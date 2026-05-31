@@ -3,7 +3,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ToolCard } from "@/components/ToolCard";
-import { getRelatedTools, getToolBySlug } from "@/lib/tools";
+import { getRelatedTools, getToolBySlug, categories } from "@/lib/tools";
 import { JsonFormatter } from "@/components/tools/JsonFormatter";
 import { UuidGenerator } from "@/components/tools/UuidGenerator";
 import { Base64Tool } from "@/components/tools/Base64Tool";
@@ -205,6 +205,9 @@ function ToolPage() {
   const related = getRelatedTools(tool.slug);
   const ToolComponent = toolComponents[tool.slug];
 
+  const catObj = categories.find((c) => c.key === tool.category);
+  const categoryName = catObj ? catObj.name : tool.category;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
@@ -213,7 +216,13 @@ function ToolPage() {
         <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-6">
           <Link to="/" className="hover:text-primary">Home</Link>
           <span className="mx-2">/</span>
-          <span>{tool.category}</span>
+          <Link
+            to="/categories/$category"
+            params={{ category: tool.category.toLowerCase() }}
+            className="hover:text-primary"
+          >
+            {categoryName}
+          </Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">{tool.name}</span>
         </nav>
