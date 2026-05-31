@@ -71,6 +71,35 @@ import { ImageMetadataViewer } from "@/components/tools/ImageMetadataViewer";
 import { ImageColorPicker } from "@/components/tools/ImageColorPicker";
 import { SvgOptimizer } from "@/components/tools/SvgOptimizer";
 
+import { CssGradientGenerator } from "@/components/tools/CssGradientGenerator";
+import { BoxShadowGenerator } from "@/components/tools/BoxShadowGenerator";
+import { BorderRadiusGenerator } from "@/components/tools/BorderRadiusGenerator";
+import { FlexboxGenerator } from "@/components/tools/FlexboxGenerator";
+import { CssGridGenerator } from "@/components/tools/CssGridGenerator";
+
+import { DiscountCalculator } from "@/components/tools/DiscountCalculator";
+import { HargaJualCalculator } from "@/components/tools/HargaJualCalculator";
+import { ProfitCalculator } from "@/components/tools/ProfitCalculator";
+import { RoiCalculator } from "@/components/tools/RoiCalculator";
+import { CashbackCalculator } from "@/components/tools/CashbackCalculator";
+import { KomisiSalesCalculator } from "@/components/tools/KomisiSalesCalculator";
+import { FeeShopeeCalculator } from "@/components/tools/FeeShopeeCalculator";
+import { FeeTokopediaCalculator } from "@/components/tools/FeeTokopediaCalculator";
+import { FeeTikTokShopCalculator } from "@/components/tools/FeeTikTokShopCalculator";
+import { KprCalculator } from "@/components/tools/KprCalculator";
+import { BungaPinjamanCalculator } from "@/components/tools/BungaPinjamanCalculator";
+import { DepositoCalculator } from "@/components/tools/DepositoCalculator";
+import { TabunganCalculator } from "@/components/tools/TabunganCalculator";
+import { BmiCalculator } from "@/components/tools/BmiCalculator";
+import { BmrCalculator } from "@/components/tools/BmrCalculator";
+import { KaloriCalculator } from "@/components/tools/KaloriCalculator";
+import { BeratIdealCalculator } from "@/components/tools/BeratIdealCalculator";
+import { IpkCalculator } from "@/components/tools/IpkCalculator";
+import { NilaiAkhirCalculator } from "@/components/tools/NilaiAkhirCalculator";
+import { RataRataNilaiCalculator } from "@/components/tools/RataRataNilaiCalculator";
+import { ZakatProfesiCalculator } from "@/components/tools/ZakatProfesiCalculator";
+import { ZakatMalCalculator } from "@/components/tools/ZakatMalCalculator";
+
 const toolComponents: Record<string, ComponentType> = {
   "json-formatter": JsonFormatter,
   "uuid-generator": UuidGenerator,
@@ -131,6 +160,33 @@ const toolComponents: Record<string, ComponentType> = {
   "image-metadata-viewer": ImageMetadataViewer,
   "image-color-picker": ImageColorPicker,
   "svg-optimizer": SvgOptimizer,
+  "kalkulator-diskon": DiscountCalculator,
+  "kalkulator-harga-jual": HargaJualCalculator,
+  "kalkulator-profit": ProfitCalculator,
+  "kalkulator-roi": RoiCalculator,
+  "kalkulator-cashback": CashbackCalculator,
+  "kalkulator-komisi-sales": KomisiSalesCalculator,
+  "kalkulator-fee-shopee": FeeShopeeCalculator,
+  "kalkulator-fee-tokopedia": FeeTokopediaCalculator,
+  "kalkulator-fee-tiktok-shop": FeeTikTokShopCalculator,
+  "kalkulator-kpr": KprCalculator,
+  "kalkulator-bunga-pinjaman": BungaPinjamanCalculator,
+  "kalkulator-deposito": DepositoCalculator,
+  "kalkulator-tabungan": TabunganCalculator,
+  "kalkulator-bmi": BmiCalculator,
+  "kalkulator-bmr": BmrCalculator,
+  "kalkulator-kalori": KaloriCalculator,
+  "kalkulator-berat-ideal": BeratIdealCalculator,
+  "kalkulator-ipk": IpkCalculator,
+  "kalkulator-nilai-akhir": NilaiAkhirCalculator,
+  "kalkulator-rata-rata-nilai": RataRataNilaiCalculator,
+  "kalkulator-zakat-profesi": ZakatProfesiCalculator,
+  "kalkulator-zakat-mal": ZakatMalCalculator,
+  "css-gradient-generator": CssGradientGenerator,
+  "box-shadow-generator": BoxShadowGenerator,
+  "border-radius-generator": BorderRadiusGenerator,
+  "flexbox-generator": FlexboxGenerator,
+  "css-grid-generator": CssGridGenerator,
 };
 
 export const Route = createFileRoute("/tools/$slug")({

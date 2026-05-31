@@ -763,6 +763,330 @@ export const tools: Tool[] = [
       { q: "Berapa batas URL dalam satu file sitemap.xml?", a: "Satu file sitemap.xml dapat menampung hingga 50.000 URL atau memiliki ukuran file maksimal 50MB." }
     ]
   },
+  {
+    slug: "kalkulator-diskon",
+    name: "Kalkulator Diskon",
+    description: "Hitung harga akhir setelah diskon tunggal atau bertingkat (X% + Y%).",
+    longDescription: "Bantu hitung potongan harga dan jumlah uang yang Anda hemat dari diskon tunggal maupun diskon ganda secara instan.",
+    category: "Calculators",
+    subcategory: "Finance",
+    icon: "🏷️",
+    faqs: [
+      { q: "Apakah mendukung diskon ganda?", a: "Ya. Mendukung diskon bertingkat seperti diskon 50% + 10%." }
+    ]
+  },
+  {
+    slug: "kalkulator-harga-jual",
+    name: "Kalkulator Harga Jual",
+    description: "Tentukan harga jual ideal menggunakan metode Markup atau Margin Target.",
+    longDescription: "Hitung harga jual produk Anda dengan mudah berdasarkan modal (COGS) dan target keuntungan persentase.",
+    category: "Calculators",
+    subcategory: "Finance",
+    icon: "💰",
+    faqs: [
+      { q: "Apa bedanya Markup dan Margin?", a: "Markup dihitung berdasarkan persentase dari harga modal, sedangkan Margin dihitung berdasarkan persentase dari harga jual." }
+    ]
+  },
+  {
+    slug: "kalkulator-profit",
+    name: "Kalkulator Profit",
+    description: "Analisis laba kotor, laba bersih, serta persentase profit margin usaha Anda.",
+    longDescription: "Masukkan omset, HPP, dan biaya operasional untuk mengetahui margin laba kotor dan laba bersih bisnis Anda secara detail.",
+    category: "Calculators",
+    subcategory: "Finance",
+    icon: "📈",
+    faqs: [
+      { q: "Apa itu Net Margin?", a: "Persentase laba bersih setelah dikurangi semua biaya operasional terhadap total pendapatan." }
+    ]
+  },
+  {
+    slug: "kalkulator-roi",
+    name: "Kalkulator ROI",
+    description: "Hitung Return on Investment (ROI) untuk mengukur efisiensi investasi Anda.",
+    longDescription: "Analisis persentase tingkat pengembalian modal dari investasi Anda berdasarkan nilai awal dan nilai akhir investasi.",
+    category: "Calculators",
+    subcategory: "Finance",
+    icon: "📊",
+    faqs: [
+      { q: "Apakah nilai ROI bisa negatif?", a: "Ya, jika nilai pengembalian akhir lebih kecil daripada modal awal (mengalami kerugian)." }
+    ]
+  },
+  {
+    slug: "kalkulator-cashback",
+    name: "Kalkulator Cashback",
+    description: "Hitung nominal cashback yang didapatkan beserta diskon efektifnya.",
+    longDescription: "Masukkan nilai belanja, persentase cashback, batas maksimal, dan minimum belanja untuk menghitung cashback riil Anda.",
+    category: "Calculators",
+    subcategory: "Finance",
+    icon: "🪙",
+    faqs: [
+      { q: "Mengapa cashback saya bernilai Rp0?", a: "Pastikan total belanja Anda sudah memenuhi batas minimum pembelian yang disyaratkan." }
+    ]
+  },
+  {
+    slug: "kalkulator-komisi-sales",
+    name: "Kalkulator Komisi Sales",
+    description: "Hitung pendapatan komisi penjualan sales beserta bonus pencapaian target.",
+    longDescription: "Simulasikan total penghasilan agen penjualan berdasarkan gaji pokok, rate komisi, target penjualan, dan bonus kuota.",
+    category: "Calculators",
+    subcategory: "Finance",
+    icon: "🤝",
+    faqs: [
+      { q: "Apakah bonus target otomatis ditambahkan?", a: "Ya, jika total penjualan mencapai atau melebihi kuota target yang ditentukan." }
+    ]
+  },
+  {
+    slug: "kalkulator-fee-shopee",
+    name: "Kalkulator Fee Shopee",
+    description: "Simulasi potongan biaya admin Shopee untuk tipe Star, Star+, Mall, dan Regular.",
+    longDescription: "Hitung estimasi potongan biaya admin dan biaya program promo gratis ongkir/cashback ekstra untuk toko Shopee Anda.",
+    category: "Calculators",
+    subcategory: "Marketplace",
+    icon: "🧡",
+    faqs: [
+      { q: "Mengapa potongan biaya admin setiap produk berbeda?", a: "Shopee membagi tarif biaya administrasi berdasarkan kategori grup produk A, B, C, D, dan E." }
+    ]
+  },
+  {
+    slug: "kalkulator-fee-tokopedia",
+    name: "Kalkulator Fee Tokopedia",
+    description: "Simulasikan potongan biaya layanan Tokopedia untuk Power Merchant dan OS.",
+    longDescription: "Ketahui sisa saldo bersih hasil penjualan Tokopedia setelah dikurangi admin fee dan biaya bebas ongkir.",
+    category: "Calculators",
+    subcategory: "Marketplace",
+    icon: "💚",
+    faqs: [
+      { q: "Berapa biaya admin Tokopedia terbaru?", a: "Biaya admin berkisar mulai dari 2% hingga 8% tergantung status seller dan kategori produk." }
+    ]
+  },
+  {
+    slug: "kalkulator-fee-tiktok-shop",
+    name: "Kalkulator Fee TikTok Shop",
+    description: "Hitung potongan komisi penjualan dan biaya transaksi di TikTok Shop (Tokopedia).",
+    longDescription: "Simulasikan sisa pendapatan bersih toko TikTok Shop Anda setelah dikurangi komisi kategori produk, biaya transaksi 2%, dan campaign fee.",
+    category: "Calculators",
+    subcategory: "Marketplace",
+    icon: "🖤",
+    faqs: [
+      { q: "Apakah biaya transaksi bersifat flat?", a: "Ya. Biaya transaksi di TikTok Shop saat ini flat sebesar 2% dari harga produk." }
+    ]
+  },
+  {
+    slug: "kalkulator-kpr",
+    name: "Kalkulator KPR",
+    description: "Simulasikan angsuran bulanan Kredit Pemilikan Rumah (KPR) Anda.",
+    longDescription: "Hitung angsuran bulanan, total bunga yang dibayarkan, serta total pengeluaran untuk cicilan KPR rumah impian Anda.",
+    category: "Calculators",
+    subcategory: "Personal Finance",
+    icon: "🏠",
+    faqs: [
+      { q: "Bagaimana cara memperkecil angsuran KPR?", a: "Anda bisa memperbesar nilai uang muka (DP) atau memilih tenor pinjaman yang lebih lama." }
+    ]
+  },
+  {
+    slug: "kalkulator-bunga-pinjaman",
+    name: "Kalkulator Bunga Pinjaman",
+    description: "Hitung angsuran bulanan untuk pinjaman dengan suku bunga flat atau efektif.",
+    longDescription: "Simulasikan rincian pinjaman bank atau kredit lainnya untuk membandingkan angsuran menggunakan bunga flat maupun anuitas.",
+    category: "Calculators",
+    subcategory: "Personal Finance",
+    icon: "💸",
+    faqs: [
+      { q: "Kapan sebaiknya memilih bunga flat?", a: "Bunga flat cocok untuk kredit jangka pendek karena perhitungan bunganya konstan dan cicilannya tetap." }
+    ]
+  },
+  {
+    slug: "kalkulator-deposito",
+    name: "Kalkulator Deposito",
+    description: "Hitung bagi hasil atau bunga deposito setelah dipotong pajak 20%.",
+    longDescription: "Ketahui bunga bersih bulanan dan total dana jatuh tempo deposito Anda berdasarkan bunga tahunan dan durasi simpanan.",
+    category: "Calculators",
+    subcategory: "Personal Finance",
+    icon: "🏦",
+    faqs: [
+      { q: "Apakah bunga deposito dikenakan pajak?", a: "Ya. Di Indonesia, bunga deposito di atas nominal Rp7,5 juta dikenakan pajak PPh final sebesar 20%." }
+    ]
+  },
+  {
+    slug: "kalkulator-tabungan",
+    name: "Kalkulator Tabungan",
+    description: "Rencanakan tabungan bulanan untuk mencapai target finansial Anda.",
+    longDescription: "Hitung berapa uang yang harus Anda sisihkan per bulan atau berapa lama waktu yang diperlukan untuk mencapai saving goal Anda.",
+    category: "Calculators",
+    subcategory: "Personal Finance",
+    icon: "🪙",
+    faqs: [
+      { q: "Apakah kalkulator ini memperhitungkan bunga bank?", a: "Tidak. Kalkulator ini menghitung tabungan murni tanpa asumsi bunga atau inflasi untuk kesederhanaan rencana." }
+    ]
+  },
+  {
+    slug: "kalkulator-bmi",
+    name: "Kalkulator BMI",
+    description: "Hitung indeks massa tubuh (BMI) untuk mengetahui status berat badan ideal.",
+    longDescription: "Ketahui apakah berat badan Anda termasuk kategori kurang, normal, berlebih, atau obesitas berdasarkan standar WHO.",
+    category: "Calculators",
+    subcategory: "Health",
+    icon: "⚖️",
+    faqs: [
+      { q: "Apakah BMI akurat untuk semua orang?", a: "BMI adalah indikator umum yang baik, namun kurang akurat untuk binaragawan atau ibu hamil karena tidak membedakan massa otot dan lemak." }
+    ]
+  },
+  {
+    slug: "kalkulator-bmr",
+    name: "Kalkulator BMR",
+    description: "Hitung Basal Metabolic Rate (BMR) berdasarkan rumus Harris-Benedict.",
+    longDescription: "Ketahui kebutuhan kalori minimal yang diperlukan tubuh Anda saat istirahat total untuk menjalankan fungsi organ vital.",
+    category: "Calculators",
+    subcategory: "Health",
+    icon: "🔥",
+    faqs: [
+      { q: "Apa kegunaan skor BMR?", a: "BMR membantu Anda merancang program diet penurunan atau kenaikan berat badan dengan menghitung kalori dasar tubuh." }
+    ]
+  },
+  {
+    slug: "kalkulator-kalori",
+    name: "Kalkulator Kalori",
+    description: "Hitung kebutuhan kalori harian (TDEE) berdasarkan tingkat aktivitas fisik.",
+    longDescription: "Tentukan porsi kalori harian ideal Anda untuk menjaga berat badan, diet menurunkan berat badan, atau menambah masa tubuh.",
+    category: "Calculators",
+    subcategory: "Health",
+    icon: "🍎",
+    faqs: [
+      { q: "Berapa batas aman defisit kalori harian?", a: "Defisit kalori yang aman adalah sekitar 500 kkal dari kebutuhan harian Anda untuk penurunan berat badan berkala." }
+    ]
+  },
+  {
+    slug: "kalkulator-berat-ideal",
+    name: "Kalkulator Berat Ideal",
+    description: "Hitung kisaran berat badan ideal Anda menggunakan rumus Devine, Robinson, dan Miller.",
+    longDescription: "Dapatkan estimasi berat badan paling ideal dan sehat untuk Anda berdasarkan jenis kelamin dan tinggi badan.",
+    category: "Calculators",
+    subcategory: "Health",
+    icon: "🧍",
+    faqs: [
+      { q: "Rumus mana yang paling umum digunakan?", a: "Rumus Devine adalah standar industri medis yang paling sering digunakan untuk mengukur berat badan ideal." }
+    ]
+  },
+  {
+    slug: "kalkulator-ipk",
+    name: "Kalkulator IPK",
+    description: "Hitung Indeks Prestasi Kumulatif (IPK) mahasiswa secara online dan praktis.",
+    longDescription: "Masukkan nilai huruf matkul beserta jumlah SKS-nya untuk menghitung rata-rata nilai IP semester atau IPK akhir Anda.",
+    category: "Calculators",
+    subcategory: "Education",
+    icon: "🎓",
+    faqs: [
+      { q: "Bagaimana cara konversi nilai huruf ke angka?", a: "Nilai A=4.00, A-=3.75, B+=3.50, B=3.00, B-=2.75, C+=2.50, C=2.00, D=1.00, E=0.00." }
+    ]
+  },
+  {
+    slug: "kalkulator-nilai-akhir",
+    name: "Kalkulator Nilai Akhir",
+    description: "Hitung nilai akhir mata kuliah berdasarkan persentase bobot tugas, UTS, dan UAS.",
+    longDescription: "Bantu siswa/mahasiswa menghitung nilai akhir gabungan berdasarkan persentase bobot absensi, tugas kelompok/mandiri, UTS, dan UAS.",
+    category: "Calculators",
+    subcategory: "Education",
+    icon: "📝",
+    faqs: [
+      { q: "Bagaimana jika total bobot melebihi 100%?", a: "Kalkulator akan menormalkan bobot, namun pastikan total bobot bernilai 100% agar perhitungan nilai akhir Anda akurat." }
+    ]
+  },
+  {
+    slug: "kalkulator-rata-rata-nilai",
+    name: "Kalkulator Rata-Rata Nilai",
+    description: "Hitung rata-rata (mean), median, nilai tertinggi, dan terendah dari sekumpulan angka.",
+    longDescription: "Ukur performa nilai ujian kelas dengan menghitung rata-rata aritmetika, nilai tengah, rentang nilai minimum & maksimum secara instan.",
+    category: "Calculators",
+    subcategory: "Education",
+    icon: "📊",
+    faqs: [
+      { q: "Pemisah karakter apa saja yang didukung?", a: "Anda bisa memisahkan angka dengan koma (,), spasi, titik koma (;), atau menaruhnya di baris baru." }
+    ]
+  },
+  {
+    slug: "kalkulator-zakat-profesi",
+    name: "Kalkulator Zakat Profesi",
+    description: "Hitung kewajiban zakat pendapatan/profesi bulanan berdasarkan harga emas terbaru.",
+    longDescription: "Hitung zakat penghasilan bersih bulanan Anda sebesar 2.5% jika total pendapatan Anda telah mencapai batas nisab 85 gram emas.",
+    category: "Calculators",
+    subcategory: "Islamic",
+    icon: "🕌",
+    faqs: [
+      { q: "Kapan saya wajib membayar zakat profesi?", a: "Zakat wajib ditunaikan jika pendapatan bersih setelah kebutuhan pokok mencapai atau melampaui nisab bulanan (setara 85g emas / 12 bulan)." }
+    ]
+  },
+  {
+    slug: "kalkulator-zakat-mal",
+    name: "Kalkulator Zakat Mal",
+    description: "Hitung zakat atas harta kekayaan simpanan (zakat mal) tahunan secara praktis.",
+    longDescription: "Hitung zakat harta simpanan Anda (uang tunai, tabungan, investasi, emas) sebesar 2.5% jika telah haul 1 tahun dan melampaui nisab 85g emas.",
+    category: "Calculators",
+    subcategory: "Islamic",
+    icon: "🕋",
+    faqs: [
+      { q: "Apa saja aset yang masuk hitungan Zakat Mal?", a: "Tabungan bank, emas/perak perhiasan yang tidak dipakai sehari-hari, saham, reksadana, dan piutang lancar abadi." }
+    ]
+  },
+  {
+    slug: "css-gradient-generator",
+    name: "CSS Gradient Generator",
+    description: "Generate CSS linear & radial gradients secara visual dan instan.",
+    longDescription: "Buat gradien warna CSS (Linear & Radial) yang indah secara interaktif dengan kontrol sudut, warna, dan posisi persentase yang presisi.",
+    category: "Developer",
+    subcategory: "CSS & Layout",
+    icon: "🌈",
+    faqs: [
+      { q: "Apakah mendukung gradien radial?", a: "Ya. Mendukung gradien bertipe radial (lingkaran) serta linear (sudut derajat)." }
+    ]
+  },
+  {
+    slug: "box-shadow-generator",
+    name: "Box Shadow Generator",
+    description: "Desain bayangan CSS (box-shadow) interaktif dengan live preview.",
+    longDescription: "Sesuaikan offset horizontal & vertikal, radius blur, radius spread, warna, serta opsi inset shadow secara mudah dan salin kode CSS-nya langsung.",
+    category: "Developer",
+    subcategory: "CSS & Layout",
+    icon: "👤",
+    faqs: [
+      { q: "Apa kegunaan opsi inset shadow?", a: "Opsi inset mengarahkan bayangan masuk ke bagian dalam kotak (bukan ke luar)." }
+    ]
+  },
+  {
+    slug: "border-radius-generator",
+    name: "Border Radius Generator",
+    description: "Desain bentuk sudut tumpul CSS (border-radius) secara instan.",
+    longDescription: "Sesuaikan lengkungan sudut kotak secara individual atau bersamaan menggunakan satuan piksel (px) maupun persentase (%).",
+    category: "Developer",
+    subcategory: "CSS & Layout",
+    icon: "🟢",
+    faqs: [
+      { q: "Apa bedanya satuan px dan %?", a: "PX memberikan ukuran lengkungan tetap, sedangkan % melengkungkan sudut relatif terhadap lebar dan tinggi elemen." }
+    ]
+  },
+  {
+    slug: "flexbox-generator",
+    name: "Flexbox Generator",
+    description: "Visualisasikan dan generate struktur layout CSS Flexbox secara interaktif.",
+    longDescription: "Eksplorasi properti flex-direction, justify-content, align-items, flex-wrap, dan gap secara visual dengan render container interaktif.",
+    category: "Developer",
+    subcategory: "CSS & Layout",
+    icon: "📦",
+    faqs: [
+      { q: "Apakah saya bisa mengatur jumlah item?", a: "Ya, Anda bisa menambah atau mengurangi jumlah item preview dari 2 sampai 12 item." }
+    ]
+  },
+  {
+    slug: "css-grid-generator",
+    name: "CSS Grid Generator",
+    description: "Generate layout grid CSS dua dimensi secara interaktif dan visual.",
+    longDescription: "Bikin layout baris dan kolom (CSS Grid) kustom lengkap dengan pengaturan jumlah kolom, baris, column gap, dan row gap.",
+    category: "Developer",
+    subcategory: "CSS & Layout",
+    icon: "🏁",
+    faqs: [
+      { q: "Apakah grid layout didukung semua browser?", a: "Ya, seluruh browser modern saat ini mendukung penuh spesifikasi CSS Grid standard." }
+    ]
+  }
 ];
 
 export interface CategoryInfo {
@@ -776,7 +1100,7 @@ export const categories: CategoryInfo[] = [
   {
     name: "🛠️ Developer Tools",
     key: "Developer",
-    subcategories: ["Formatting", "Conversion", "Testing", "Encoding", "Generation"]
+    subcategories: ["Formatting", "Conversion", "Testing", "Encoding", "Generation", "CSS & Layout"]
   },
   {
     name: "🖼️ Image Tools",
@@ -786,7 +1110,7 @@ export const categories: CategoryInfo[] = [
   {
     name: "🧮 Calculators",
     key: "Calculators",
-    subcategories: ["Finance", "Business", "Health", "Education", "Tax", "Islamic"]
+    subcategories: ["Finance", "Business", "Marketplace", "Personal Finance", "Health", "Education", "Tax", "Islamic"]
   },
   {
     name: "🔐 Generators",
