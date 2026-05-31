@@ -1,4 +1,4 @@
-export type ToolCategory = "Developer" | "Image" | "Calculators" | "Generators" | "Converters" | "Utilities";
+export type ToolCategory = "Developer" | "Image" | "Calculators" | "Generators" | "Converters" | "Utilities" | "WhatsApp";
 
 export interface Tool {
   slug: string;
@@ -343,6 +343,19 @@ export const tools: Tool[] = [
     ]
   },
   {
+    slug: "indonesian-meme-generator",
+    name: "Meme Generator Netizen",
+    description: "Buat meme ala netizen Indonesia dengan template viral terpopuler.",
+    longDescription: "Hasilkan meme kocak lokal favorit warganet seperti template 'Nggak Bisa Yura', 'KTP Plesetan', 'Akreditasi BAN-PT', hingga classic meme dengan cepat.",
+    category: "Image",
+    subcategory: "Editing",
+    icon: "🔥",
+    featured: true,
+    faqs: [
+      { q: "Apakah gambar meme buatan saya aman?", a: "Sangat aman. Seluruh proses pembuatan meme, upload foto, dan download dilakukan secara lokal di browser Anda." }
+    ]
+  },
+  {
     slug: "jpg-to-png",
     name: "JPG to PNG Converter",
     description: "Konversi file gambar dari format JPG ke format PNG secara instan.",
@@ -679,11 +692,11 @@ export const tools: Tool[] = [
   {
     slug: "whatsapp-link-generator",
     name: "WhatsApp Link Generator",
-    description: "Buat link chat WhatsApp langsung beserta pesan template kustom.",
-    longDescription: "Mudahkan calon pelanggan menghubungi Anda melalui chat WhatsApp dengan sekali klik. Dilengkapi link wa.me dan QR Code otomatis.",
-    category: "Generators",
-    subcategory: "QR & Links",
-    icon: "💬",
+    description: "Buat link chat WhatsApp langsung secara instan.",
+    longDescription: "Mudahkan calon pelanggan menghubungi Anda dengan membuat link wa.me kustom lengkap dengan pesan otomatis.",
+    category: "WhatsApp",
+    subcategory: "Link Tools",
+    icon: "🔗",
     featured: true,
     faqs: [
       { q: "Apakah nomor handphone harus pakai kode negara?", a: "Ya. Namun tool ini akan otomatis memformat dan menambahkan kode negara jika Anda lupa memasukkannya." }
@@ -1028,6 +1041,30 @@ export const tools: Tool[] = [
     ]
   },
   {
+    slug: "kalkulator-fidyah",
+    name: "Kalkulator Fidyah",
+    description: "Hitung besaran fidyah utang puasa Ramadhan berupa makanan pokok atau uang.",
+    longDescription: "Hitung kewajiban fidyah puasa secara akurat berdasarkan jumlah hari puasa yang ditinggalkan, keterlambatan tahun, serta opsi nominal rupiah standar BAZNAS.",
+    category: "Calculators",
+    subcategory: "Islamic",
+    icon: "🌾",
+    faqs: [
+      { q: "Berapa fidyah dalam bentuk beras per hari puasa?", a: "Berdasarkan mayoritas ulama (Madzhab Syafi'i), fidyah per hari puasa adalah 1 mud beras, atau setara dengan kurang lebih 675 gram beras." }
+    ]
+  },
+  {
+    slug: "kalkulator-waris",
+    name: "Kalkulator Waris Sederhana",
+    description: "Hitung pembagian harta waris (Faraid) sesuai aturan hukum Islam secara praktis.",
+    longDescription: "Hitung pembagian warisan untuk ahli waris inti seperti suami, istri, ayah, ibu, anak laki-laki, dan anak perempuan secara presisi berdasarkan ketentuan Al-Qur'an.",
+    category: "Calculators",
+    subcategory: "Islamic",
+    icon: "⚖️",
+    faqs: [
+      { q: "Apakah sisa waris (Asabah) dibagi sama rata untuk semua anak?", a: "Tidak. Dalam aturan Faraidh Islam, anak laki-laki mendapat bagian 2 kali lebih banyak dari anak perempuan (rasio 2:1)." }
+    ]
+  },
+  {
     slug: "css-gradient-generator",
     name: "CSS Gradient Generator",
     description: "Generate CSS linear & radial gradients secara visual dan instan.",
@@ -1086,6 +1123,102 @@ export const tools: Tool[] = [
     faqs: [
       { q: "Apakah grid layout didukung semua browser?", a: "Ya, seluruh browser modern saat ini mendukung penuh spesifikasi CSS Grid standard." }
     ]
+  },
+  {
+    slug: "whatsapp-bulk-link",
+    name: "WhatsApp Bulk Link Generator",
+    description: "Buat banyak link WhatsApp sekaligus dari daftar nomor.",
+    longDescription: "Hasilkan link wa.me secara massal untuk mempermudah campaign pemasaran atau pembagian database prospek Anda secara otomatis.",
+    category: "WhatsApp",
+    subcategory: "Link Tools",
+    icon: "📋",
+    faqs: [
+      { q: "Bagaimana cara memasukkan nomor massal?", a: "Cukup masukkan satu nomor per baris di area input yang telah disediakan." }
+    ]
+  },
+  {
+    slug: "whatsapp-text-formatter",
+    name: "WhatsApp Text Formatter",
+    description: "Format teks WhatsApp Anda jadi tebal, miring, coret, atau monospace.",
+    longDescription: "Beri gaya pada pesan chat Anda menggunakan pemformatan resmi WhatsApp (Bold, Italic, Strikethrough, Monospace) dengan editor visual.",
+    category: "WhatsApp",
+    subcategory: "Text Tools",
+    icon: "✍️",
+    faqs: [
+      { q: "Apakah tulisan hasil format bisa dibaca di semua HP?", a: "Ya, karena tool ini menggunakan format markdown bawaan resmi dari WhatsApp." }
+    ]
+  },
+  {
+    slug: "fancy-whatsapp-text",
+    name: "Fancy WhatsApp Text Generator",
+    description: "Ubah font teks WhatsApp Anda dengan berbagai gaya unik dan dekoratif.",
+    longDescription: "Hasilkan tulisan bergaya unik seperti huruf lingkaran, kotak, sambung, tebal serif untuk status atau chat WhatsApp Anda agar lebih menarik.",
+    category: "WhatsApp",
+    subcategory: "Text Tools",
+    icon: "✨",
+    faqs: [
+      { q: "Apakah semua karakter didukung?", a: "Hampir semua karakter latin dasar (A-Z, a-z) dan angka didukung untuk diubah gayanya." }
+    ]
+  },
+  {
+    slug: "whatsapp-qr-generator",
+    name: "WhatsApp QR Generator",
+    description: "Buat QR Code untuk chat WhatsApp Anda secara instan.",
+    longDescription: "Hasilkan QR Code dinamis berkualitas tinggi yang dapat di-scan langsung oleh pelanggan untuk mulai chat dengan nomor Anda.",
+    category: "WhatsApp",
+    subcategory: "QR Tools",
+    icon: "📸",
+    faqs: [
+      { q: "Format unduhan QR Code-nya apa?", a: "QR Code dapat diunduh langsung dalam format berkas gambar PNG berkualitas tinggi." }
+    ]
+  },
+  {
+    slug: "whatsapp-group-qr",
+    name: "WhatsApp Group QR Generator",
+    description: "Hasilkan QR Code scannable khusus untuk link grup WhatsApp Anda.",
+    longDescription: "Ubah tautan undangan (invite link) grup chat WhatsApp menjadi QR Code siap scan dan unduh untuk ditempel di poster/flyer.",
+    category: "WhatsApp",
+    subcategory: "QR Tools",
+    icon: "👥",
+    faqs: [
+      { q: "Dimana saya bisa mendapatkan link grup?", a: "Dari info grup WhatsApp, klik 'Undang via tautan' lalu salin link undangan tersebut." }
+    ]
+  },
+  {
+    slug: "whatsapp-cs-link",
+    name: "WhatsApp CS Link Generator",
+    description: "Buat link chat WhatsApp khusus untuk pembagian tugas agen Customer Service.",
+    longDescription: "Bagi trafik chat pelanggan Anda dengan membuat daftar link chat terstruktur untuk masing-masing admin CS/agen penjualan Anda.",
+    category: "WhatsApp",
+    subcategory: "Business Tools",
+    icon: "📞",
+    faqs: [
+      { q: "Apakah saya bisa menambahkan banyak agen?", a: "Bisa, tidak ada batasan jumlah agen CS yang bisa Anda tambahkan di halaman ini." }
+    ]
+  },
+  {
+    slug: "whatsapp-order-link",
+    name: "WhatsApp Order Link Generator",
+    description: "Buat link chat berisi format pemesanan produk otomatis untuk toko online.",
+    longDescription: "Mudahkan transaksi toko online dengan meng-generate form pemesanan chat terstruktur berisi detail nama produk, harga, dan metode bayar.",
+    category: "WhatsApp",
+    subcategory: "Business Tools",
+    icon: "🛍️",
+    faqs: [
+      { q: "Apakah harga otomatis terformat ke Rupiah?", a: "Ya, input angka harga akan otomatis dikonversikan ke dalam format rupiah (Rp)." }
+    ]
+  },
+  {
+    slug: "whatsapp-sticker-maker",
+    name: "WA Sticker Maker",
+    description: "Buat sticker kustom untuk WhatsApp secara instan.",
+    longDescription: "Unggah gambar Anda, berikan teks kustom dengan pilihan warna dan outline, lalu unduh berkas WebP yang kompatibel untuk dijadikan sticker WhatsApp.",
+    category: "WhatsApp",
+    subcategory: "Sticker Tools",
+    icon: "🎨",
+    faqs: [
+      { q: "Apakah sticker hasil unduhan langsung dalam format WebP?", a: "Ya. Hasil unduhan adalah berkas WebP berukuran 512x512 piksel yang merupakan format standar sticker WhatsApp." }
+    ]
   }
 ];
 
@@ -1126,6 +1259,11 @@ export const categories: CategoryInfo[] = [
     name: "⚙️ Utilities",
     key: "Utilities",
     subcategories: ["Time", "Random", "Productivity", "Events"]
+  },
+  {
+    name: "💬 WhatsApp Tools",
+    key: "WhatsApp",
+    subcategories: ["Link Tools", "Text Tools", "QR Tools", "Business Tools", "Sticker Tools"]
   }
 ];
 

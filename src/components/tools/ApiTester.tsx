@@ -93,29 +93,38 @@ export function ApiTester() {
         <h3 className="text-lg font-bold">Kirim API Request</h3>
 
         {/* Method & URL Bar */}
-        <div className="flex gap-2">
-          <select
-            value={method}
-            onChange={(e) => setMethod(e.target.value)}
-            className="h-11 px-3 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary font-bold text-sm"
-          >
-            {["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"].map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
+            <select
+              value={method}
+              onChange={(e) => setMethod(e.target.value)}
+              className="h-11 px-3 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary font-bold text-sm min-w-[90px] flex-1 sm:flex-none"
+            >
+              {["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"].map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={sendRequest}
+              disabled={isLoading}
+              className="sm:hidden flex-1 bg-primary text-primary-foreground px-6 h-11 rounded-lg font-bold hover:opacity-90 transition-opacity uppercase tracking-wider text-xs"
+            >
+              {isLoading ? "Loading..." : "Send"}
+            </button>
+          </div>
           <input
             type="text"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="flex-1 h-11 px-4 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary font-mono text-sm"
+            className="flex-1 min-w-0 h-11 px-4 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary font-mono text-sm"
             placeholder="https://api.example.com/endpoint"
           />
           <button
             onClick={sendRequest}
             disabled={isLoading}
-            className="bg-primary text-primary-foreground px-6 h-11 rounded-lg font-bold hover:opacity-90 transition-opacity uppercase tracking-wider text-xs"
+            className="hidden sm:block bg-primary text-primary-foreground px-6 h-11 rounded-lg font-bold hover:opacity-90 transition-opacity uppercase tracking-wider text-xs"
           >
             {isLoading ? "Loading..." : "Send"}
           </button>
@@ -151,14 +160,14 @@ export function ApiTester() {
                     value={h.key}
                     onChange={(e) => updateHeader(idx, "key", e.target.value)}
                     placeholder="Key"
-                    className="flex-1 h-9 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono"
+                    className="flex-1 min-w-0 h-9 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono"
                   />
                   <input
                     type="text"
                     value={h.value}
                     onChange={(e) => updateHeader(idx, "value", e.target.value)}
                     placeholder="Value"
-                    className="flex-1 h-9 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono"
+                    className="flex-1 min-w-0 h-9 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono"
                   />
                   <button
                     onClick={() => removeHeader(idx)}

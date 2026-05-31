@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
+import QRCode from "qrcode";
 
-export function WhatsappLinkGenerator() {
+export function WhatsappQrGenerator() {
   const [countryCode, setCountryCode] = useState("62");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
   const [link, setLink] = useState("");
-  const [copiedLink, setCopiedLink] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
 
-  // Generate WhatsApp links
   const generateLink = () => {
-    // Strip non-numbers from the telephone input
     const cleanPhone = phoneNumber.replace(/\D/g, "");
     
-    // Remove leading '0' or country code if already prefixed
     let formattedPhone = cleanPhone;
     if (formattedPhone.startsWith("0")) {
       formattedPhone = formattedPhone.substring(1);
@@ -24,7 +22,6 @@ export function WhatsappLinkGenerator() {
     }
     
     const finalNumber = prefix + formattedPhone;
-    
     if (!cleanPhone) return "";
     
     const encodedMessage = encodeURIComponent(message);
@@ -34,23 +31,23 @@ export function WhatsappLinkGenerator() {
   useEffect(() => {
     const generated = generateLink();
     setLink(generated);
-  }, [countryCode, phoneNumber, message]);
 
-  const copyToClipboard = () => {
-    if (!link) return;
-    navigator.clipboard.writeText(link);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
-  };
+    if (generated) {
+      QRCode.toDataURL(generated, { width: 512, margin: 2, color: { dark: "#000000", light: "#ffffff" } })
+        .then(setQrCodeUrl)
+        .catch(() => setQrCodeUrl(""));
+    } else {
+      setQrCodeUrl("");
+    }
+  }, [countryCode, phoneNumber, message]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      {/* Settings Panel */}
+      {/* Configuration */}
       <div className="space-y-6 bg-card border border-foreground/10 p-6 rounded-xl">
-        <h3 className="text-xs font-mono uppercase tracking-wider text-foreground/50">Pengaturan Pesan</h3>
+        <h3 className="text-xs font-mono uppercase tracking-wider text-foreground/50">Pengaturan QR Code</h3>
 
         <div className="space-y-4">
-          {/* Country Code & Phone Number */}
           <div className="space-y-2">
             <label className="text-xs font-mono uppercase tracking-wider text-foreground/50 block">Nomor WhatsApp</label>
             <div className="flex gap-2">
@@ -64,7 +61,6 @@ export function WhatsappLinkGenerator() {
                 <option value="44">+44 (UK)</option>
                 <option value="65">+65 (SG)</option>
                 <option value="60">+60 (MY)</option>
-                <option value="61">+61 (AU)</option>
                 <option value="81">+81 (JP)</option>
               </select>
               <input
@@ -77,13 +73,12 @@ export function WhatsappLinkGenerator() {
             </div>
           </div>
 
-          {/* Pre-filled message */}
           <div className="space-y-2">
-            <label className="text-xs font-mono uppercase tracking-wider text-foreground/50 block">Pesan Template (Opsional)</label>
+            <label className="text-xs font-mono uppercase tracking-wider text-foreground/50 block">Pesan Template</label>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="e.g. Halo, saya tertarik dengan produk Anda..."
+              placeholder="e.g. Halo, saya mau tanya..."
               rows={4}
               className="w-full p-4 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary text-sm resize-none"
             />
@@ -91,44 +86,42 @@ export function WhatsappLinkGenerator() {
         </div>
       </div>
 
-      {/* Preview & Output Panel */}
+      {/* QR Output */}
       <div className="space-y-6 bg-foreground/5 border border-foreground/10 p-6 rounded-xl flex flex-col justify-between min-h-[300px]">
-        <div>
-          <h3 className="text-xs font-mono uppercase tracking-wider text-foreground/50 mb-4">Hasil Link</h3>
-
+        <div className="flex flex-col items-center justify-center flex-1">
           {!phoneNumber ? (
-            <div className="bg-foreground/5 border border-foreground/10 text-foreground/60 p-8 rounded-xl text-center flex flex-col items-center justify-center min-h-[180px]">
-              <span className="text-2xl mb-2">💬</span>
-              <p className="text-sm">Masukkan nomor HP WhatsApp di samping untuk meng-generate link.</p>
+            <div className="text-center p-8 text-foreground/50">
+              <span className="text-3xl block mb-2">📸</span>
+              <p className="text-sm">Masukkan nomor WhatsApp untuk membuat QR Code.</p>
             </div>
           ) : (
-            <div className="space-y-6">
-              {/* Generated Link Box */}
-              <div className="bg-background border border-foreground/10 rounded-lg p-4 flex justify-between items-center gap-4">
-                <div className="flex-1 min-w-0">
-                  <span className="text-[10px] font-mono text-foreground/50 block">LINK WHATSAPP</span>
-                  <p className="text-sm font-mono truncate text-primary font-bold">{link}</p>
+            <div className="space-y-6 flex flex-col items-center w-full">
+              {qrCodeUrl && (
+                <div className="p-4 bg-white border border-foreground/10 rounded-2xl shadow-md">
+                  <img src={qrCodeUrl} alt="WhatsApp QR Code" className="w-48 h-48" />
                 </div>
-                <button
-                  onClick={copyToClipboard}
-                  className="px-4 py-2 bg-foreground text-background rounded-lg font-bold text-xs uppercase tracking-wider whitespace-nowrap hover:bg-foreground/90 transition-colors"
-                >
-                  {copiedLink ? "Copied!" : "Copy"}
-                </button>
-              </div>
+              )}
+              <p className="text-xs text-foreground/50 text-center">Scan QR code ini untuk memulai obrolan WhatsApp secara langsung.</p>
             </div>
           )}
         </div>
 
-        {phoneNumber && link && (
-          <div className="pt-6 border-t border-foreground/10">
+        {phoneNumber && qrCodeUrl && (
+          <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-foreground/10">
             <a
               href={link}
               target="_blank"
               rel="noreferrer"
-              className="w-full flex items-center justify-center h-12 bg-primary text-white rounded-lg font-bold text-sm uppercase tracking-wider hover:bg-primary/95 transition-colors"
+              className="flex-1 flex items-center justify-center h-12 bg-primary text-white rounded-lg font-bold text-sm uppercase tracking-wider hover:bg-primary/95 transition-colors"
             >
-              Test Kirim Pesan
+              Test Link
+            </a>
+            <a
+              href={qrCodeUrl}
+              download="whatsapp-qr.png"
+              className="flex-1 flex items-center justify-center h-12 bg-background border-2 border-foreground text-foreground rounded-lg font-bold text-sm uppercase tracking-wider hover:bg-foreground/5 transition-colors"
+            >
+              Download QR PNG
             </a>
           </div>
         )}

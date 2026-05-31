@@ -38,6 +38,7 @@ import { JpgToWebp } from "@/components/tools/JpgToWebp";
 import { WebpToJpg } from "@/components/tools/WebpToJpg";
 import { ImageCropper } from "@/components/tools/ImageCropper";
 import { ImageRotator } from "@/components/tools/ImageRotator";
+import { IndonesianMemeGenerator } from "@/components/tools/IndonesianMemeGenerator";
 
 import { ThrCalculator } from "@/components/tools/ThrCalculator";
 import { Pph21Calculator } from "@/components/tools/Pph21Calculator";
@@ -56,6 +57,14 @@ import { ColorConverter } from "@/components/tools/ColorConverter";
 import { BarcodeGenerator } from "@/components/tools/BarcodeGenerator";
 import { WifiQrGenerator } from "@/components/tools/WifiQrGenerator";
 import { WhatsappLinkGenerator } from "@/components/tools/WhatsappLinkGenerator";
+import { WhatsappBulkLinkGenerator } from "@/components/tools/WhatsappBulkLinkGenerator";
+import { WhatsappTextFormatter } from "@/components/tools/WhatsappTextFormatter";
+import { FancyWhatsappTextGenerator } from "@/components/tools/FancyWhatsappTextGenerator";
+import { WhatsappQrGenerator } from "@/components/tools/WhatsappQrGenerator";
+import { WhatsappGroupQrGenerator } from "@/components/tools/WhatsappGroupQrGenerator";
+import { WhatsappCsLinkGenerator } from "@/components/tools/WhatsappCsLinkGenerator";
+import { WhatsappOrderLinkGenerator } from "@/components/tools/WhatsappOrderLinkGenerator";
+import { WhatsappStickerMaker } from "@/components/tools/WhatsappStickerMaker";
 import { FaqSchemaGenerator } from "@/components/tools/FaqSchemaGenerator";
 import { OpenGraphGenerator } from "@/components/tools/OpenGraphGenerator";
 import { JsonLdGenerator } from "@/components/tools/JsonLdGenerator";
@@ -99,6 +108,8 @@ import { NilaiAkhirCalculator } from "@/components/tools/NilaiAkhirCalculator";
 import { RataRataNilaiCalculator } from "@/components/tools/RataRataNilaiCalculator";
 import { ZakatProfesiCalculator } from "@/components/tools/ZakatProfesiCalculator";
 import { ZakatMalCalculator } from "@/components/tools/ZakatMalCalculator";
+import { FidyahCalculator } from "@/components/tools/FidyahCalculator";
+import { WarisCalculator } from "@/components/tools/WarisCalculator";
 
 const toolComponents: Record<string, ComponentType> = {
   "json-formatter": JsonFormatter,
@@ -132,6 +143,7 @@ const toolComponents: Record<string, ComponentType> = {
   "webp-to-jpg": WebpToJpg,
   "image-cropper": ImageCropper,
   "image-rotator": ImageRotator,
+  "indonesian-meme-generator": IndonesianMemeGenerator,
   "kalkulator-thr": ThrCalculator,
   "kalkulator-pph21": Pph21Calculator,
   "kalkulator-gaji-bersih": GajiBersihCalculator,
@@ -147,6 +159,14 @@ const toolComponents: Record<string, ComponentType> = {
   "barcode-generator": BarcodeGenerator,
   "wifi-qr-generator": WifiQrGenerator,
   "whatsapp-link-generator": WhatsappLinkGenerator,
+  "whatsapp-bulk-link": WhatsappBulkLinkGenerator,
+  "whatsapp-text-formatter": WhatsappTextFormatter,
+  "fancy-whatsapp-text": FancyWhatsappTextGenerator,
+  "whatsapp-qr-generator": WhatsappQrGenerator,
+  "whatsapp-group-qr": WhatsappGroupQrGenerator,
+  "whatsapp-cs-link": WhatsappCsLinkGenerator,
+  "whatsapp-order-link": WhatsappOrderLinkGenerator,
+  "whatsapp-sticker-maker": WhatsappStickerMaker,
   "faq-schema-generator": FaqSchemaGenerator,
   "open-graph-generator": OpenGraphGenerator,
   "json-ld-generator": JsonLdGenerator,
@@ -182,6 +202,8 @@ const toolComponents: Record<string, ComponentType> = {
   "kalkulator-rata-rata-nilai": RataRataNilaiCalculator,
   "kalkulator-zakat-profesi": ZakatProfesiCalculator,
   "kalkulator-zakat-mal": ZakatMalCalculator,
+  "kalkulator-fidyah": FidyahCalculator,
+  "kalkulator-waris": WarisCalculator,
   "css-gradient-generator": CssGradientGenerator,
   "box-shadow-generator": BoxShadowGenerator,
   "border-radius-generator": BorderRadiusGenerator,

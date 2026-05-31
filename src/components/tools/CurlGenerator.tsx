@@ -143,11 +143,11 @@ export function CurlGenerator() {
       <div className="space-y-6 bg-card border border-foreground/10 p-6 rounded-xl">
         <h3 className="text-lg font-bold">Pengaturan Request</h3>
 
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <select
             value={method}
             onChange={(e) => setMethod(e.target.value)}
-            className="h-11 px-3 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary font-bold text-sm"
+            className="h-11 px-3 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary font-bold text-sm w-full sm:w-28 text-center"
           >
             {["GET", "POST", "PUT", "DELETE", "PATCH"].map((m) => (
               <option key={m} value={m}>
@@ -159,7 +159,7 @@ export function CurlGenerator() {
             type="text"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="flex-1 h-11 px-4 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary font-mono text-sm"
+            className="flex-1 min-w-0 h-11 px-4 bg-background border border-foreground/15 rounded-lg focus:outline-none focus:border-primary font-mono text-sm"
             placeholder="URL Endpoint"
           />
         </div>
@@ -173,14 +173,14 @@ export function CurlGenerator() {
                 value={h.key}
                 onChange={(e) => updateHeader(idx, "key", e.target.value)}
                 placeholder="Header Name"
-                className="flex-1 h-9 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono"
+                className="flex-1 min-w-0 h-9 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono"
               />
               <input
                 type="text"
                 value={h.value}
                 onChange={(e) => updateHeader(idx, "value", e.target.value)}
                 placeholder="Value"
-                className="flex-1 h-9 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono"
+                className="flex-1 min-w-0 h-9 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono"
               />
               <button
                 onClick={() => removeHeader(idx)}
