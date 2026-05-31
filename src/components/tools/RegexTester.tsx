@@ -9,7 +9,7 @@ interface RegexMatch {
 export function RegexTester() {
   const [pattern, setPattern] = useState("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
   const [flags, setFlags] = useState("g");
-  const [testString, setTestString] = useState("Halo! Hubungi kami di support@palugada.com atau admin.web@palugada.co.id.");
+  const [testString, setTestString] = useState("Halo! Hubungi kami di support@sqwerly.com atau admin@sqwerly.com.");
   const [matches, setMatches] = useState<RegexMatch[]>([]);
   const [error, setError] = useState("");
   const [highlighted, setHighlighted] = useState<React.ReactNode[] | string>("");
@@ -109,9 +109,8 @@ export function RegexTester() {
                 <button
                   key={flag}
                   onClick={() => toggleFlag(flag)}
-                  className={`w-7 h-7 rounded text-xs font-mono font-bold uppercase transition-colors ${
-                    active ? "bg-primary text-background" : "hover:bg-foreground/5 text-foreground/60"
-                  }`}
+                  className={`w-7 h-7 rounded text-xs font-mono font-bold uppercase transition-colors ${active ? "bg-primary text-background" : "hover:bg-foreground/5 text-foreground/60"
+                    }`}
                   title={{
                     g: "global (semua kecocokan)",
                     i: "case-insensitive (abaikan huruf besar/kecil)",

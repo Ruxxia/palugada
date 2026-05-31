@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { categories, tools, type ToolCategory } from "@/lib/tools";
+import { categories, tools } from "@/lib/tools";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ToolCard } from "@/components/ToolCard";
@@ -20,6 +20,7 @@ export const Route = createFileRoute("/categories/$category")({
   },
   head: ({ loaderData }) => {
     const category = loaderData?.category;
+    const categoryTools = loaderData?.categoryTools;
     const title = category ? `${category.name} — Palugada` : "Kategori — Palugada";
     const description = category
       ? `Kumpulan tool gratis lengkap untuk kategori ${category.name}. Tanpa login, langsung pakai.`
@@ -34,6 +35,35 @@ export const Route = createFileRoute("/categories/$category")({
         { property: "og:type", content: "website" },
       ],
       links: category ? [{ rel: "canonical", href: `/categories/${category.key}` }] : [],
+      scripts: category
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: [
+                  {
+                    "@type": "Question",
+                    name: `Ada berapa alat gratis yang tersedia di kategori ${category.name}?`,
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: `Ada total ${categoryTools?.length ?? 0} alat gratis di kategori ${category.name} pada Palugada, termasuk ${categoryTools?.slice(0, 3).map((t) => t.name).join(", ")}.`,
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: `Apakah alat di kategori ${category.name} aman digunakan?`,
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: `Sangat aman. Semua pemrosesan data dilakukan 100% secara lokal di browser Anda. Kami tidak menyimpan atau mengirim data apa pun ke server kami.`,
+                    },
+                  },
+                ],
+              }),
+            },
+          ]
+        : [],
     };
   },
   component: CategoryPage,
@@ -88,6 +118,27 @@ function CategoryPage() {
             ))}
           </div>
         )}
+
+        {/* Other Categories Links */}
+        <section className="mt-16 pt-10 border-t border-foreground/10">
+          <h2 className="text-xs font-mono uppercase tracking-wider text-foreground/50 mb-6">
+            Kategori Lainnya
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {categories
+              .filter((c) => c.key !== "all" && c.key.toLowerCase() !== category.key.toLowerCase())
+              .map((c) => (
+                <Link
+                  key={c.key}
+                  to="/categories/$category"
+                  params={{ category: c.key.toLowerCase() }}
+                  className="px-4 py-2 bg-card border border-foreground/10 hover:border-foreground/40 text-xs font-bold uppercase rounded-full tracking-wider transition-colors"
+                >
+                  {c.name}
+                </Link>
+              ))}
+          </div>
+        </section>
       </main>
 
       <SiteFooter />

@@ -34,7 +34,7 @@ export function SiteFooter() {
       </div>
       <div className="max-w-6xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-[10px] font-mono uppercase tracking-tighter">
-          © {new Date().getFullYear()} Palugada Tools
+          © {new Date().getFullYear()} Palugada Tools |  Developed by <a href="https://sqwerly.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary">Sqwerly</a>
         </p>
         <p className="text-[10px] font-mono uppercase tracking-tighter">Apa Lu Mau, Gua Ada.</p>
       </div>

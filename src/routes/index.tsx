@@ -106,16 +106,21 @@ function Index() {
           {categories.map((c) => {
             const isActive = active === c.key;
             return (
-              <button
+              <Link
                 key={c.key}
-                onClick={() => setActive(c.key)}
+                to={c.key === "all" ? "/" : "/categories/$category"}
+                params={c.key === "all" ? undefined : { category: c.key.toLowerCase() }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActive(c.key);
+                }}
                 className={`whitespace-nowrap px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${isActive
                   ? "bg-foreground text-background"
                   : "bg-card border border-foreground/10 hover:border-foreground/40"
                   }`}
               >
                 {c.name === "Semua" ? "Semua Tools" : c.name}
-              </button>
+              </Link>
             );
           })}
         </div>

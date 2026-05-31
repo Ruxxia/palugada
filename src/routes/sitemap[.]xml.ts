@@ -1,15 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type {} from "@tanstack/react-start";
-import { tools } from "@/lib/tools";
-
-const BASE_URL = "";
+import { tools, categories } from "@/lib/tools";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
-      GET: async () => {
+      GET: async ({ request }: { request: Request }) => {
+        const url = new URL(request.url);
+        const origin = `${url.protocol}//${url.host}`;
+
         const entries = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          ...categories
+            .filter((c) => c.key !== "all")
+            .map((c) => ({
+              path: `/categories/${c.key.toLowerCase()}`,
+              changefreq: "weekly" as const,
+              priority: "0.9",
+            })),
           ...tools.map((t) => ({
             path: `/tools/${t.slug}`,
             changefreq: "monthly" as const,
@@ -19,7 +26,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         const urls = entries.map(
           (e) =>
-            `  <url>\n    <loc>${BASE_URL}${e.path}</loc>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority}</priority>\n  </url>`,
+            `  <url>\n    <loc>${origin}${e.path}</loc>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority}</priority>\n  </url>`
         );
 
         const xml = [

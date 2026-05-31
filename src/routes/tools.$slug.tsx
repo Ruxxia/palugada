@@ -1,4 +1,4 @@
-import type { ComponentType } from "react";
+import { type ComponentType, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -208,6 +208,18 @@ function ToolPage() {
   const catObj = categories.find((c) => c.key === tool.category);
   const categoryName = catObj ? catObj.name : tool.category;
 
+  const [copiedUrl, setCopiedUrl] = useState(false);
+  const [copiedEmbed, setCopiedEmbed] = useState(false);
+
+  const shareUrl = typeof window !== "undefined" ? window.location.href : `https://palugada.sqwerly.com/tools/${tool.slug}`;
+  const embedCode = `<a href="${shareUrl}" target="_blank">Gunakan ${tool.name} Gratis di Palugada</a>`;
+
+  const copyToClipboard = (text: string, setCopied: (val: boolean) => void) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
@@ -244,6 +256,63 @@ function ToolPage() {
         <div className="bg-card border-2 border-foreground rounded-2xl p-6 md:p-8 shadow-tactile">
           {ToolComponent ? <ToolComponent /> : <p>Tool sedang disiapkan.</p>}
         </div>
+
+        {/* Share & Embed (Backlink Generator Hack) */}
+        <section className="mt-16 bg-foreground/5 border border-foreground/10 rounded-2xl p-6 md:p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="font-display text-2xl uppercase tracking-tight">Bagikan Tool Ini</h3>
+              <p className="text-sm text-foreground/60 leading-relaxed">
+                Bantu teman atau kolega Anda dengan membagikan alat ini. Cepat, gratis, dan tanpa registrasi.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => copyToClipboard(shareUrl, setCopiedUrl)}
+                  className="px-5 h-11 bg-foreground text-background text-xs font-bold uppercase rounded-lg tracking-wider hover:opacity-90 transition-opacity"
+                >
+                  {copiedUrl ? "Copied Link!" : "Salin Link URL"}
+                </button>
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Coba tool ${tool.name} gratis di Palugada: ${shareUrl}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 h-11 bg-[#25D366] text-white text-xs font-bold uppercase rounded-lg tracking-wider flex items-center justify-center hover:opacity-90 transition-opacity"
+                >
+                  WhatsApp
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Rekomendasi tool gratis ${tool.name} dari Palugada!`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 h-11 bg-[#1DA1F2] text-white text-xs font-bold uppercase rounded-lg tracking-wider flex items-center justify-center hover:opacity-90 transition-opacity"
+                >
+                  Twitter / X
+                </a>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="font-display text-2xl uppercase tracking-tight">Sematkan di Website Anda</h3>
+              <p className="text-sm text-foreground/60 leading-relaxed">
+                Pasang backlink HTML di blog atau web resource Anda agar pengunjung Anda bisa langsung mengakses alat ini.
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={embedCode}
+                  className="flex-1 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono text-foreground/60 focus:outline-none"
+                />
+                <button
+                  onClick={() => copyToClipboard(embedCode, setCopiedEmbed)}
+                  className="px-4 bg-foreground text-background text-xs font-bold uppercase rounded-lg tracking-wider hover:opacity-90 transition-opacity shrink-0"
+                >
+                  {copiedEmbed ? "Copied!" : "Salin"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* FAQ */}
         <section className="mt-16">
