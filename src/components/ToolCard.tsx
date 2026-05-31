@@ -3,13 +3,11 @@ import type { Tool } from "@/lib/tools";
 
 const categoryLabel: Record<Tool["category"], string> = {
   Developer: "DEV",
-  Text: "TEXT",
-  Generators: "GEN",
-  Calculators: "CALC",
-  Fun: "FUN",
-  Time: "TIME",
-  Converters: "CONV",
   Image: "IMG",
+  Calculators: "CALC",
+  Generators: "GEN",
+  Converters: "CONV",
+  Utilities: "UTIL",
 };
 
 export function ToolCard({ tool }: { tool: Tool }) {

@@ -225,7 +225,7 @@ function ToolPage() {
       <SiteHeader />
 
       <div className="max-w-6xl mx-auto px-4 pt-10 pb-6">
-        <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-6">
+        <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-6 flex flex-wrap items-center">
           <Link to="/" className="hover:text-primary">Home</Link>
           <span className="mx-2">/</span>
           <Link
@@ -235,6 +235,8 @@ function ToolPage() {
           >
             {categoryName}
           </Link>
+          <span className="mx-2">/</span>
+          <span className="text-foreground/60">{tool.subcategory}</span>
           <span className="mx-2">/</span>
           <span className="text-foreground">{tool.name}</span>
         </nav>

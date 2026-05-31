@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useState, useMemo } from "react";
 import { categories, tools } from "@/lib/tools";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -82,6 +83,12 @@ export const Route = createFileRoute("/categories/$category")({
 
 function CategoryPage() {
   const { category, categoryTools } = Route.useLoaderData();
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>("all");
+
+  const filteredTools = useMemo(() => {
+    if (selectedSubcategory === "all") return categoryTools;
+    return categoryTools.filter((t) => t.subcategory === selectedSubcategory);
+  }, [categoryTools, selectedSubcategory]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -105,15 +112,45 @@ function CategoryPage() {
           </p>
         </div>
 
+        {/* Subcategories Filter */}
+        {category.subcategories && category.subcategories.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-foreground/5 animate-[entrance_0.8s_var(--ease-out-expo)_both_100ms]">
+            <button
+              onClick={() => setSelectedSubcategory("all")}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${selectedSubcategory === "all"
+                ? "bg-foreground text-background"
+                : "bg-card border border-foreground/10 hover:border-foreground/40"
+                }`}
+            >
+              Semua Subkategori
+            </button>
+            {category.subcategories.map((sub) => {
+              const isSubActive = selectedSubcategory === sub;
+              return (
+                <button
+                  key={sub}
+                  onClick={() => setSelectedSubcategory(sub)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${isSubActive
+                    ? "bg-foreground text-background"
+                    : "bg-card border border-foreground/10 hover:border-foreground/40"
+                    }`}
+                >
+                  {sub}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* Tools Grid */}
-        {categoryTools.length === 0 ? (
+        {filteredTools.length === 0 ? (
           <div className="text-center py-20 text-foreground/50 border border-foreground/10 rounded-xl bg-card">
             <p className="font-display text-2xl uppercase mb-2">Belum ada tool</p>
             <p className="text-sm">Silakan kembali lagi nanti untuk pembaruan tools baru.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categoryTools.map((t) => (
+            {filteredTools.map((t) => (
               <ToolCard key={t.slug} tool={t} />
             ))}
           </div>
@@ -145,3 +182,4 @@ function CategoryPage() {
     </div>
   );
 }
+

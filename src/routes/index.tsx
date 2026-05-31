@@ -29,19 +29,26 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<string>("all");
+  const [activeSubcategory, setActiveSubcategory] = useState<string>("all");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return tools.filter((t) => {
       const matchCat = active === "all" || t.category === active;
+      const matchSubcat = activeSubcategory === "all" || t.subcategory === activeSubcategory;
       const matchQ =
         !q ||
         t.name.toLowerCase().includes(q) ||
         t.description.toLowerCase().includes(q) ||
-        t.category.toLowerCase().includes(q);
-      return matchCat && matchQ;
+        t.category.toLowerCase().includes(q) ||
+        t.subcategory.toLowerCase().includes(q);
+      return matchCat && matchSubcat && matchQ;
     });
-  }, [query, active]);
+  }, [query, active, activeSubcategory]);
+
+  const activeCategoryConfig = useMemo(() => {
+    return categories.find((c) => c.key === active);
+  }, [active]);
 
   const featured = tools.filter((t) => t.featured);
 
@@ -101,7 +108,7 @@ function Index() {
       </section>
 
       {/* Category tabs */}
-      <section className="px-4 mb-10 animate-[entrance_0.8s_var(--ease-out-expo)_both_200ms]">
+      <section className="px-4 mb-6 animate-[entrance_0.8s_var(--ease-out-expo)_both_200ms]">
         <div className="max-w-6xl mx-auto flex flex-wrap gap-2 pb-2 justify-start">
           {categories.map((c) => {
             const isActive = active === c.key;
@@ -113,6 +120,7 @@ function Index() {
                 onClick={(e) => {
                   e.preventDefault();
                   setActive(c.key);
+                  setActiveSubcategory("all");
                 }}
                 className={`whitespace-nowrap px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${isActive
                   ? "bg-foreground text-background"
@@ -125,6 +133,38 @@ function Index() {
           })}
         </div>
       </section>
+
+      {/* Subcategory tabs */}
+      {activeCategoryConfig?.subcategories && activeCategoryConfig.subcategories.length > 0 && (
+        <section className="px-4 mb-10 animate-[entrance_0.8s_var(--ease-out-expo)_both_100ms]">
+          <div className="max-w-6xl mx-auto flex flex-wrap gap-2 pb-2 justify-start border-b border-foreground/5">
+            <button
+              onClick={() => setActiveSubcategory("all")}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${activeSubcategory === "all"
+                ? "bg-foreground/80 text-background"
+                : "bg-card border border-foreground/5 hover:border-foreground/20"
+                }`}
+            >
+              Semua Subkategori
+            </button>
+            {activeCategoryConfig.subcategories.map((sub) => {
+              const isSubActive = activeSubcategory === sub;
+              return (
+                <button
+                  key={sub}
+                  onClick={() => setActiveSubcategory(sub)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${isSubActive
+                    ? "bg-foreground/80 text-background"
+                    : "bg-card border border-foreground/5 hover:border-foreground/20"
+                    }`}
+                >
+                  {sub}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <main className="px-4 pb-24 max-w-6xl mx-auto animate-[entrance_1s_var(--ease-out-expo)_both_400ms]">
         {filtered.length === 0 ? (
