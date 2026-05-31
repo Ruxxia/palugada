@@ -1,4 +1,4 @@
-export type ToolCategory = "Developer" | "Image" | "Calculators" | "Generators" | "Converters" | "Utilities" | "WhatsApp";
+export type ToolCategory = "Developer" | "Image" | "Calculators" | "Generators" | "Converters" | "Utilities" | "WhatsApp" | "PDF";
 
 export interface Tool {
   slug: string;
@@ -1219,6 +1219,78 @@ export const tools: Tool[] = [
     faqs: [
       { q: "Apakah sticker hasil unduhan langsung dalam format WebP?", a: "Ya. Hasil unduhan adalah berkas WebP berukuran 512x512 piksel yang merupakan format standar sticker WhatsApp." }
     ]
+  },
+  {
+    slug: "image-to-pdf",
+    name: "Image to PDF",
+    description: "Ubah satu atau beberapa gambar JPG/PNG/WebP menjadi satu file PDF.",
+    longDescription: "Konversi galeri gambar Anda menjadi dokumen PDF secara cepat. Atur urutan gambar, orientasi halaman (potrait/landscape), dan ukuran kertas.",
+    category: "PDF",
+    subcategory: "Conversion",
+    icon: "🖼️",
+    faqs: [
+      { q: "Format gambar apa saja yang bisa diconvert?", a: "Kalkulator ini mendukung format JPG, JPEG, PNG, dan WebP." }
+    ]
+  },
+  {
+    slug: "pdf-to-image",
+    name: "PDF to Image",
+    description: "Ekstrak semua halaman dokumen PDF menjadi file gambar PNG berkualitas tinggi.",
+    longDescription: "Konversi berkas PDF Anda menjadi sekumpulan gambar PNG per halaman secara lokal tanpa perlu upload data ke server luar.",
+    category: "PDF",
+    subcategory: "Conversion",
+    icon: "📸",
+    faqs: [
+      { q: "Apakah gambar hasil ekstrak beresolusi tinggi?", a: "Ya. Halaman PDF dirender dengan skala resolusi tajam yang nyaman untuk dibaca." }
+    ]
+  },
+  {
+    slug: "pdf-merge",
+    name: "PDF Merge",
+    description: "Gabungkan beberapa file PDF terpisah menjadi satu dokumen utuh.",
+    longDescription: "Beri kemudahan menyatukan laporan kerja dengan menggabungkan dua atau lebih file PDF secara berurutan dan terstruktur.",
+    category: "PDF",
+    subcategory: "Editing",
+    icon: "🔀",
+    faqs: [
+      { q: "Apakah ada batasan jumlah file yang bisa digabung?", a: "Tidak ada batasan jumlah file. Anda dapat menggabungkan file sebanyak yang Anda perlukan secara lokal." }
+    ]
+  },
+  {
+    slug: "pdf-split",
+    name: "PDF Split",
+    description: "Pisahkan file PDF menjadi beberapa bagian berdasarkan rentang halaman.",
+    longDescription: "Potong dokumen PDF yang panjang menjadi beberapa berkas baru berdasarkan nomor halaman atau pisahkan setiap halamannya satu per satu.",
+    category: "PDF",
+    subcategory: "Editing",
+    icon: "✂️",
+    faqs: [
+      { q: "Bagaimana cara menulis rentang halaman?", a: "Anda dapat menggunakan format seperti '1-3' untuk halaman 1 sampai 3, atau angka tunggal '5' dipisahkan koma." }
+    ]
+  },
+  {
+    slug: "pdf-rotate",
+    name: "PDF Rotate",
+    description: "Putar arah orientasi halaman dokumen PDF Anda secara permanen.",
+    longDescription: "Perbaiki orientasi halaman PDF yang terbalik atau miring dengan memutarnya 90, 180, atau 270 derajat secara instan.",
+    category: "PDF",
+    subcategory: "Editing",
+    icon: "🔄",
+    faqs: [
+      { q: "Apakah rotasi disimpan secara permanen?", a: "Ya, file baru hasil download akan menyimpan sudut rotasi baru tersebut secara permanen." }
+    ]
+  },
+  {
+    slug: "pdf-page-extractor",
+    name: "PDF Page Extractor",
+    description: "Pilih dan ambil beberapa halaman tertentu saja dari satu dokumen PDF.",
+    longDescription: "Ambil halaman-halaman penting dari file PDF tebal dan satukan menjadi sebuah berkas PDF baru secara praktis.",
+    category: "PDF",
+    subcategory: "Editing",
+    icon: "📥",
+    faqs: [
+      { q: "Apakah file asli saya akan terhapus?", a: "Tidak, file asli Anda tetap aman tidak disentuh. Sistem hanya menyalin halaman yang Anda pilih ke file PDF baru." }
+    ]
   }
 ];
 
@@ -1264,6 +1336,11 @@ export const categories: CategoryInfo[] = [
     name: "💬 WhatsApp Tools",
     key: "WhatsApp",
     subcategories: ["Link Tools", "Text Tools", "QR Tools", "Business Tools", "Sticker Tools"]
+  },
+  {
+    name: "📄 PDF Tools",
+    key: "PDF",
+    subcategories: ["Conversion", "Editing"]
   }
 ];
 

@@ -9,6 +9,7 @@ const categoryLabel: Record<Tool["category"], string> = {
   Converters: "CONV",
   Utilities: "UTIL",
   WhatsApp: "WA",
+  PDF: "PDF",
 };
 
 export function ToolCard({ tool }: { tool: Tool }) {

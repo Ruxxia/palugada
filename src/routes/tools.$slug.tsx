@@ -111,6 +111,13 @@ import { ZakatMalCalculator } from "@/components/tools/ZakatMalCalculator";
 import { FidyahCalculator } from "@/components/tools/FidyahCalculator";
 import { WarisCalculator } from "@/components/tools/WarisCalculator";
 
+import { ImageToPdf } from "@/components/tools/ImageToPdf";
+import { PdfToImage } from "@/components/tools/PdfToImage";
+import { PdfMerge } from "@/components/tools/PdfMerge";
+import { PdfSplit } from "@/components/tools/PdfSplit";
+import { PdfRotate } from "@/components/tools/PdfRotate";
+import { PdfPageExtractor } from "@/components/tools/PdfPageExtractor";
+
 const toolComponents: Record<string, ComponentType> = {
   "json-formatter": JsonFormatter,
   "uuid-generator": UuidGenerator,
@@ -209,6 +216,12 @@ const toolComponents: Record<string, ComponentType> = {
   "border-radius-generator": BorderRadiusGenerator,
   "flexbox-generator": FlexboxGenerator,
   "css-grid-generator": CssGridGenerator,
+  "image-to-pdf": ImageToPdf,
+  "pdf-to-image": PdfToImage,
+  "pdf-merge": PdfMerge,
+  "pdf-split": PdfSplit,
+  "pdf-rotate": PdfRotate,
+  "pdf-page-extractor": PdfPageExtractor,
 };
 
 export const Route = createFileRoute("/tools/$slug")({
