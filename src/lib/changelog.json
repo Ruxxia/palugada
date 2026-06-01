@@ -1,6 +1,23 @@
 [
   {
     "date": "1 Juni 2026",
+    "title": "Integrasi Google Analytics 4 (GA4)",
+    "description": "Kami meluncurkan integrasi Google Analytics 4 (GA4) untuk memantau performa platform, lalu lintas halaman, dan interaksi penting, baik di browser maupun di mode aplikasi PWA.",
+    "tools": [
+      {
+        "slug": "page-view-tracking",
+        "badge": "Analytics",
+        "details": "Pemantauan lalu lintas per halaman secara otomatis pada sistem single-page-application (SPA)."
+      },
+      {
+        "slug": "engagement-tracking",
+        "badge": "Analytics",
+        "details": "Pelacakan interaksi penting seperti penambahan bookmark, pembagian tool (share link/embed), dan status instalasi PWA."
+      }
+    ]
+  },
+  {
+    "date": "1 Juni 2026",
     "title": "Fitur Baru: PWA & Offline Support",
     "description": "Palugada sekarang mendukung Progressive Web App (PWA) sepenuhnya. Anda dapat memasang aplikasi langsung ke layar utama HP atau desktop Anda dengan performa super cepat dan akses offline.",
     "tools": [

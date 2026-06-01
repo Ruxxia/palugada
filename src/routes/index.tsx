@@ -85,57 +85,61 @@ function Index() {
       </header>
 
       {/* Featured / Populer */}
-      <section className="px-4 mb-8 max-w-6xl mx-auto">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-foreground/40">
-            Populer
-          </span>
-          <div className="flex-1 h-px bg-foreground/5" />
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          {featured.map((t) => (
-            <Link
-              key={t.slug}
-              to="/tools/$slug"
-              params={{ slug: t.slug }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-card border border-foreground/10 rounded-full text-xs font-medium hover:border-primary transition-colors"
-            >
-              <span className="font-mono text-primary">{t.icon}</span>
-              {t.shortName ?? t.name}
-            </Link>
-          ))}
-        </div>
-      </section>
+      {!query.trim() && (
+        <section className="px-4 mb-8 max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-foreground/40">
+              Populer
+            </span>
+            <div className="flex-1 h-px bg-foreground/5" />
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {featured.map((t) => (
+              <Link
+                key={t.slug}
+                to="/tools/$slug"
+                params={{ slug: t.slug }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 bg-card border border-foreground/10 rounded-full text-xs font-medium hover:border-primary transition-colors"
+              >
+                <span className="font-mono text-primary">{t.icon}</span>
+                {t.shortName ?? t.name}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Category tabs */}
-      <section className="px-4 mb-6 animate-[entrance_0.8s_var(--ease-out-expo)_both_200ms]">
-        <div className="max-w-6xl mx-auto flex flex-wrap gap-2 pb-2 justify-start">
-          {categories.map((c) => {
-            const isActive = active === c.key;
-            return (
-              <Link
-                key={c.key}
-                to={c.key === "all" ? "/" : "/categories/$category"}
-                params={c.key === "all" ? undefined : { category: c.key.toLowerCase() }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setActive(c.key);
-                  setActiveSubcategory("all");
-                }}
-                className={`whitespace-nowrap px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${isActive
-                  ? "bg-foreground text-background"
-                  : "bg-card border border-foreground/10 hover:border-foreground/40"
-                  }`}
-              >
-                {c.name === "Semua" ? "Semua Tools" : c.name}
-              </Link>
-            );
-          })}
-        </div>
-      </section>
+      {!query.trim() && (
+        <section className="px-4 mb-6 animate-[entrance_0.8s_var(--ease-out-expo)_both_200ms]">
+          <div className="max-w-6xl mx-auto flex flex-wrap gap-2 pb-2 justify-start">
+            {categories.map((c) => {
+              const isActive = active === c.key;
+              return (
+                <Link
+                  key={c.key}
+                  to={c.key === "all" ? "/" : "/categories/$category"}
+                  params={c.key === "all" ? undefined : { category: c.key.toLowerCase() }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setActive(c.key);
+                    setActiveSubcategory("all");
+                  }}
+                  className={`whitespace-nowrap px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${isActive
+                    ? "bg-foreground text-background"
+                    : "bg-card border border-foreground/10 hover:border-foreground/40"
+                    }`}
+                >
+                  {c.name === "Semua" ? "Semua Tools" : c.name}
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {/* Subcategory tabs */}
-      {activeCategoryConfig?.subcategories && activeCategoryConfig.subcategories.length > 0 && (
+      {!query.trim() && activeCategoryConfig?.subcategories && activeCategoryConfig.subcategories.length > 0 && (
         <section className="px-4 mb-10 animate-[entrance_0.8s_var(--ease-out-expo)_both_100ms]">
           <div className="max-w-6xl mx-auto flex flex-wrap gap-2 pb-2 justify-start border-b border-foreground/5">
             <button

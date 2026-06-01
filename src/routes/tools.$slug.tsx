@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ToolCard } from "@/components/ToolCard";
 import { getRelatedTools, getToolBySlug, categories } from "@/lib/tools";
+import { trackToolAccess, trackEvent } from "@/lib/analytics";
 import { JsonFormatter } from "@/components/tools/JsonFormatter";
 import { UuidGenerator } from "@/components/tools/UuidGenerator";
 import { Base64Tool } from "@/components/tools/Base64Tool";
@@ -363,11 +364,22 @@ function ToolPage() {
     } catch (e) {}
   }, [tool.slug]);
 
+  useEffect(() => {
+    trackToolAccess(tool.slug, tool.name);
+  }, [tool.slug, tool.name]);
+
   const toggleBookmark = () => {
     try {
       const bookmarks = JSON.parse(localStorage.getItem("palugada_bookmarks") || "[]");
       let nextBookmarks: string[];
-      if (bookmarks.includes(tool.slug)) {
+      const isCurrentlyBookmarked = bookmarks.includes(tool.slug);
+      
+      trackEvent(isCurrentlyBookmarked ? "tool_unbookmarked" : "tool_bookmarked", {
+        tool_slug: tool.slug,
+        tool_name: tool.name,
+      });
+
+      if (isCurrentlyBookmarked) {
         nextBookmarks = bookmarks.filter((s: string) => s !== tool.slug);
         setIsBookmarked(false);
       } else {
@@ -382,9 +394,14 @@ function ToolPage() {
   const shareUrl = typeof window !== "undefined" ? window.location.href : `https://palugada.sqwerly.com/tools/${tool.slug}`;
   const embedCode = `<a href="${shareUrl}" target="_blank">Gunakan ${tool.name} Gratis di Palugada</a>`;
 
-  const copyToClipboard = (text: string, setCopied: (val: boolean) => void) => {
+  const copyToClipboard = (text: string, setCopied: (val: boolean) => void, type: "link" | "embed") => {
     navigator.clipboard.writeText(text);
     setCopied(true);
+    trackEvent("tool_shared", {
+      tool_slug: tool.slug,
+      tool_name: tool.name,
+      share_type: type,
+    });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -463,12 +480,13 @@ function ToolPage() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <button
-                  onClick={() => copyToClipboard(shareUrl, setCopiedUrl)}
+                  onClick={() => copyToClipboard(shareUrl, setCopiedUrl, "link")}
                   className="px-5 h-11 bg-foreground text-background text-xs font-bold uppercase rounded-lg tracking-wider hover:opacity-90 transition-opacity"
                 >
                   {copiedUrl ? "Copied Link!" : "Salin Link URL"}
                 </button>
                 <a
+                  onClick={() => trackEvent("tool_shared", { tool_slug: tool.slug, tool_name: tool.name, share_type: "whatsapp" })}
                   href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Coba tool ${tool.name} gratis di Palugada: ${shareUrl}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -477,6 +495,7 @@ function ToolPage() {
                   WhatsApp
                 </a>
                 <a
+                  onClick={() => trackEvent("tool_shared", { tool_slug: tool.slug, tool_name: tool.name, share_type: "twitter" })}
                   href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Rekomendasi tool gratis ${tool.name} dari Palugada!`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -500,7 +519,7 @@ function ToolPage() {
                   className="flex-1 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono text-foreground/60 focus:outline-none"
                 />
                 <button
-                  onClick={() => copyToClipboard(embedCode, setCopiedEmbed)}
+                  onClick={() => copyToClipboard(embedCode, setCopiedEmbed, "embed")}
                   className="px-4 bg-foreground text-background text-xs font-bold uppercase rounded-lg tracking-wider hover:opacity-90 transition-opacity shrink-0"
                 >
                   {copiedEmbed ? "Copied!" : "Salin"}

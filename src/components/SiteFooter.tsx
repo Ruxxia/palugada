@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { trackPWAEvent } from "@/lib/analytics";
 
 export function SiteFooter() {
   const [canInstall, setCanInstall] = useState(false);
@@ -28,6 +29,7 @@ export function SiteFooter() {
     await promptEvent.prompt();
     const { outcome } = await promptEvent.userChoice;
     console.log(`User response to footer install prompt: ${outcome}`);
+    trackPWAEvent("prompt_accepted", { outcome, context: "footer" });
     if (outcome === "accepted") {
       setCanInstall(false);
     }

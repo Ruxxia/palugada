@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Download, X, Laptop, Smartphone } from "lucide-react";
+import { trackPWAEvent } from "@/lib/analytics";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -70,6 +71,7 @@ export function PWAInstallPrompt() {
 
       // Show custom banner
       setIsVisible(true);
+      trackPWAEvent("prompt_shown");
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -77,6 +79,7 @@ export function PWAInstallPrompt() {
     // 4. Listen for successful app installation
     const handleAppInstalled = () => {
       console.log("Palugada PWA was installed successfully!");
+      trackPWAEvent("installed");
       setIsVisible(false);
       setDeferredPrompt(null);
       (window as any).deferredPrompt = null;
@@ -100,6 +103,7 @@ export function PWAInstallPrompt() {
     // Wait for the user response
     const { outcome } = await deferredPrompt.userChoice;
     console.log(`User response to install prompt: ${outcome}`);
+    trackPWAEvent("prompt_accepted", { outcome, context: "banner" });
 
     // Clear saved prompt event
     setDeferredPrompt(null);
@@ -107,6 +111,7 @@ export function PWAInstallPrompt() {
   };
 
   const handleDismiss = () => {
+    trackPWAEvent("prompt_dismissed", { context: "banner" });
     setIsVisible(false);
     // Persist dismissal for 7 days
     localStorage.setItem("pwa-prompt-dismissed", Date.now().toString());
