@@ -75,6 +75,9 @@ import { RobotsGenerator } from "@/components/tools/RobotsGenerator";
 import { SitemapGenerator } from "@/components/tools/SitemapGenerator";
 import { KeywordDensityChecker } from "@/components/tools/KeywordDensityChecker";
 import { MetaTagAnalyzer } from "@/components/tools/MetaTagAnalyzer";
+import { SeoAudit } from "@/components/tools/SeoAudit";
+import { LinkAuditor } from "@/components/tools/LinkAuditor";
+import { SeoPerformanceChecker } from "@/components/tools/SeoPerformanceChecker";
 import { SerpPreviewTool } from "@/components/tools/SerpPreviewTool";
 import { CanonicalUrlGenerator } from "@/components/tools/CanonicalUrlGenerator";
 import { UtmBuilder } from "@/components/tools/UtmBuilder";
@@ -212,6 +215,9 @@ const toolComponents: Record<string, ComponentType> = {
   "sitemap-generator": SitemapGenerator,
   "keyword-density-checker": KeywordDensityChecker,
   "meta-tag-analyzer": MetaTagAnalyzer,
+  "seo-audit": SeoAudit,
+  "link-auditor": LinkAuditor,
+  "seo-performance-checker": SeoPerformanceChecker,
   "serp-preview-tool": SerpPreviewTool,
   "canonical-url-generator": CanonicalUrlGenerator,
   "utm-builder": UtmBuilder,

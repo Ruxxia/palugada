@@ -821,6 +821,49 @@ export const tools: Tool[] = [
     ]
   },
   {
+    slug: "seo-audit",
+    name: "Website SEO Audit Tool",
+    description: "Analisis performa SEO on-page, teknis, link, dan media website Anda secara instan.",
+    longDescription: "SEO Audit Tool adalah alat serbaguna untuk memindai website atau kode HTML Anda guna mengidentifikasi masalah SEO on-page, struktur heading, optimasi gambar (alt tag), kesalahan tautan (link health), kompatibilitas mobile (viewport), SSL/HTTPS, hingga schema markup.",
+    category: "SEO",
+    subcategory: "Analysis",
+    icon: "📈",
+    featured: true,
+    faqs: [
+      { q: "Bagaimana cara kerja SEO Audit Tool ini?", a: "Alat ini memindai tag HTML halaman Anda (baik melalui URL atau kode HTML yang Anda tempel) dan mengevaluasi 10+ parameter utama yang memengaruhi peringkat mesin pencari." },
+      { q: "Mengapa skor SEO saya rendah?", a: "Skor SEO dihitung berdasarkan bobot kepatuhan terhadap standar industri (seperti tag title/description, struktur heading yang runtut, alt tag pada gambar, tautan yang aman, dan keramahan perangkat seluler)." },
+      { q: "Apakah data website saya aman?", a: "Ya, 100% aman. Jika Anda menggunakan opsi analisis HTML source, seluruh pemrosesan kode dilakukan secara lokal di peramban Anda tanpa dikirim ke server luar." }
+    ]
+  },
+  {
+    slug: "link-auditor",
+    name: "Link Auditor Tool",
+    description: "Audit kualitas jangkar teks, periksa tautan eksternal yang aman, dan temukan link rusak/kosong.",
+    longDescription: "Link Auditor memindai seluruh hyperlink di dokumen HTML atau URL target untuk menganalisis keamanan (target blank), kepatuhan anchor text (menghindari teks generik), dan mengidentifikasi link rusak/kosong.",
+    category: "SEO",
+    subcategory: "Analysis",
+    icon: "🔗",
+    featured: true,
+    faqs: [
+      { q: "Mengapa tautan kosong (#) harus dihindari?", a: "Tautan kosong dapat mengganggu aksesibilitas navigasi bagi pembaca layar dan menyulitkan mesin pencari memahami struktur arsitektur link web Anda." },
+      { q: "Bagaimana kriteria anchor text yang baik?", a: "Anchor text harus mendeskripsikan secara jelas konten halaman yang dituju. Hindari kata generik seperti 'klik disini' atau 'baca selengkapnya'." }
+    ]
+  },
+  {
+    slug: "seo-performance-checker",
+    name: "SEO Performance Checker",
+    description: "Evaluasi kecepatan render awal dokumen berdasarkan ukuran HTML, penulisan script/style, dan struktur DOM.",
+    longDescription: "SEO Performance Checker mengevaluasi dokumen HTML Anda untuk mengidentifikasi potensi bottleneck kecepatan render awal, seperti ukuran berkas HTML yang berlebih, DOM Node berlebih, tag CSS/JS inline yang membengkak, dan kompatibilitas viewport mobile.",
+    category: "SEO",
+    subcategory: "Analysis",
+    icon: "⚡",
+    featured: true,
+    faqs: [
+      { q: "Mengapa ukuran file HTML memengaruhi SEO?", a: "Pemuatan kode awal yang ringan mempercepat rendering pertama dokumen (TTFB), memberikan performa user experience yang baik di jaringan lambat." },
+      { q: "Apa dampak DOM Node berlebih?", a: "Jumlah elemen HTML yang terlalu banyak (>1500) meningkatkan beban komputasi peramban untuk merender gaya dan melacak interaksi input (INP)." }
+    ]
+  },
+  {
     slug: "serp-preview-tool",
     name: "SERP Preview Tool",
     description: "Simulasikan tampilan halaman website Anda di hasil pencarian Google desktop dan mobile.",

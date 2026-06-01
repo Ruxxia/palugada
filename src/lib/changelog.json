@@ -1,6 +1,28 @@
 [
   {
     "date": "1 Juni 2026",
+    "title": "Rilis Paket Alat Audit SEO Lengkap (SEO Audit Suite)",
+    "description": "Kami meluncurkan tiga alat audit optimasi mesin pencari (SEO Audit) baru untuk mendeteksi masalah on-page SEO secara mendalam, mengevaluasi kesehatan tautan/link, dan memeriksa performa pemuatan rendering awal berkas secara instan.",
+    "tools": [
+      {
+        "slug": "seo-audit",
+        "badge": "New Audit Tool",
+        "details": "Pemindaian menyeluruh 10+ parameter on-page SEO utama seperti title/description, struktur H1-H6, canonical, mobile viewport, SSL, schema markup, dan OG tags dengan skor akhir."
+      },
+      {
+        "slug": "link-auditor",
+        "badge": "New Audit Tool",
+        "details": "Analisis detail semua hyperlink untuk mendeteksi link kosong/rusak, anchor text generik, dan kepatuhan atribut keamanan noopener/noreferrer."
+      },
+      {
+        "slug": "seo-performance-checker",
+        "badge": "New Audit Tool",
+        "details": "Identifikasi kendala performa pemuatan dokumen seperti file HTML berlebih, pembengkakan tag CSS/JS inline, dan kompleksitas elemen DOM."
+      }
+    ]
+  },
+  {
+    "date": "1 Juni 2026",
     "title": "Integrasi Google Analytics 4 (GA4)",
     "description": "Kami meluncurkan integrasi Google Analytics 4 (GA4) untuk memantau performa platform, lalu lintas halaman, dan interaksi penting, baik di browser maupun di mode aplikasi PWA.",
     "tools": [
