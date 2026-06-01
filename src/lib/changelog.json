@@ -1,0 +1,162 @@
+[
+  {
+    "date": "1 Juni 2026",
+    "title": "Zona Bermain: Rilis Kategori Game Tools Baru",
+    "description": "Memperkenalkan kategori 'Game Tools' dengan 6 game mini yang seru untuk menguji kecepatan mengetik, waktu reaksi, CPS, melatih bidikan presisi, roda keberuntungan, serta game teka-teki geser ubin 2048.",
+    "tools": [
+      {
+        "slug": "typing-speed-test",
+        "badge": "New Game",
+        "details": "Tes kecepatan mengetik Anda (WPM) dan akurasi dengan statistik langsung."
+      },
+      {
+        "slug": "reaction-time-test",
+        "badge": "New Game",
+        "details": "Uji refleks motorik mata dan tangan Anda saat warna layar berubah menjadi hijau."
+      },
+      {
+        "slug": "cps-test",
+        "badge": "New Game",
+        "details": "Ukur seberapa cepat Anda dapat mengklik mouse/layar sentuh Anda per detik."
+      },
+      {
+        "slug": "aim-trainer",
+        "badge": "New Game",
+        "details": "Latih ketangkasan membidik target lingkaran merah yang muncul acak secepat mungkin."
+      },
+      {
+        "slug": "spin-wheel",
+        "badge": "New Game",
+        "details": "Putar roda keberuntungan pie visual berwarna untuk mengambil keputusan acak."
+      },
+      {
+        "slug": "2048",
+        "badge": "New Game",
+        "details": "Mainkan game teka-teki geser ubin klasik 2048 dengan dukungan swipe mobile."
+      }
+    ]
+  },
+  {
+    "date": "1 Juni 2026",
+    "title": "Produktivitas Maksimal: Rilis 4 Alat Utilitas Baru",
+    "description": "Menambahkan 4 alat produktivitas baru di kategori Utilities untuk mempermudah undian nama, pembagian tim, perencanaan waktu rapat global, dan manajemen fokus.",
+    "tools": [
+      {
+        "slug": "random-name-picker",
+        "badge": "New Utility",
+        "details": "Undi nama acak secara interaktif dari daftar masukan Anda dengan animasi slot machine dan sound effects."
+      },
+      {
+        "slug": "team-generator",
+        "badge": "New Utility",
+        "details": "Bagi anggota kelompok/tim secara acak dan seimbang berdasarkan jumlah tim atau batas maksimal anggota."
+      },
+      {
+        "slug": "meeting-time-calculator",
+        "badge": "New Utility",
+        "details": "Bandingkan dan rencanakan waktu rapat tim lintas zona waktu dunia secara visual dan mudah."
+      },
+      {
+        "slug": "pomodoro-timer",
+        "badge": "New Utility",
+        "details": "Kelola siklus fokus bekerja dan istirahat menggunakan teknik Pomodoro dengan visual progress ring dan alarm chime."
+      }
+    ]
+  },
+  {
+    "date": "1 Juni 2026",
+    "title": "Ekspansi Kreatif: Kategori Design Tools Baru",
+    "description": "Meluncurkan kategori baru 'Design Tools' dengan 5 alat bantu visual untuk mempercepat alur kerja pembuatan aset desain UI/UX dan web dev.",
+    "tools": [
+      {
+        "slug": "color-palette-generator",
+        "badge": "New Design Tool",
+        "details": "Buat kombinasi palet warna harmonis (komplementer, analog, monokromatik) secara instan berdasarkan teori roda warna."
+      },
+      {
+        "slug": "gradient-palette-generator",
+        "badge": "New Design Tool",
+        "details": "Rancang gradasi warna linear atau radial secara visual dengan sudut kustom dan salin kode CSS-nya secara instan."
+      },
+      {
+        "slug": "svg-blob-generator",
+        "badge": "New Design Tool",
+        "details": "Hasilkan bentuk blob organik SVG acak yang dinamis dengan kontrol kehalusan dan jumlah titik sudut."
+      },
+      {
+        "slug": "svg-wave-generator",
+        "badge": "New Design Tool",
+        "details": "Buat pemisah bagian bergelombang SVG (wave divider) yang responsif dan estetik untuk landing page website Anda."
+      },
+      {
+        "slug": "favicon-generator",
+        "badge": "New Design Tool",
+        "details": "Konversi gambar logo PNG/JPG Anda menjadi file favicon (.ico) multi-resolusi serta paket ikon Apple & Android lengkap."
+      }
+    ]
+  },
+  {
+    "date": "1 Juni 2026",
+    "title": "Pembaruan: Modul PDF & Ejaan Keuangan Rupiah",
+    "description": "Menambahkan konverter nominal rupiah ke ejaan formal dan 4 alat baru untuk manipulasi berkas PDF secara lokal di browser.",
+    "tools": [
+      {
+        "slug": "angka-terbilang",
+        "badge": "New Converter",
+        "details": "Mengonversi angka nominal keuangan menjadi ejaan teks kalimat Bahasa Indonesia yang formal dan presisi (termasuk sen/pecahan), sangat berguna untuk penulisan kuitansi dan slip bank."
+      },
+      {
+        "slug": "pdf-page-delete",
+        "badge": "New PDF Tool",
+        "details": "Hapus satu atau beberapa halaman tertentu dari dokumen PDF secara permanen dan unduh hasilnya secara instan."
+      },
+      {
+        "slug": "pdf-reorder-pages",
+        "badge": "New PDF Tool",
+        "details": "Menyusun ulang urutan halaman dokumen PDF secara interaktif dengan tombol geser atau input daftar urutan baru."
+      },
+      {
+        "slug": "pdf-watermark",
+        "badge": "New PDF Tool",
+        "details": "Tambahkan watermark teks kustom yang transparan pada setiap halaman PDF dengan pengaturan warna, ukuran, dan sudut rotasi."
+      },
+      {
+        "slug": "pdf-metadata-viewer",
+        "badge": "New PDF Tool",
+        "details": "Lihat informasi metadata detail tersembunyi dari file PDF seperti judul, pembuat, tanggal modifikasi, beserta SHA-256 checksum."
+      }
+    ]
+  },
+  {
+    "date": "31 Mei 2026",
+    "title": "Rilis Besar: Paket SEO Tools & Optimasi Halaman",
+    "description": "Meluncurkan kategori baru 'SEO Tools' dengan 5 alat analisis performa pencarian untuk membantu pemilik website mengaudit dan merancang metadata yang ramah mesin pencari.",
+    "tools": [
+      {
+        "slug": "keyword-density-checker",
+        "badge": "New SEO Analysis",
+        "details": "Menganalisis kepadatan kata tunggal, frasa dua kata, dan frasa tiga kata dalam artikel Anda untuk mencegah spam kata kunci (keyword stuffing)."
+      },
+      {
+        "slug": "meta-tag-analyzer",
+        "badge": "New SEO Analysis",
+        "details": "Mengevaluasi tag meta HTML halaman Anda, rasio heading H1-H3, deskripsi alternatif gambar, serta pratinjau kartu sosial Facebook/Twitter."
+      },
+      {
+        "slug": "serp-preview-tool",
+        "badge": "New SEO Optimization",
+        "details": "Simulasi tampilan judul halaman, URL, dan deskripsi meta Anda di hasil pencarian Google versi desktop maupun mobile."
+      },
+      {
+        "slug": "canonical-url-generator",
+        "badge": "New SEO Optimization",
+        "details": "Membuat tag link rel='canonical' yang bersih dengan opsi pembersihan URL dari query parameter tracking."
+      },
+      {
+        "slug": "utm-builder",
+        "badge": "New SEO Optimization",
+        "details": "Membantu menaruh parameter UTM pelacakan Google Analytics secara cepat dengan preset platform sosial media populer."
+      }
+    ]
+  }
+]

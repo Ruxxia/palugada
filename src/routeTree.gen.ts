@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as CategoriesCategoryRouteImport } from './routes/categories.$category'
@@ -17,6 +18,11 @@ import { Route as CategoriesCategoryRouteImport } from './routes/categories.$cat
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangelogRoute = ChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,12 +43,14 @@ const CategoriesCategoryRoute = CategoriesCategoryRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/changelog': typeof ChangelogRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/categories/$category': typeof CategoriesCategoryRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/changelog': typeof ChangelogRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/categories/$category': typeof CategoriesCategoryRoute
   '/tools/$slug': typeof ToolsSlugRoute
@@ -50,18 +58,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/changelog': typeof ChangelogRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/categories/$category': typeof CategoriesCategoryRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml' | '/categories/$category' | '/tools/$slug'
+  fullPaths:
+    | '/'
+    | '/changelog'
+    | '/sitemap.xml'
+    | '/categories/$category'
+    | '/tools/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml' | '/categories/$category' | '/tools/$slug'
+  to:
+    | '/'
+    | '/changelog'
+    | '/sitemap.xml'
+    | '/categories/$category'
+    | '/tools/$slug'
   id:
     | '__root__'
     | '/'
+    | '/changelog'
     | '/sitemap.xml'
     | '/categories/$category'
     | '/tools/$slug'
@@ -69,6 +89,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChangelogRoute: typeof ChangelogRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CategoriesCategoryRoute: typeof CategoriesCategoryRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
@@ -81,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changelog': {
+      id: '/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof ChangelogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -109,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChangelogRoute: ChangelogRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CategoriesCategoryRoute: CategoriesCategoryRoute,
   ToolsSlugRoute: ToolsSlugRoute,

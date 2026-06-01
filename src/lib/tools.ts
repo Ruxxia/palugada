@@ -1,4 +1,5 @@
-export type ToolCategory = "Developer" | "Image" | "Calculators" | "Generators" | "Converters" | "Utilities" | "WhatsApp" | "PDF";
+export type ToolCategory = "Developer" | "Image" | "Calculators" | "Generators" | "Converters" | "Utilities" | "WhatsApp" | "PDF" | "SEO" | "Design" | "Games";
+
 
 export interface Tool {
   slug: string;
@@ -302,6 +303,21 @@ export const tools: Tool[] = [
     featured: true,
     faqs: [
       { q: "Satuan apa saja yang tersedia?", a: "Mendukung panjang (m, km, ft, inch, dll), berat (kg, g, pound, dll), suhu (C, F, K, R), area, dan volume." }
+    ]
+  },
+  {
+    slug: "angka-terbilang",
+    name: "Angka Ke Terbilang Rupiah",
+    shortName: "Angka → Terbilang",
+    description: "Konversi nominal angka menjadi ejaan terbilang teks bahasa Indonesia secara otomatis.",
+    longDescription: "Alat konversi untuk mengubah nominal angka atau nilai rupiah menjadi ejaan kalimat tulisan resmi bahasa Indonesia (terbilang).",
+    category: "Converters",
+    subcategory: "Units",
+    icon: "Rp",
+    featured: true,
+    faqs: [
+      { q: "Apakah mendukung pecahan atau sen?", a: "Ya, mendukung desimal 2 angka di belakang koma untuk pembulatan sen." },
+      { q: "Maksimal angka berapa yang dapat diproses?", a: "Dapat memproses angka hingga ratusan kuadriliun secara tepat tanpa kehilangan presisi numerik." }
     ]
   },
   {
@@ -707,8 +723,8 @@ export const tools: Tool[] = [
     name: "FAQ Schema Generator",
     description: "Buat kode JSON-LD FAQ Page Schema untuk meningkatkan SEO di Google.",
     longDescription: "Hasilkan schema markup halaman tanya-jawab secara visual untuk mendapatkan snippet kaya (Rich Snippets) di halaman hasil pencarian Google.",
-    category: "Generators",
-    subcategory: "SEO",
+    category: "SEO",
+    subcategory: "Schema",
     icon: "❓",
     faqs: [
       { q: "Mengapa harus menggunakan FAQ Schema?", a: "Membantu mesin pencari seperti Google memahami struktur tanya-jawab di halaman web Anda dan berpotensi menampilkan FAQ langsung di hasil pencarian." }
@@ -719,8 +735,8 @@ export const tools: Tool[] = [
     name: "Open Graph Generator",
     description: "Generate meta tags Open Graph (Facebook) dan Twitter Cards untuk preview media sosial.",
     longDescription: "Buat tag meta optimasi media sosial agar konten website Anda tampil menarik dan profesional saat dibagikan ke platform seperti Facebook, Twitter, dan LinkedIn.",
-    category: "Generators",
-    subcategory: "SEO",
+    category: "SEO",
+    subcategory: "Meta Tags",
     icon: "🌐",
     faqs: [
       { q: "Apa kegunaan tag Open Graph?", a: "Mengontrol visualisasi konten Anda (gambar, judul, deskripsi) ketika link halaman Anda dibagikan di media sosial." }
@@ -731,8 +747,8 @@ export const tools: Tool[] = [
     name: "JSON-LD Schema Generator",
     description: "Generate Schema.org JSON-LD terstruktur untuk Website, Bisnis Lokal, Artikel, dll.",
     longDescription: "Bantu optimasi SEO teknis Anda dengan meng-generate script data terstruktur terstandardisasi menggunakan format direkomendasikan Google (JSON-LD).",
-    category: "Generators",
-    subcategory: "SEO",
+    category: "SEO",
+    subcategory: "Schema",
     icon: "JS",
     featured: true,
     faqs: [
@@ -745,8 +761,8 @@ export const tools: Tool[] = [
     name: "Meta Tag Generator",
     description: "Buat meta tags SEO lengkap untuk website Anda secara instan.",
     longDescription: "Bantu robot pencari memahami konten situs Anda dengan cepat menggunakan meta tags standar seperti judul, deskripsi, kata kunci, penulis, dan konfigurasi indeks bot.",
-    category: "Generators",
-    subcategory: "SEO",
+    category: "SEO",
+    subcategory: "Meta Tags",
     icon: "🏷️",
     faqs: [
       { q: "Kenapa meta tags penting untuk SEO?", a: "Meta tags memberikan metadata penting tentang halaman web Anda kepada mesin pencari dan pengunjung, memengaruhi cara situs Anda terindeks dan ditampilkan di hasil pencarian." }
@@ -757,8 +773,8 @@ export const tools: Tool[] = [
     name: "Robots.txt Generator",
     description: "Hasilkan file robots.txt kustom untuk mengontrol akses bot mesin pencari.",
     longDescription: "Buat panduan yang jelas untuk bot perayap (crawlers) seperti Googlebot dan Bingbot mengenai folder atau halaman mana saja yang boleh dan tidak boleh diindeks.",
-    category: "Generators",
-    subcategory: "SEO",
+    category: "SEO",
+    subcategory: "Crawling",
     icon: "🤖",
     faqs: [
       { q: "Apa fungsi utama robots.txt?", a: "Mengontrol lalu lintas bot perayap agar tidak membebani server Anda dan menyembunyikan halaman privat dari hasil pencarian publik." }
@@ -769,11 +785,81 @@ export const tools: Tool[] = [
     name: "Sitemap Generator",
     description: "Buat file sitemap.xml untuk mempermudah indeksasi seluruh halaman website.",
     longDescription: "Hasilkan sitemap terstruktur standar XML yang berisi seluruh tautan halaman Anda agar robot Google dapat mengindeks konten baru Anda lebih cepat.",
-    category: "Generators",
-    subcategory: "SEO",
+    category: "SEO",
+    subcategory: "Crawling",
     icon: "🗺️",
     faqs: [
       { q: "Berapa batas URL dalam satu file sitemap.xml?", a: "Satu file sitemap.xml dapat menampung hingga 50.000 URL atau memiliki ukuran file maksimal 50MB." }
+    ]
+  },
+  {
+    slug: "keyword-density-checker",
+    name: "Keyword Density Checker",
+    description: "Analisis kepadatan kata kunci dalam suatu teks untuk optimasi SEO.",
+    longDescription: "Keyword Density Checker membantu menganalisis frekuensi dan persentase kemunculan kata kunci tertentu dalam teks Anda untuk menghindari keyword stuffing.",
+    category: "SEO",
+    subcategory: "Analysis",
+    icon: "KD",
+    featured: true,
+    faqs: [
+      { q: "Berapa kepadatan kata kunci yang ideal untuk SEO?", a: "Idealnya berkisar antara 1% hingga 2.5% agar tulisan terdengar alami di mata mesin pencari." },
+      { q: "Apakah tool ini mendukung bahasa Indonesia?", a: "Ya, tool ini mendukung analisis teks dalam bahasa Indonesia maupun Inggris, termasuk opsi mengabaikan kata hubung (stop words)." }
+    ]
+  },
+  {
+    slug: "meta-tag-analyzer",
+    name: "Meta Tag Analyzer",
+    description: "Uji dan analisis tag meta website untuk optimasi search engine.",
+    longDescription: "Meta Tag Analyzer menganalisis URL atau teks HTML Anda untuk mengevaluasi tag judul, deskripsi, tag Open Graph, dan struktur heading.",
+    category: "SEO",
+    subcategory: "Analysis",
+    icon: "MA",
+    featured: true,
+    faqs: [
+      { q: "Mengapa tag H1 penting dalam audit heading?", a: "Tag H1 memberi tahu mesin pencari topik utama halaman tersebut. Idealnya hanya ada satu H1 di setiap halaman." },
+      { q: "Bagaimana cara menganalisis website lokal yang belum online?", a: "Anda dapat menyalin kode HTML source halaman Anda dan menempelkannya langsung ke kolom analisis HTML." }
+    ]
+  },
+  {
+    slug: "serp-preview-tool",
+    name: "SERP Preview Tool",
+    description: "Simulasikan tampilan halaman website Anda di hasil pencarian Google desktop dan mobile.",
+    longDescription: "SERP Preview Tool mensimulasikan tampilan judul halaman, URL, dan deskripsi meta Anda di halaman hasil pencarian mesin pencari (SERP).",
+    category: "SEO",
+    subcategory: "Optimization",
+    icon: "SP",
+    featured: true,
+    faqs: [
+      { q: "Berapa panjang judul yang optimal?", a: "Antara 50 hingga 60 karakter agar tidak terpotong di Google SERP." },
+      { q: "Apakah tool ini menghitung lebar piksel?", a: "Ya, tool ini membatasi karakter secara visual berdasarkan standar lebar tampilan hasil pencarian Google desktop dan mobile." }
+    ]
+  },
+  {
+    slug: "canonical-url-generator",
+    name: "Canonical URL Generator",
+    description: "Generate URL kanonikal standar untuk mencegah konten duplikat.",
+    longDescription: "Canonical URL Generator membantu Anda membuat tag link rel='canonical' yang bersih dan seragam untuk halaman web Anda.",
+    category: "SEO",
+    subcategory: "Optimization",
+    icon: "CU",
+    faqs: [
+      { q: "Kapan saya harus menggunakan URL kanonikal?", a: "Gunakan pada setiap halaman website, terutama jika halaman tersebut dapat diakses melalui beberapa variasi URL berbeda." },
+      { q: "Apa dampak dari tidak memiliki tag kanonikal?", a: "Mesin pencari bisa menganggap variasi URL sebagai konten duplikat, yang dapat menurunkan peringkat pencarian Anda." }
+    ]
+  },
+  {
+    slug: "utm-builder",
+    name: "UTM Campaign Builder",
+    shortName: "UTM Builder",
+    description: "Tambahkan parameter UTM ke URL Anda untuk melacak performa kampanye di Google Analytics.",
+    longDescription: "UTM Builder membantu Anda menambahkan parameter kampanye (source, medium, name, dll.) ke URL Anda untuk pelacakan analitik.",
+    category: "SEO",
+    subcategory: "Optimization",
+    icon: "UTM",
+    featured: true,
+    faqs: [
+      { q: "Apa kegunaan utama parameter UTM?", a: "Untuk mengetahui secara spesifik dari mana pengunjung berasal saat mengklik tautan iklan atau promo Anda." },
+      { q: "Apakah parameter UTM mempengaruhi SEO?", a: "Secara langsung tidak, namun disarankan memadukannya dengan tag kanonikal agar parameter UTM tidak dianggap sebagai URL konten duplikat." }
     ]
   },
   {
@@ -1291,6 +1377,251 @@ export const tools: Tool[] = [
     faqs: [
       { q: "Apakah file asli saya akan terhapus?", a: "Tidak, file asli Anda tetap aman tidak disentuh. Sistem hanya menyalin halaman yang Anda pilih ke file PDF baru." }
     ]
+  },
+  {
+    slug: "pdf-page-delete",
+    name: "PDF Page Delete",
+    description: "Hapus satu atau beberapa halaman tertentu dari dokumen PDF Anda secara permanen.",
+    longDescription: "Hilangkan halaman yang tidak diperlukan seperti halaman kosong, cover, atau lampiran dari file PDF Anda dengan mudah.",
+    category: "PDF",
+    subcategory: "Editing",
+    icon: "🗑️",
+    faqs: [
+      { q: "Bagaimana cara menentukan halaman yang akan dihapus?", a: "Masukkan nomor halaman yang ingin dihapus, misalnya '2, 5' atau rentang seperti '10-12'." }
+    ]
+  },
+  {
+    slug: "pdf-reorder-pages",
+    name: "PDF Reorder Pages",
+    description: "Ubah urutan halaman dokumen PDF Anda sesuai keinginan.",
+    longDescription: "Susun ulang urutan halaman di dalam berkas PDF Anda dengan menentukan urutan nomor halaman baru.",
+    category: "PDF",
+    subcategory: "Editing",
+    icon: "📋",
+    faqs: [
+      { q: "Bagaimana cara menyusun ulang?", a: "Masukkan urutan halaman baru yang dipisahkan koma, contohnya: '3, 1, 2, 4'." }
+    ]
+  },
+  {
+    slug: "pdf-watermark",
+    name: "PDF Watermark",
+    description: "Tambahkan watermark teks kustom ke setiap halaman dokumen PDF Anda.",
+    longDescription: "Amankan dokumen Anda dengan menambahkan teks watermark transparan seperti 'DRAFT', 'CONFIDENTIAL', atau nama Anda di seluruh halaman PDF.",
+    category: "PDF",
+    subcategory: "Editing",
+    icon: "🏷️",
+    faqs: [
+      { q: "Di mana watermark akan diposisikan?", a: "Watermark akan diposisikan tepat di tengah setiap halaman dengan sudut kemiringan diagonal." }
+    ]
+  },
+  {
+    slug: "pdf-metadata-viewer",
+    name: "PDF Metadata Viewer",
+    description: "Lihat dan analisis informasi metadata tersembunyi dari file PDF.",
+    longDescription: "Periksa metadata dokumen PDF Anda seperti Judul, Penulis, Subjek, Kata Kunci, Pembuat, Produser, Tanggal Pembuatan, dan Tanggal Modifikasi.",
+    category: "PDF",
+    subcategory: "Editing",
+    icon: "ℹ️",
+    faqs: [
+      { q: "Apakah alat ini mengedit metadata?", a: "Saat ini alat ini hanya menampilkan informasi (viewer) metadata yang tersimpan dalam file PDF." }
+    ]
+  },
+  {
+    slug: "color-palette-generator",
+    name: "Color Palette Generator",
+    description: "Generate skema palet warna harmonis acak atau dengan warna dasar.",
+    longDescription: "Bantu proyek desain Anda dengan membuat kombinasi palet warna yang saling melengkapi (analogous, monochromatic, triadic, tetradic) secara instan. Salin kode HEX dengan satu klik.",
+    category: "Design",
+    subcategory: "Palette",
+    icon: "🎨",
+    featured: true,
+    faqs: [
+      { q: "Bagaimana cara kerja generator ini?", a: "Generator ini menggunakan teori roda warna (color wheel) untuk menghasilkan kombinasi warna harmonis seperti komplementer, analog, atau monokromatik." },
+      { q: "Format warna apa saja yang didukung?", a: "Anda bisa langsung menyalin kode HEX warna, atau mengekspornya ke format CSS/JSON." }
+    ]
+  },
+  {
+    slug: "gradient-palette-generator",
+    name: "Gradient Palette Generator",
+    description: "Buat gradasi warna CSS yang halus dan modern dengan transisi warna menarik.",
+    longDescription: "Rancang gradien warna linear atau radial secara visual dengan sudut kemiringan kustom. Dapatkan kode CSS linear-gradient siap pakai secara instan.",
+    category: "Design",
+    subcategory: "Palette",
+    icon: "🌈",
+    featured: true,
+    faqs: [
+      { q: "Dapatkah saya menambahkan lebih dari dua warna?", a: "Ya, Anda bisa menambahkan banyak color stops (titik warna) untuk menciptakan transisi warna gradasi yang kompleks." }
+    ]
+  },
+  {
+    slug: "svg-blob-generator",
+    name: "SVG Blob Generator",
+    description: "Hasilkan bentuk organik blob SVG acak dan unik untuk dekorasi desain UI.",
+    longDescription: "Bentuk blob organik SVG acak dengan kompleksitas dan kehalusan sudut yang dapat diatur. Sangat cocok untuk latar belakang elemen UI modern dan desain ilustrasi.",
+    category: "Design",
+    subcategory: "SVG Generators",
+    icon: "💧",
+    featured: true,
+    faqs: [
+      { q: "Bagaimana cara menggunakan blob yang dihasilkan?", a: "Anda dapat menyalin kode SVG-nya secara langsung untuk ditempel ke kode HTML/CSS, atau mendownload file berekstensi .svg." }
+    ]
+  },
+  {
+    slug: "svg-wave-generator",
+    name: "SVG Wave Generator",
+    description: "Buat pembatas bagian bergelombang SVG (wave) yang estetik untuk landing page.",
+    longDescription: "Rancang bentuk gelombang SVG yang mulus dan dinamis untuk pemisah section situs Anda. Atur tinggi gelombang, jumlah puncak, dan arah gelombang.",
+    category: "Design",
+    subcategory: "SVG Generators",
+    icon: "🌊",
+    featured: true,
+    faqs: [
+      { q: "Apakah gelombang SVG responsif?", a: "Ya, gelombang SVG memiliki atribut viewBox dan preserveAspectRatio sehingga meregang pas di berbagai lebar layar." }
+    ]
+  },
+  {
+    slug: "favicon-generator",
+    name: "Favicon Generator",
+    description: "Konversi gambar logo Anda menjadi format file favicon (.ico) multi-resolusi.",
+    longDescription: "Bantu situs web Anda terlihat profesional dengan membuat file favicon.ico dari file gambar PNG/JPG biasa, mencakup resolusi standar 16x16, 32x32, dan 48x48 piksel.",
+    category: "Design",
+    subcategory: "Asset Generators",
+    icon: "🌐",
+    featured: true,
+    faqs: [
+      { q: "Format gambar apa saja yang didukung sebagai input?", a: "Anda dapat mengunggah gambar berformat PNG, JPG, JPEG, atau WebP." },
+      { q: "Mengapa favicon berformat ICO?", a: "Format ICO memungkinkan satu file menyimpan beberapa ukuran ikon sekaligus (misal 16px, 32px, 48px), yang secara otomatis dipilih oleh browser." }
+    ]
+  },
+  {
+    slug: "random-name-picker",
+    name: "Random Name Picker",
+    description: "Pilih nama acak dari daftar nama untuk undian atau giliran secara visual.",
+    longDescription: "Alat bantu mengambil keputusan dengan mengundi nama secara acak dari daftar teks input yang Anda masukkan. Dilengkapi dengan animasi ticker visual dan sound effect.",
+    category: "Utilities",
+    subcategory: "Productivity",
+    icon: "🎲",
+    featured: true,
+    faqs: [
+      { q: "Dapatkah saya mengundi lebih dari satu pemenang?", a: "Ya, Anda dapat menentukan jumlah nama yang ingin diambil sebagai pemenang sekaligus." }
+    ]
+  },
+  {
+    slug: "team-generator",
+    name: "Team Generator",
+    description: "Bagi sekelompok orang ke dalam beberapa tim secara acak dan seimbang.",
+    longDescription: "Bagi anggota kelompok, kelas, atau tim e-sport secara adil ke dalam beberapa tim acak. Atur jumlah tim atau jumlah maksimal anggota per tim secara fleksibel.",
+    category: "Utilities",
+    subcategory: "Productivity",
+    icon: "👥",
+    featured: true,
+    faqs: [
+      { q: "Bagaimana jika jumlah anggota tidak habis dibagi jumlah tim?", a: "Generator akan membagi sisa anggota secara merata ke tim-tim awal secara acak agar ukuran tim tetap seimbang." }
+    ]
+  },
+  {
+    slug: "meeting-time-calculator",
+    name: "Meeting Time Calculator",
+    description: "Hitung waktu pertemuan di berbagai zona waktu dunia secara bersamaan.",
+    longDescription: "Temukan waktu pertemuan (meeting time) yang cocok di antara beberapa zona waktu dunia (seperti WIB, UTC, EST, GMT, dll) untuk mempermudah koordinasi tim remote.",
+    category: "Utilities",
+    subcategory: "Productivity",
+    icon: "🕒",
+    featured: true,
+    faqs: [
+      { q: "Zona waktu apa saja yang didukung?", a: "Mendukung zona waktu utama dunia termasuk Asia/Jakarta, UTC, GMT, US Eastern/Pacific, dan Eropa." }
+    ]
+  },
+  {
+    slug: "pomodoro-timer",
+    name: "Pomodoro Timer",
+    description: "Tingkatkan produktivitas kerja dengan teknik fokus Pomodoro.",
+    longDescription: "Kelaya waktu bekerja dan istirahat Anda menggunakan pengatur waktu Pomodoro standar (25 menit fokus, 5 menit istirahat pendek, 15 menit istirahat panjang).",
+    category: "Utilities",
+    subcategory: "Productivity",
+    icon: "🍅",
+    featured: true,
+    faqs: [
+      { q: "Apakah durasi waktu fokus bisa diatur sendiri?", a: "Ya, Anda dapat menyesuaikan durasi sesi fokus dan istirahat sesuai ritme kerja Anda." }
+    ]
+  },
+  {
+    slug: "typing-speed-test",
+    name: "Typing Speed Test",
+    description: "Tes kecepatan mengetik (WPM) dan akurasi Anda secara real-time.",
+    longDescription: "Uji seberapa cepat Anda mengetik dalam satuan Word Per Minute (WPM) dan ukur akurasinya dengan paragraf acak yang menantang.",
+    category: "Games",
+    subcategory: "Speed & Reflex",
+    icon: "⌨️",
+    featured: true,
+    faqs: [
+      { q: "Bagaimana cara menghitung skor WPM?", a: "Skor WPM dihitung dari jumlah karakter yang diketik dengan benar dibagi 5, lalu dibagi durasi waktu pengerjaan dalam menit." }
+    ]
+  },
+  {
+    slug: "reaction-time-test",
+    name: "Reaction Time Test",
+    description: "Ukur kecepatan waktu reaksi reflek Anda dalam milidetik.",
+    longDescription: "Tes seberapa cepat refleks motorik Anda merespon perubahan warna visual pada layar dari merah ke hijau.",
+    category: "Games",
+    subcategory: "Speed & Reflex",
+    icon: "⚡",
+    featured: true,
+    faqs: [
+      { q: "Berapa rata-rata waktu reaksi manusia normal?", a: "Waktu reaksi visual rata-rata manusia berkisar antara 200 hingga 250 milidetik." }
+    ]
+  },
+  {
+    slug: "cps-test",
+    name: "CPS Test",
+    description: "Tes jumlah klik per detik (Clicks Per Second) jari Anda.",
+    longDescription: "Ukur kecepatan ketukan/klik mouse atau layar sentuh jari Anda dalam rentang waktu 5, 10, atau 15 detik.",
+    category: "Games",
+    subcategory: "Speed & Reflex",
+    icon: "🖱️",
+    featured: true,
+    faqs: [
+      { q: "Teknik klik apa saja yang biasa digunakan dalam CPS test?", a: "Beberapa teknik populer meliputi Jitter Clicking, Butterfly Clicking, dan Drag Clicking." }
+    ]
+  },
+  {
+    slug: "aim-trainer",
+    name: "Aim Trainer",
+    description: "Latih presisi dan akurasi klik koordinat bidikan Anda.",
+    longDescription: "Latih koordinasi mata dan tangan Anda dengan menembak target bulat yang muncul secara acak di layar secepat mungkin.",
+    category: "Games",
+    subcategory: "Trainers",
+    icon: "🎯",
+    featured: true,
+    faqs: [
+      { q: "Apakah ukuran target tetap sama sepanjang sesi?", a: "Tidak, target akan mengecil secara bertahap seiring bertambahnya skor Anda untuk meningkatkan kesulitan." }
+    ]
+  },
+  {
+    slug: "spin-wheel",
+    name: "Spin Wheel",
+    description: "Buat keputusan acak dengan memutar roda keberuntungan berwarna.",
+    longDescription: "Masukkan daftar opsi keputusan pilihan Anda, lalu putar roda pie visual dengan animasi perlambatan dinamis dan efek confetti pemenang.",
+    category: "Games",
+    subcategory: "Casual Games",
+    icon: "🎡",
+    featured: true,
+    faqs: [
+      { q: "Bagaimana cara mengubah isi pilihan roda?", a: "Anda dapat mengetik opsi baru di kotak input teks dengan memisahkannya menggunakan koma atau baris baru." }
+    ]
+  },
+  {
+    slug: "2048",
+    name: "2048",
+    description: "Gabungkan ubin angka yang sama hingga mencapai ubin 2048.",
+    longDescription: "Mainkan game teka-teki geser ubin klasik 2048. Geser ubin menggunakan keyboard atau sentuhan swipe untuk menggabungkannya.",
+    category: "Games",
+    subcategory: "Casual Games",
+    icon: "🎮",
+    featured: true,
+    faqs: [
+      { q: "Bagaimana cara memenangkan game 2048?", a: "Gabungkan ubin dengan angka yang sama secara taktis hingga Anda berhasil menciptakan satu ubin bernilai 2048." }
+    ]
   }
 ];
 
@@ -1320,7 +1651,12 @@ export const categories: CategoryInfo[] = [
   {
     name: "🔐 Generators",
     key: "Generators",
-    subcategories: ["Business", "SEO", "QR & Links", "Documents", "Content"]
+    subcategories: ["Business", "QR & Links", "Documents", "Content"]
+  },
+  {
+    name: "🔍 SEO Tools",
+    key: "SEO",
+    subcategories: ["Analysis", "Meta Tags", "Crawling", "Optimization", "Schema"]
   },
   {
     name: "📏 Converters",
@@ -1341,6 +1677,16 @@ export const categories: CategoryInfo[] = [
     name: "📄 PDF Tools",
     key: "PDF",
     subcategories: ["Conversion", "Editing"]
+  },
+  {
+    name: "🎨 Design Tools",
+    key: "Design",
+    subcategories: ["Palette", "SVG Generators", "Asset Generators"]
+  },
+  {
+    name: "🎮 Game Tools",
+    key: "Games",
+    subcategories: ["Speed & Reflex", "Casual Games", "Trainers"]
   }
 ];
 

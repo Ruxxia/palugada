@@ -10,6 +10,9 @@ const categoryLabel: Record<Tool["category"], string> = {
   Utilities: "UTIL",
   WhatsApp: "WA",
   PDF: "PDF",
+  SEO: "SEO",
+  Design: "DSN",
+  Games: "GME",
 };
 
 export function ToolCard({ tool }: { tool: Tool }) {

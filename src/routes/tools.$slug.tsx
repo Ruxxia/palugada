@@ -1,4 +1,4 @@
-import { type ComponentType, useState } from "react";
+import { type ComponentType, useState, useEffect } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -28,6 +28,7 @@ import { CoinFlip } from "@/components/tools/CoinFlip";
 import { CountdownTimer } from "@/components/tools/CountdownTimer";
 import { Stopwatch } from "@/components/tools/Stopwatch";
 import { UnitConverter } from "@/components/tools/UnitConverter";
+import { AngkaTerbilang } from "@/components/tools/AngkaTerbilang";
 import { PercentageCalculator } from "@/components/tools/PercentageCalculator";
 
 import { ImageCompressor } from "@/components/tools/ImageCompressor";
@@ -71,6 +72,11 @@ import { JsonLdGenerator } from "@/components/tools/JsonLdGenerator";
 import { MetaTagGenerator } from "@/components/tools/MetaTagGenerator";
 import { RobotsGenerator } from "@/components/tools/RobotsGenerator";
 import { SitemapGenerator } from "@/components/tools/SitemapGenerator";
+import { KeywordDensityChecker } from "@/components/tools/KeywordDensityChecker";
+import { MetaTagAnalyzer } from "@/components/tools/MetaTagAnalyzer";
+import { SerpPreviewTool } from "@/components/tools/SerpPreviewTool";
+import { CanonicalUrlGenerator } from "@/components/tools/CanonicalUrlGenerator";
+import { UtmBuilder } from "@/components/tools/UtmBuilder";
 
 import { ImageWatermark } from "@/components/tools/ImageWatermark";
 import { ImageFlip } from "@/components/tools/ImageFlip";
@@ -117,6 +123,28 @@ import { PdfMerge } from "@/components/tools/PdfMerge";
 import { PdfSplit } from "@/components/tools/PdfSplit";
 import { PdfRotate } from "@/components/tools/PdfRotate";
 import { PdfPageExtractor } from "@/components/tools/PdfPageExtractor";
+import { PdfPageDelete } from "@/components/tools/PdfPageDelete";
+import { PdfReorderPages } from "@/components/tools/PdfReorderPages";
+import { PdfWatermark } from "@/components/tools/PdfWatermark";
+import { PdfMetadataViewer } from "@/components/tools/PdfMetadataViewer";
+
+import { ColorPaletteGenerator } from "@/components/tools/ColorPaletteGenerator";
+import { GradientPaletteGenerator } from "@/components/tools/GradientPaletteGenerator";
+import { SvgBlobGenerator } from "@/components/tools/SvgBlobGenerator";
+import { SvgWaveGenerator } from "@/components/tools/SvgWaveGenerator";
+import { FaviconGenerator } from "@/components/tools/FaviconGenerator";
+
+import { RandomNamePicker } from "@/components/tools/RandomNamePicker";
+import { TeamGenerator } from "@/components/tools/TeamGenerator";
+import { MeetingTimeCalculator } from "@/components/tools/MeetingTimeCalculator";
+import { PomodoroTimer } from "@/components/tools/PomodoroTimer";
+
+import { TypingSpeedTest } from "@/components/tools/TypingSpeedTest";
+import { ReactionTimeTest } from "@/components/tools/ReactionTimeTest";
+import { CpsTest } from "@/components/tools/CpsTest";
+import { AimTrainer } from "@/components/tools/AimTrainer";
+import { SpinWheel } from "@/components/tools/SpinWheel";
+import { Game2048 } from "@/components/tools/Game2048";
 
 const toolComponents: Record<string, ComponentType> = {
   "json-formatter": JsonFormatter,
@@ -141,6 +169,7 @@ const toolComponents: Record<string, ComponentType> = {
   "countdown-timer": CountdownTimer,
   "stopwatch": Stopwatch,
   "unit-converter": UnitConverter,
+  "angka-terbilang": AngkaTerbilang,
   "percentage-calculator": PercentageCalculator,
   "image-compressor": ImageCompressor,
   "image-resizer": ImageResizer,
@@ -180,6 +209,11 @@ const toolComponents: Record<string, ComponentType> = {
   "meta-tag-generator": MetaTagGenerator,
   "robots-txt-generator": RobotsGenerator,
   "sitemap-generator": SitemapGenerator,
+  "keyword-density-checker": KeywordDensityChecker,
+  "meta-tag-analyzer": MetaTagAnalyzer,
+  "serp-preview-tool": SerpPreviewTool,
+  "canonical-url-generator": CanonicalUrlGenerator,
+  "utm-builder": UtmBuilder,
   "image-watermark": ImageWatermark,
   "image-flip": ImageFlip,
   "image-blur": ImageBlur,
@@ -222,6 +256,25 @@ const toolComponents: Record<string, ComponentType> = {
   "pdf-split": PdfSplit,
   "pdf-rotate": PdfRotate,
   "pdf-page-extractor": PdfPageExtractor,
+  "pdf-page-delete": PdfPageDelete,
+  "pdf-reorder-pages": PdfReorderPages,
+  "pdf-watermark": PdfWatermark,
+  "pdf-metadata-viewer": PdfMetadataViewer,
+  "color-palette-generator": ColorPaletteGenerator,
+  "gradient-palette-generator": GradientPaletteGenerator,
+  "svg-blob-generator": SvgBlobGenerator,
+  "svg-wave-generator": SvgWaveGenerator,
+  "favicon-generator": FaviconGenerator,
+  "random-name-picker": RandomNamePicker,
+  "team-generator": TeamGenerator,
+  "meeting-time-calculator": MeetingTimeCalculator,
+  "pomodoro-timer": PomodoroTimer,
+  "typing-speed-test": TypingSpeedTest,
+  "reaction-time-test": ReactionTimeTest,
+  "cps-test": CpsTest,
+  "aim-trainer": AimTrainer,
+  "spin-wheel": SpinWheel,
+  "2048": Game2048,
 };
 
 export const Route = createFileRoute("/tools/$slug")({
@@ -301,6 +354,30 @@ function ToolPage() {
 
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [copiedEmbed, setCopiedEmbed] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  useEffect(() => {
+    try {
+      const bookmarks = JSON.parse(localStorage.getItem("palugada_bookmarks") || "[]");
+      setIsBookmarked(bookmarks.includes(tool.slug));
+    } catch (e) {}
+  }, [tool.slug]);
+
+  const toggleBookmark = () => {
+    try {
+      const bookmarks = JSON.parse(localStorage.getItem("palugada_bookmarks") || "[]");
+      let nextBookmarks: string[];
+      if (bookmarks.includes(tool.slug)) {
+        nextBookmarks = bookmarks.filter((s: string) => s !== tool.slug);
+        setIsBookmarked(false);
+      } else {
+        nextBookmarks = [...bookmarks, tool.slug];
+        setIsBookmarked(true);
+      }
+      localStorage.setItem("palugada_bookmarks", JSON.stringify(nextBookmarks));
+      window.dispatchEvent(new Event("bookmark_change"));
+    } catch (e) {}
+  };
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : `https://palugada.sqwerly.com/tools/${tool.slug}`;
   const embedCode = `<a href="${shareUrl}" target="_blank">Gunakan ${tool.name} Gratis di Palugada</a>`;
@@ -314,6 +391,18 @@ function ToolPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
+      <style>{`
+        @keyframes periodic-wiggle {
+          0%, 90%, 100% { transform: rotate(0deg) scale(1); }
+          92% { transform: rotate(-10deg) scale(1.1); }
+          94% { transform: rotate(8deg) scale(1.1); }
+          96% { transform: rotate(-6deg) scale(1.1); }
+          98% { transform: rotate(4deg) scale(1.1); }
+        }
+        .animate-wiggle-notice {
+          animation: periodic-wiggle 4s infinite;
+        }
+      `}</style>
 
       <div className="max-w-6xl mx-auto px-4 pt-10 pb-6">
         <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-6 flex flex-wrap items-center">
@@ -332,16 +421,30 @@ function ToolPage() {
           <span className="text-foreground">{tool.name}</span>
         </nav>
 
-        <div className="flex items-start gap-4 mb-4">
-          <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center text-primary font-mono font-bold text-2xl shrink-0">
-            {tool.icon}
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center text-primary font-mono font-bold text-2xl shrink-0">
+              {tool.icon}
+            </div>
+            <div>
+              <h1 className="font-display text-4xl md:text-5xl uppercase tracking-tight leading-none">
+                {tool.name}
+              </h1>
+              <p className="text-foreground/60 mt-2 text-pretty">{tool.longDescription}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="font-display text-4xl md:text-5xl uppercase tracking-tight leading-none">
-              {tool.name}
-            </h1>
-            <p className="text-foreground/60 mt-2 text-pretty">{tool.longDescription}</p>
-          </div>
+
+          <button
+            onClick={toggleBookmark}
+            title={isBookmarked ? "Hapus dari Bookmark" : "Simpan ke Bookmark"}
+            className={`p-3.5 border-2 border-foreground rounded-xl shadow-[3px_3px_0px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all cursor-pointer select-none shrink-0 ${
+              isBookmarked
+                ? "bg-primary text-primary-foreground hover:bg-primary/95"
+                : "bg-card text-foreground hover:bg-foreground/5 animate-wiggle-notice"
+            }`}
+          >
+            <span className="text-2xl leading-none">{isBookmarked ? "★" : "☆"}</span>
+          </button>
         </div>
       </div>
 

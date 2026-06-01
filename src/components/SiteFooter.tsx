@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+
 export function SiteFooter() {
   return (
     <footer className="bg-foreground text-background/40 py-16 px-4 border-t-8 border-primary">
@@ -27,7 +29,8 @@ export function SiteFooter() {
         <div>
           <h4 className="text-background font-bold text-xs uppercase tracking-widest mb-6">Lainnya</h4>
           <ul className="space-y-4 text-sm font-medium">
-            <li><a href="/" className="hover:text-primary">Semua Tools</a></li>
+            <li><Link to="/" className="hover:text-primary">Semua Tools</Link></li>
+            <li><Link to="/changelog" className="hover:text-primary">Changelog</Link></li>
             <li><a href="/sitemap.xml" className="hover:text-primary">Sitemap</a></li>
           </ul>
         </div>
