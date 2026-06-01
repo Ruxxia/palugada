@@ -145,8 +145,8 @@ export function PdfReorderPages() {
       // Copy pages in the new order
       const pageIndices = pages.map((p) => p.originalNum - 1);
       const copiedPages = await pdfDoc.copyPages(srcDoc, pageIndices);
-      
-      copiedPages.forEach((page) => {
+
+      copiedPages.forEach((page: any) => {
         pdfDoc.addPage(page);
       });
 
@@ -228,7 +228,7 @@ export function PdfReorderPages() {
                   <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-primary text-white font-mono text-xs font-bold flex items-center justify-center shadow">
                     {idx + 1}
                   </div>
-                  
+
                   <div className="relative aspect-[3/4] w-full bg-foreground/5 rounded mb-3 flex items-center justify-center overflow-hidden border border-foreground/5">
                     <img src={p.thumbUrl} alt={`Halaman Asli ${p.originalNum}`} className="w-full h-full object-contain" />
                   </div>
