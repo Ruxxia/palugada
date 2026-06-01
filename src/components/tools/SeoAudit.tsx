@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { fetchUrlHtml } from "../../lib/api/seo.functions";
+
 
 interface AuditCheck {
   id: string;
@@ -564,45 +566,60 @@ export function SeoAudit() {
       targetUrl = "https://" + targetUrl;
     }
 
-    const proxies = [
-      `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
-      `https://thingproxy.freeboard.io/fetch/${targetUrl}`,
-      `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
-    ];
-
     let fetchedHtml = "";
-    let proxySuccess = false;
+    let success = false;
 
-    // Try fetching through CORS Proxies
-    for (const proxy of proxies) {
-      try {
-        const response = await fetch(proxy);
-        if (response.ok) {
-          if (proxy.includes("allorigins")) {
-            const data = await response.json();
-            if (data.contents) {
-              fetchedHtml = data.contents;
-              proxySuccess = true;
-              break;
-            }
-          } else {
-            fetchedHtml = await response.text();
-            if (fetchedHtml && fetchedHtml.trim().length > 100) {
-              proxySuccess = true;
-              break;
+    // 1. Try fetching via our server-side function (CORS bypass)
+    try {
+      const serverRes = await fetchUrlHtml({ data: { url: targetUrl } });
+      if (serverRes.success && serverRes.html) {
+        fetchedHtml = serverRes.html;
+        success = true;
+      } else if (serverRes.error) {
+        console.warn("Server-side fetch failed:", serverRes.error);
+      }
+    } catch (err: any) {
+      console.warn("Server-side fetch exception:", err);
+    }
+
+    // 2. Fallback to client-side CORS Proxies if server function failed
+    if (!success) {
+      const proxies = [
+        `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+        `https://thingproxy.freeboard.io/fetch/${targetUrl}`,
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+      ];
+
+      for (const proxy of proxies) {
+        try {
+          const response = await fetch(proxy);
+          if (response.ok) {
+            if (proxy.includes("allorigins")) {
+              const data = await response.json();
+              if (data.contents) {
+                fetchedHtml = data.contents;
+                success = true;
+                break;
+              }
+            } else {
+              fetchedHtml = await response.text();
+              if (fetchedHtml && fetchedHtml.trim().length > 100) {
+                success = true;
+                break;
+              }
             }
           }
+        } catch (err) {
+          // Fallback to next proxy
         }
-      } catch (err) {
-        // Fallback to next proxy
       }
     }
 
-    if (proxySuccess && fetchedHtml) {
+    if (success && fetchedHtml) {
       runAudit(fetchedHtml, targetUrl);
     } else {
       setError(
-        "Website target menolak permintaan akses bot proxy (CORS Policy). Silakan gunakan tab 'Salin & Tempel HTML Source' untuk mengaudit kode HTML halaman Anda secara langsung dan andal."
+        "Website target menolak permintaan akses (CORS/IP Block). Silakan gunakan tab 'Salin & Tempel HTML Source' untuk mengaudit kode HTML halaman Anda secara langsung dan andal."
       );
     }
     setLoading(false);

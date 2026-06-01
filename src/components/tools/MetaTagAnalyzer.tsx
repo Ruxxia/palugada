@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { fetchUrlHtml } from "../../lib/api/seo.functions";
+
 
 interface AuditResult {
   title: { content: string; length: number; status: "success" | "warning" | "error"; msg: string };
@@ -174,15 +176,58 @@ export function MetaTagAnalyzer() {
         cleanUrl = "https://" + cleanUrl;
       }
 
-      // Fetch via CORS Proxy
-      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(cleanUrl)}`;
-      const res = await fetch(proxyUrl);
-      if (!res.ok) throw new Error("Gagal mengambil data dari URL.");
-      
-      const data = await res.json();
-      if (!data.contents) throw new Error("Data kosong atau diblokir oleh target server.");
-      
-      analyzeHtmlContent(data.contents);
+      let fetchedHtml = "";
+      let success = false;
+
+      // 1. Try server-side fetching (CORS bypass)
+      try {
+        const serverRes = await fetchUrlHtml({ data: { url: cleanUrl } });
+        if (serverRes.success && serverRes.html) {
+          fetchedHtml = serverRes.html;
+          success = true;
+        } else if (serverRes.error) {
+          console.warn("Server-side fetch failed:", serverRes.error);
+        }
+      } catch (err: any) {
+        console.warn("Server-side fetch exception:", err);
+      }
+
+      // 2. Fallback to client-side CORS Proxies
+      if (!success) {
+        const proxies = [
+          `https://api.allorigins.win/get?url=${encodeURIComponent(cleanUrl)}`,
+          `https://corsproxy.io/?${encodeURIComponent(cleanUrl)}`
+        ];
+
+        for (const proxy of proxies) {
+          try {
+            const res = await fetch(proxy);
+            if (res.ok) {
+              if (proxy.includes("allorigins")) {
+                const data = await res.json();
+                if (data.contents) {
+                  fetchedHtml = data.contents;
+                  success = true;
+                  break;
+                }
+              } else {
+                const text = await res.text();
+                if (text && text.trim().length > 100) {
+                  fetchedHtml = text;
+                  success = true;
+                  break;
+                }
+              }
+            }
+          } catch (e) {}
+        }
+      }
+
+      if (!success || !fetchedHtml) {
+        throw new Error("Gagal mengambil data dari URL via server maupun proxy.");
+      }
+
+      analyzeHtmlContent(fetchedHtml);
     } catch (err: any) {
       setError(
         `Gagal menganalisis URL: ${err.message}. Beberapa website memblokir akses proxy. Silakan gunakan opsi 'Salin HTML Source' untuk analisis yang andal.`

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { fetchUrlHtml } from "../../lib/api/seo.functions";
+
 
 interface LinkItem {
   href: string;
@@ -162,34 +164,50 @@ export function LinkAuditor() {
       targetUrl = "https://" + targetUrl;
     }
 
-    const proxies = [
-      `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
-      `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
-    ];
-
     let fetchedHtml = "";
     let success = false;
 
-    for (const proxy of proxies) {
-      try {
-        const response = await fetch(proxy);
-        if (response.ok) {
-          if (proxy.includes("allorigins")) {
-            const data = await response.json();
-            if (data.contents) {
-              fetchedHtml = data.contents;
-              success = true;
-              break;
-            }
-          } else {
-            fetchedHtml = await response.text();
-            if (fetchedHtml && fetchedHtml.trim().length > 100) {
-              success = true;
-              break;
+    // 1. Try server-side fetching (CORS bypass)
+    try {
+      const serverRes = await fetchUrlHtml({ data: { url: targetUrl } });
+      if (serverRes.success && serverRes.html) {
+        fetchedHtml = serverRes.html;
+        success = true;
+      } else if (serverRes.error) {
+        console.warn("Server-side fetch failed:", serverRes.error);
+      }
+    } catch (err: any) {
+      console.warn("Server-side fetch exception:", err);
+    }
+
+    // 2. Fallback to client-side CORS Proxies
+    if (!success) {
+      const proxies = [
+        `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+      ];
+
+      for (const proxy of proxies) {
+        try {
+          const response = await fetch(proxy);
+          if (response.ok) {
+            if (proxy.includes("allorigins")) {
+              const data = await response.json();
+              if (data.contents) {
+                fetchedHtml = data.contents;
+                success = true;
+                break;
+              }
+            } else {
+              fetchedHtml = await response.text();
+              if (fetchedHtml && fetchedHtml.trim().length > 100) {
+                success = true;
+                break;
+              }
             }
           }
-        }
-      } catch (e) {}
+        } catch (e) {}
+      }
     }
 
     if (success && fetchedHtml) {
