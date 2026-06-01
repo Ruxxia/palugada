@@ -10,6 +10,7 @@ import {
 import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { PWAInstallPrompt } from "../components/PWAInstallPrompt";
 
 function NotFoundComponent() {
   return (
@@ -82,8 +83,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Palugada" },
       { name: "twitter:card", content: "summary" },
+      { name: "theme-color", content: "#ff4d00" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Palugada" },
     ],
     links: [
+      { rel: "manifest", href: "/manifest.json" },
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "shortcut icon", href: "/favicon.svg" },
       { rel: "stylesheet", href: appCss },
@@ -122,6 +128,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <PWAInstallPrompt />
     </QueryClientProvider>
   );
 }

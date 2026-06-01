@@ -7,6 +7,7 @@ export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const [canInstall, setCanInstall] = useState(false);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -26,6 +27,35 @@ export function SiteHeader() {
       window.removeEventListener("bookmark_change", handleStorageChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCanInstall(!!(window as any).deferredPrompt);
+
+      const handlePromptAvailable = () => setCanInstall(true);
+      const handlePromptInstalled = () => setCanInstall(false);
+
+      window.addEventListener("pwa-prompt-available", handlePromptAvailable);
+      window.addEventListener("pwa-prompt-installed", handlePromptInstalled);
+
+      return () => {
+        window.removeEventListener("pwa-prompt-available", handlePromptAvailable);
+        window.removeEventListener("pwa-prompt-installed", handlePromptInstalled);
+      };
+    }
+  }, []);
+
+  const handleInstallClick = async () => {
+    const promptEvent = (window as any).deferredPrompt;
+    if (!promptEvent) return;
+
+    await promptEvent.prompt();
+    const { outcome } = await promptEvent.userChoice;
+    console.log(`User response to header install prompt: ${outcome}`);
+    if (outcome === "accepted") {
+      setCanInstall(false);
+    }
+  };
 
   const bookmarkedTools = tools.filter((t) => bookmarks.includes(t.slug));
 
@@ -116,6 +146,17 @@ export function SiteHeader() {
           >
             Changelog
           </Link>
+          {canInstall && (
+            <>
+              <div className="bg-foreground/5 h-8 w-px" />
+              <button
+                onClick={handleInstallClick}
+                className="text-xs font-bold uppercase tracking-wider text-primary hover:text-primary/80 transition-colors flex items-center gap-1 cursor-pointer animate-pulse"
+              >
+                📥 Install App
+              </button>
+            </>
+          )}
           <div className="hidden sm:block bg-foreground/5 h-8 w-px" />
           <span className="text-[10px] font-mono font-medium uppercase tracking-widest text-primary">
             v{version}

@@ -4,7 +4,7 @@ interface MemeTemplate {
   id: string;
   name: string;
   description: string;
-  fields: { name: string; label: string; default: string; type: "text" | "select"; options?: string[] }[];
+  fields: { name: string; label: string; default: string; type?: "text" | "select"; options?: string[] }[];
 }
 
 const MEME_TEMPLATES: MemeTemplate[] = [

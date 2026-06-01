@@ -34,8 +34,6 @@ export function NilaiAkhirCalculator() {
     setTotalWeight(sumWeights);
 
     if (sumWeights > 0) {
-      const final = (sAtt * wAtt + sAss * wAss + sUts * wtsScore + sUas * wUas) / sumWeights;
-      // Wait, there is a typo in my variable above: sUts * wtsScore -> should be sUts * wUts. Good catch!
       const correctFinal = (sAtt * wAtt + sAss * wAss + sUts * wUts + sUas * wUas) / sumWeights;
       setFinalScore(correctFinal);
 

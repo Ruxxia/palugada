@@ -1,6 +1,38 @@
 import { Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 
 export function SiteFooter() {
+  const [canInstall, setCanInstall] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCanInstall(!!(window as any).deferredPrompt);
+
+      const handlePromptAvailable = () => setCanInstall(true);
+      const handlePromptInstalled = () => setCanInstall(false);
+
+      window.addEventListener("pwa-prompt-available", handlePromptAvailable);
+      window.addEventListener("pwa-prompt-installed", handlePromptInstalled);
+
+      return () => {
+        window.removeEventListener("pwa-prompt-available", handlePromptAvailable);
+        window.removeEventListener("pwa-prompt-installed", handlePromptInstalled);
+      };
+    }
+  }, []);
+
+  const handleInstallClick = async () => {
+    const promptEvent = (window as any).deferredPrompt;
+    if (!promptEvent) return;
+
+    await promptEvent.prompt();
+    const { outcome } = await promptEvent.userChoice;
+    console.log(`User response to footer install prompt: ${outcome}`);
+    if (outcome === "accepted") {
+      setCanInstall(false);
+    }
+  };
+
   return (
     <footer className="bg-foreground text-background/40 py-16 px-4 border-t-8 border-primary">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -31,6 +63,16 @@ export function SiteFooter() {
           <ul className="space-y-4 text-sm font-medium">
             <li><Link to="/" className="hover:text-primary">Semua Tools</Link></li>
             <li><Link to="/changelog" className="hover:text-primary">Changelog</Link></li>
+            {canInstall && (
+              <li>
+                <button
+                  onClick={handleInstallClick}
+                  className="hover:text-primary cursor-pointer text-left font-medium"
+                >
+                  📥 Install App
+                </button>
+              </li>
+            )}
             <li><a href="/sitemap.xml" className="hover:text-primary">Sitemap</a></li>
           </ul>
         </div>

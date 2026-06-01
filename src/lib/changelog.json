@@ -1,6 +1,23 @@
 [
   {
     "date": "1 Juni 2026",
+    "title": "Fitur Baru: PWA & Offline Support",
+    "description": "Palugada sekarang mendukung Progressive Web App (PWA) sepenuhnya. Anda dapat memasang aplikasi langsung ke layar utama HP atau desktop Anda dengan performa super cepat dan akses offline.",
+    "tools": [
+      {
+        "slug": "PWA Installation",
+        "badge": "Fitur Platform",
+        "details": "Pasang aplikasi secara instan dari header, footer, atau banner petunjuk di bagian bawah layar."
+      },
+      {
+        "slug": "Offline Cache",
+        "badge": "Peningkatan Performa",
+        "details": "Akses kembali tool yang pernah dibuka sebelumnya tanpa memerlukan koneksi internet aktif."
+      }
+    ]
+  },
+  {
+    "date": "1 Juni 2026",
     "title": "Zona Bermain: Rilis Kategori Game Tools Baru",
     "description": "Memperkenalkan kategori 'Game Tools' dengan 6 game mini yang seru untuk menguji kecepatan mengetik, waktu reaksi, CPS, melatih bidikan presisi, roda keberuntungan, serta game teka-teki geser ubin 2048.",
     "tools": [
