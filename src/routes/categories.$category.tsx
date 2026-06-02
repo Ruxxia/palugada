@@ -8,9 +8,7 @@ import { ToolCard } from "@/components/ToolCard";
 export const Route = createFileRoute("/categories/$category")({
   loader: ({ params }) => {
     const categoryKey = params.category;
-    const categoryObj = categories.find(
-      (c) => c.key.toLowerCase() === categoryKey.toLowerCase()
-    );
+    const categoryObj = categories.find((c) => c.key.toLowerCase() === categoryKey.toLowerCase());
 
     if (!categoryObj || categoryObj.key === "all") {
       throw notFound();
@@ -30,10 +28,19 @@ export const Route = createFileRoute("/categories/$category")({
       meta: [
         { title },
         { name: "description", content: description },
+        { property: "og:locale", content: "id_ID" },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:url", content: `/categories/${category?.key ?? ""}` },
         { property: "og:type", content: "website" },
+        { property: "og:image", content: "/icon-512.png" },
+        { property: "og:image:width", content: "512" },
+        { property: "og:image:height", content: "512" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:site", content: "@palugada" },
+        { name: "twitter:image", content: "/icon-512.png" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
       ],
       links: category ? [{ rel: "canonical", href: `/categories/${category.key}` }] : [],
       scripts: category
@@ -49,7 +56,10 @@ export const Route = createFileRoute("/categories/$category")({
                     name: `Ada berapa alat gratis yang tersedia di kategori ${category.name}?`,
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: `Ada total ${categoryTools?.length ?? 0} alat gratis di kategori ${category.name} pada Palugada, termasuk ${categoryTools?.slice(0, 3).map((t) => t.name).join(", ")}.`,
+                      text: `Ada total ${categoryTools?.length ?? 0} alat gratis di kategori ${category.name} pada Palugada, termasuk ${categoryTools
+                        ?.slice(0, 3)
+                        .map((t) => t.name)
+                        .join(", ")}.`,
                     },
                   },
                   {
@@ -63,6 +73,22 @@ export const Route = createFileRoute("/categories/$category")({
                 ],
               }),
             },
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: "https://palugada.sqwerly.com/",
+                  },
+                  { "@type": "ListItem", position: 2, name: category.name },
+                ],
+              }),
+            },
           ]
         : [],
     };
@@ -73,7 +99,10 @@ export const Route = createFileRoute("/categories/$category")({
       <div className="text-center">
         <p className="font-display text-6xl uppercase">404</p>
         <p className="mt-2 text-foreground/60">Kategori tidak ditemukan.</p>
-        <Link to="/" className="inline-block mt-6 text-primary font-bold uppercase text-sm tracking-widest">
+        <Link
+          to="/"
+          className="inline-block mt-6 text-primary font-bold uppercase text-sm tracking-widest"
+        >
           ← Kembali ke beranda
         </Link>
       </div>
@@ -97,7 +126,9 @@ function CategoryPage() {
       <main className="max-w-6xl mx-auto px-4 pt-10 pb-24">
         {/* Breadcrumb */}
         <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-10">
-          <Link to="/" className="hover:text-primary">Home</Link>
+          <Link to="/" className="hover:text-primary">
+            Home
+          </Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">{category.name}</span>
         </nav>
@@ -108,7 +139,8 @@ function CategoryPage() {
             {category.name}
           </h1>
           <p className="max-w-[50ch] text-foreground/60 text-base">
-            Temukan semua tools yang didesain khusus untuk memudahkan pekerjaan Anda di bidang {category.name.replace(/^[^\w]*/, "")}.
+            Temukan semua tools yang didesain khusus untuk memudahkan pekerjaan Anda di bidang{" "}
+            {category.name.replace(/^[^\w]*/, "")}.
           </p>
         </div>
 
@@ -117,10 +149,11 @@ function CategoryPage() {
           <div className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-foreground/5 animate-[entrance_0.8s_var(--ease-out-expo)_both_100ms]">
             <button
               onClick={() => setSelectedSubcategory("all")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${selectedSubcategory === "all"
-                ? "bg-foreground text-background"
-                : "bg-card border border-foreground/10 hover:border-foreground/40"
-                }`}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${
+                selectedSubcategory === "all"
+                  ? "bg-foreground text-background"
+                  : "bg-card border border-foreground/10 hover:border-foreground/40"
+              }`}
             >
               Semua Subkategori
             </button>
@@ -130,10 +163,11 @@ function CategoryPage() {
                 <button
                   key={sub}
                   onClick={() => setSelectedSubcategory(sub)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${isSubActive
-                    ? "bg-foreground text-background"
-                    : "bg-card border border-foreground/10 hover:border-foreground/40"
-                    }`}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${
+                    isSubActive
+                      ? "bg-foreground text-background"
+                      : "bg-card border border-foreground/10 hover:border-foreground/40"
+                  }`}
                 >
                   {sub}
                 </button>
@@ -182,4 +216,3 @@ function CategoryPage() {
     </div>
   );
 }
-

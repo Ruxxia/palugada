@@ -83,8 +83,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Kumpulan free online tools terlengkap: JSON formatter, password generator, QR code, dan banyak lagi. Cepat, ringan, tanpa registrasi.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "id_ID" },
       { property: "og:site_name", content: "Palugada" },
+      { property: "og:image", content: "/icon-512.png" },
+      { property: "og:image:width", content: "512" },
+      { property: "og:image:height", content: "512" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:site", content: "@palugada" },
+      { name: "twitter:image", content: "/icon-512.png" },
       { name: "theme-color", content: "#ff4d00" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
@@ -111,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="id">
       <head>
         <HeadContent />
       </head>

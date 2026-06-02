@@ -171,7 +171,7 @@ const toolComponents: Record<string, ComponentType> = {
   "dice-roller": DiceRoller,
   "coin-flip": CoinFlip,
   "countdown-timer": CountdownTimer,
-  "stopwatch": Stopwatch,
+  stopwatch: Stopwatch,
   "unit-converter": UnitConverter,
   "angka-terbilang": AngkaTerbilang,
   "percentage-calculator": PercentageCalculator,
@@ -294,43 +294,79 @@ export const Route = createFileRoute("/tools/$slug")({
     const tool = loaderData?.tool;
     const title = tool ? `${tool.name} — Palugada` : "Tool — Palugada";
     const description = tool?.description ?? "Free online tool by Palugada.";
+    const category = tool ? categories.find((c) => c.key === tool.category) : null;
     return {
       meta: [
         { title },
         { name: "description", content: description },
+        { property: "og:locale", content: "id_ID" },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:url", content: `/tools/${tool?.slug ?? ""}` },
         { property: "og:type", content: "website" },
+        { property: "og:image", content: "/icon-512.png" },
+        { property: "og:image:width", content: "512" },
+        { property: "og:image:height", content: "512" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:site", content: "@palugada" },
+        { name: "twitter:image", content: "/icon-512.png" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
       ],
       links: tool ? [{ rel: "canonical", href: `/tools/${tool.slug}` }] : [],
       scripts: tool
         ? [
-          {
-            type: "application/ld+json",
-            children: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              name: tool.name,
-              description: tool.description,
-              applicationCategory: "UtilityApplication",
-              operatingSystem: "Web",
-              offers: { "@type": "Offer", price: "0", priceCurrency: "IDR" },
-            }),
-          },
-          {
-            type: "application/ld+json",
-            children: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: tool.faqs.map((f) => ({
-                "@type": "Question",
-                name: f.q,
-                acceptedAnswer: { "@type": "Answer", text: f.a },
-              })),
-            }),
-          },
-        ]
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "SoftwareApplication",
+                name: tool.name,
+                description: tool.description,
+                applicationCategory: "UtilityApplication",
+                operatingSystem: "Web",
+                offers: { "@type": "Offer", price: "0", priceCurrency: "IDR" },
+              }),
+            },
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: tool.faqs.map((f) => ({
+                  "@type": "Question",
+                  name: f.q,
+                  acceptedAnswer: { "@type": "Answer", text: f.a },
+                })),
+              }),
+            },
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: "https://palugada.sqwerly.com/",
+                  },
+                  ...(category
+                    ? [
+                        {
+                          "@type": "ListItem" as const,
+                          position: 2,
+                          name: category.name,
+                          item: `https://palugada.sqwerly.com/categories/${category.key.toLowerCase()}`,
+                        },
+                      ]
+                    : []),
+                  { "@type": "ListItem", position: category ? 3 : 2, name: tool.name },
+                ],
+              }),
+            },
+          ]
         : [],
     };
   },
@@ -343,7 +379,10 @@ export const Route = createFileRoute("/tools/$slug")({
       <div className="text-center">
         <p className="font-display text-6xl uppercase">404</p>
         <p className="mt-2 text-foreground/60">Tool tidak ditemukan.</p>
-        <Link to="/" className="inline-block mt-6 text-primary font-bold uppercase text-sm tracking-widest">
+        <Link
+          to="/"
+          className="inline-block mt-6 text-primary font-bold uppercase text-sm tracking-widest"
+        >
           ← Kembali ke beranda
         </Link>
       </div>
@@ -379,7 +418,7 @@ function ToolPage() {
       const bookmarks = JSON.parse(localStorage.getItem("palugada_bookmarks") || "[]");
       let nextBookmarks: string[];
       const isCurrentlyBookmarked = bookmarks.includes(tool.slug);
-      
+
       trackEvent(isCurrentlyBookmarked ? "tool_unbookmarked" : "tool_bookmarked", {
         tool_slug: tool.slug,
         tool_name: tool.name,
@@ -397,10 +436,17 @@ function ToolPage() {
     } catch (e) {}
   };
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : `https://palugada.sqwerly.com/tools/${tool.slug}`;
+  const shareUrl =
+    typeof window !== "undefined"
+      ? window.location.href
+      : `https://palugada.sqwerly.com/tools/${tool.slug}`;
   const embedCode = `<a href="${shareUrl}" target="_blank">Gunakan ${tool.name} Gratis di Palugada</a>`;
 
-  const copyToClipboard = (text: string, setCopied: (val: boolean) => void, type: "link" | "embed") => {
+  const copyToClipboard = (
+    text: string,
+    setCopied: (val: boolean) => void,
+    type: "link" | "embed",
+  ) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     trackEvent("tool_shared", {
@@ -429,7 +475,9 @@ function ToolPage() {
 
       <div className="max-w-6xl mx-auto px-4 pt-10 pb-6">
         <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-6 flex flex-wrap items-center">
-          <Link to="/" className="hover:text-primary">Home</Link>
+          <Link to="/" className="hover:text-primary">
+            Home
+          </Link>
           <span className="mx-2">/</span>
           <Link
             to="/categories/$category"
@@ -482,7 +530,8 @@ function ToolPage() {
             <div className="space-y-4">
               <h3 className="font-display text-2xl uppercase tracking-tight">Bagikan Tool Ini</h3>
               <p className="text-sm text-foreground/60 leading-relaxed">
-                Bantu teman atau kolega Anda dengan membagikan alat ini. Cepat, gratis, dan tanpa registrasi.
+                Bantu teman atau kolega Anda dengan membagikan alat ini. Cepat, gratis, dan tanpa
+                registrasi.
               </p>
               <div className="flex flex-wrap gap-3">
                 <button
@@ -492,7 +541,13 @@ function ToolPage() {
                   {copiedUrl ? "Copied Link!" : "Salin Link URL"}
                 </button>
                 <a
-                  onClick={() => trackEvent("tool_shared", { tool_slug: tool.slug, tool_name: tool.name, share_type: "whatsapp" })}
+                  onClick={() =>
+                    trackEvent("tool_shared", {
+                      tool_slug: tool.slug,
+                      tool_name: tool.name,
+                      share_type: "whatsapp",
+                    })
+                  }
                   href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Coba tool ${tool.name} gratis di Palugada: ${shareUrl}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -501,7 +556,13 @@ function ToolPage() {
                   WhatsApp
                 </a>
                 <a
-                  onClick={() => trackEvent("tool_shared", { tool_slug: tool.slug, tool_name: tool.name, share_type: "twitter" })}
+                  onClick={() =>
+                    trackEvent("tool_shared", {
+                      tool_slug: tool.slug,
+                      tool_name: tool.name,
+                      share_type: "twitter",
+                    })
+                  }
                   href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Rekomendasi tool gratis ${tool.name} dari Palugada!`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -513,9 +574,12 @@ function ToolPage() {
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-display text-2xl uppercase tracking-tight">Sematkan di Website Anda</h3>
+              <h3 className="font-display text-2xl uppercase tracking-tight">
+                Sematkan di Website Anda
+              </h3>
               <p className="text-sm text-foreground/60 leading-relaxed">
-                Pasang backlink HTML di blog atau web resource Anda agar pengunjung Anda bisa langsung mengakses alat ini.
+                Pasang backlink HTML di blog atau web resource Anda agar pengunjung Anda bisa
+                langsung mengakses alat ini.
               </p>
               <div className="flex gap-2">
                 <input
@@ -546,7 +610,9 @@ function ToolPage() {
               >
                 <summary className="cursor-pointer font-semibold flex items-center justify-between list-none">
                   {f.q}
-                  <span className="text-primary text-xl group-open:rotate-45 transition-transform">+</span>
+                  <span className="text-primary text-xl group-open:rotate-45 transition-transform">
+                    +
+                  </span>
                 </summary>
                 <p className="mt-3 text-foreground/70 text-sm leading-relaxed">{f.a}</p>
               </details>

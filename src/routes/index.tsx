@@ -14,12 +14,24 @@ export const Route = createFileRoute("/")({
         content:
           "Kumpulan free online tools terlengkap untuk developer, writer, dan kebutuhan harian. JSON formatter, password generator, QR code, dan banyak lagi.",
       },
+      { property: "og:locale", content: "id_ID" },
       { property: "og:title", content: "Palugada — Apa Lu Mau, Gua Ada." },
       {
         property: "og:description",
         content: "Directory tools gratis terlengkap. Tanpa login, langsung pake.",
       },
       { property: "og:url", content: "/" },
+      { property: "og:image", content: "/icon-512.png" },
+      { property: "og:image:width", content: "512" },
+      { property: "og:image:height", content: "512" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:site", content: "@palugada" },
+      { name: "twitter:image", content: "/icon-512.png" },
+      { name: "twitter:title", content: "Palugada — Apa Lu Mau, Gua Ada." },
+      {
+        name: "twitter:description",
+        content: "Directory tools gratis terlengkap. Tanpa login, langsung pake.",
+      },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
@@ -125,10 +137,11 @@ function Index() {
                     setActive(c.key);
                     setActiveSubcategory("all");
                   }}
-                  className={`whitespace-nowrap px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${isActive
-                    ? "bg-foreground text-background"
-                    : "bg-card border border-foreground/10 hover:border-foreground/40"
-                    }`}
+                  className={`whitespace-nowrap px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider transition-colors ${
+                    isActive
+                      ? "bg-foreground text-background"
+                      : "bg-card border border-foreground/10 hover:border-foreground/40"
+                  }`}
                 >
                   {c.name === "Semua" ? "Semua Tools" : c.name}
                 </Link>
@@ -139,36 +152,40 @@ function Index() {
       )}
 
       {/* Subcategory tabs */}
-      {!query.trim() && activeCategoryConfig?.subcategories && activeCategoryConfig.subcategories.length > 0 && (
-        <section className="px-4 mb-10 animate-[entrance_0.8s_var(--ease-out-expo)_both_100ms]">
-          <div className="max-w-6xl mx-auto flex flex-wrap gap-2 pb-2 justify-start border-b border-foreground/5">
-            <button
-              onClick={() => setActiveSubcategory("all")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${activeSubcategory === "all"
-                ? "bg-foreground/80 text-background"
-                : "bg-card border border-foreground/5 hover:border-foreground/20"
-                }`}
-            >
-              Semua Subkategori
-            </button>
-            {activeCategoryConfig.subcategories.map((sub) => {
-              const isSubActive = activeSubcategory === sub;
-              return (
-                <button
-                  key={sub}
-                  onClick={() => setActiveSubcategory(sub)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${isSubActive
+      {!query.trim() &&
+        activeCategoryConfig?.subcategories &&
+        activeCategoryConfig.subcategories.length > 0 && (
+          <section className="px-4 mb-10 animate-[entrance_0.8s_var(--ease-out-expo)_both_100ms]">
+            <div className="max-w-6xl mx-auto flex flex-wrap gap-2 pb-2 justify-start border-b border-foreground/5">
+              <button
+                onClick={() => setActiveSubcategory("all")}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${
+                  activeSubcategory === "all"
                     ? "bg-foreground/80 text-background"
                     : "bg-card border border-foreground/5 hover:border-foreground/20"
+                }`}
+              >
+                Semua Subkategori
+              </button>
+              {activeCategoryConfig.subcategories.map((sub) => {
+                const isSubActive = activeSubcategory === sub;
+                return (
+                  <button
+                    key={sub}
+                    onClick={() => setActiveSubcategory(sub)}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${
+                      isSubActive
+                        ? "bg-foreground/80 text-background"
+                        : "bg-card border border-foreground/5 hover:border-foreground/20"
                     }`}
-                >
-                  {sub}
-                </button>
-              );
-            })}
-          </div>
-        </section>
-      )}
+                  >
+                    {sub}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
       <main className="px-4 pb-24 max-w-6xl mx-auto animate-[entrance_1s_var(--ease-out-expo)_both_400ms]">
         {filtered.length === 0 ? (
