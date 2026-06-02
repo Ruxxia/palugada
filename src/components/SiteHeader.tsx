@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import { categories, tools } from "@/lib/tools";
 import { version } from "../../package.json";
 import { trackPWAEvent } from "@/lib/analytics";
+import { SupabaseLoginDialog } from "./SupabaseLoginDialog";
+import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [canInstall, setCanInstall] = useState(false);
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -166,9 +169,19 @@ export function SiteHeader() {
             <span className="text-[10px] font-mono font-medium uppercase tracking-widest text-primary">
               v{version}
             </span>
+            <div className="hidden sm:block bg-foreground/5 h-8 w-px" />
+            <Button
+              onClick={() => setLoginDialogOpen(true)}
+              variant="outline"
+              size="sm"
+              className="text-xs font-bold uppercase tracking-wider"
+            >
+              Login
+            </Button>
           </div>
         </div>
       </nav>
+      <SupabaseLoginDialog open={loginDialogOpen} onOpenChange={setLoginDialogOpen} />
       {canInstall && (
         <button
           onClick={handleInstallClick}
