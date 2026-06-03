@@ -89,6 +89,18 @@ export function SiteHeader() {
           </Link>
 
           <div className="flex items-center gap-6">
+            {/* Search Trigger Button */}
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-command-menu"))}
+              className="text-xs font-bold uppercase tracking-wider text-foreground/75 hover:text-foreground transition-colors flex items-center gap-1.5 cursor-pointer bg-foreground/5 hover:bg-foreground/10 px-2.5 py-1.5 rounded-lg border border-foreground/5 select-none"
+            >
+              <span>🔍</span>
+              <span className="hidden sm:inline">Cari</span>
+              <kbd className="hidden md:inline-flex bg-background border border-foreground/15 rounded px-1.5 py-0.5 text-[8px] font-mono text-foreground/50 select-none">
+                Ctrl+K
+              </kbd>
+            </button>
+
             {/* Bookmarks Dropdown */}
             <div className="relative">
               <button

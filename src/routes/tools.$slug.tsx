@@ -137,6 +137,8 @@ import { GradientPaletteGenerator } from "@/components/tools/GradientPaletteGene
 import { SvgBlobGenerator } from "@/components/tools/SvgBlobGenerator";
 import { SvgWaveGenerator } from "@/components/tools/SvgWaveGenerator";
 import { FaviconGenerator } from "@/components/tools/FaviconGenerator";
+import { ChartMaker } from "@/components/tools/ChartMaker";
+import { CronBuilder } from "@/components/tools/CronBuilder";
 
 import { RandomNamePicker } from "@/components/tools/RandomNamePicker";
 import { TeamGenerator } from "@/components/tools/TeamGenerator";
@@ -272,6 +274,7 @@ const toolComponents: Record<string, ComponentType> = {
   "svg-blob-generator": SvgBlobGenerator,
   "svg-wave-generator": SvgWaveGenerator,
   "favicon-generator": FaviconGenerator,
+  "chart-maker": ChartMaker,
   "random-name-picker": RandomNamePicker,
   "team-generator": TeamGenerator,
   "meeting-time-calculator": MeetingTimeCalculator,
@@ -282,6 +285,7 @@ const toolComponents: Record<string, ComponentType> = {
   "aim-trainer": AimTrainer,
   "spin-wheel": SpinWheel,
   "2048": Game2048,
+  "cron-builder": CronBuilder,
 };
 
 export const Route = createFileRoute("/tools/$slug")({

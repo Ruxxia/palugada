@@ -1,5 +1,27 @@
 [
   {
+    "date": "3 Juni 2026",
+    "title": "Alat Baru: Cron Builder & Visualisasi Data + Fitur Command Palette (Cmd+K)",
+    "description": "Hari ini kami merilis fitur navigasi Command Palette (Cmd+K) untuk pencarian cepat, meluncurkan Interactive Chart Maker untuk visualisasi data lokal, serta menambahkan Cron Expression Builder & Tester untuk merancang ekspresi cron secara visual.",
+    "tools": [
+      {
+        "slug": "command-palette",
+        "badge": "Fitur Baru",
+        "details": "Akses menu pencarian cepat menggunakan shortcut Ctrl+K / Cmd+K atau tombol Cari di header untuk mencari nama alat, kategori, dan deskripsi."
+      },
+      {
+        "slug": "chart-maker",
+        "badge": "New Tool",
+        "details": "Rancang grafik tipe Bar, Line, Area, atau Pie dari file CSV atau array JSON dengan kustomisasi sumbu koordinat, tema warna brutalist/neon/pastel, dan ekspor instan ke gambar PNG."
+      },
+      {
+        "slug": "cron-builder",
+        "badge": "New Tool",
+        "details": "Rancang ekspresi cron secara visual dengan tab interaktif, lengkap dengan penerjemah bahasa Indonesia langsung dan kalkulasi 5 waktu eksekusi selanjutnya secara lokal."
+      }
+    ]
+  },
+  {
     "date": "1 Juni 2026",
     "title": "Rilis Paket Alat Audit SEO Lengkap (SEO Audit Suite)",
     "description": "Kami meluncurkan tiga alat audit optimasi mesin pencari (SEO Audit) baru untuk mendeteksi masalah on-page SEO secara mendalam, mengevaluasi kesehatan tautan/link, dan memeriksa performa pemuatan rendering awal berkas secara instan.",

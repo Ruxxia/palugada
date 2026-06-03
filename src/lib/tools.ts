@@ -1537,6 +1537,21 @@ export const tools: Tool[] = [
     ]
   },
   {
+    slug: "chart-maker",
+    name: "Interactive Chart Maker",
+    description: "Buat grafik interaktif (Bar, Line, Area, Pie) dari data CSV/JSON secara instan.",
+    longDescription: "Interactive Chart Maker memungkinkan Anda memvisualisasikan data tabular berformat CSV atau JSON menjadi grafik yang cantik. Sesuaikan judul, tipe grafik, warna tema, dan unduh sebagai file gambar PNG secara lokal.",
+    category: "Design",
+    subcategory: "Asset Generators",
+    icon: "📊",
+    featured: true,
+    faqs: [
+      { q: "Format data apa saja yang didukung?", a: "Alat ini mendukung data berformat JSON Array of Objects atau data CSV dengan baris pertama sebagai nama kolom." },
+      { q: "Apakah data saya dikirim ke server?", a: "Tidak. Seluruh proses pembacaan data, kalkulasi, dan rendering grafik dilakukan sepenuhnya di dalam browser Anda." },
+      { q: "Bagaimana cara mengunduh grafik?", a: "Gunakan tombol 'Unduh PNG' untuk mengambil snapshot grafik dalam format gambar PNG secara langsung." }
+    ]
+  },
+  {
     slug: "random-name-picker",
     name: "Random Name Picker",
     description: "Pilih nama acak dari daftar nama untuk undian atau giliran secara visual.",
@@ -1664,6 +1679,20 @@ export const tools: Tool[] = [
     featured: true,
     faqs: [
       { q: "Bagaimana cara memenangkan game 2048?", a: "Gabungkan ubin dengan angka yang sama secara taktis hingga Anda berhasil menciptakan satu ubin bernilai 2048." }
+    ]
+  },
+  {
+    slug: "cron-builder",
+    name: "Cron Expression Builder",
+    description: "Visualisasikan, buat, terjemahkan, dan uji ekspresi cron secara interaktif.",
+    longDescription: "Alat bantu interaktif untuk membangun ekspresi cron secara visual menggunakan antarmuka tab. Dilengkapi penerjemah bahasa Indonesia dan prediksi 5 waktu eksekusi tugas berikutnya secara real-time.",
+    category: "Developer",
+    subcategory: "Generation",
+    icon: "⏱️",
+    featured: true,
+    faqs: [
+      { q: "Bagaimana format cron yang didukung?", a: "Format cron standar dengan 5 kolom (menit, jam, tanggal, bulan, hari kerja)." },
+      { q: "Apakah data yang dimasukkan dikirim ke server?", a: "Tidak, semua kalkulasi dan visualisasi jadwal cron berjalan 100% lokal di browser Anda." }
     ]
   }
 ];

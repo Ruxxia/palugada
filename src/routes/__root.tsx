@@ -12,6 +12,7 @@ import { type ReactNode, useEffect } from "react";
 
 import appCss from "../styles.css?url";
 import { PWAInstallPrompt } from "../components/PWAInstallPrompt";
+import { CommandMenu } from "../components/CommandMenu";
 import { initGA, trackPageView } from "../lib/analytics";
 
 function NotFoundComponent() {
@@ -145,6 +146,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <CommandMenu />
       <PWAInstallPrompt />
     </QueryClientProvider>
   );
