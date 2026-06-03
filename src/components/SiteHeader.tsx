@@ -181,15 +181,6 @@ export function SiteHeader() {
             <span className="text-[10px] font-mono font-medium uppercase tracking-widest text-primary">
               v{version}
             </span>
-            <div className="hidden sm:block bg-foreground/5 h-8 w-px" />
-            <Button
-              onClick={() => setLoginDialogOpen(true)}
-              variant="outline"
-              size="sm"
-              className="text-xs font-bold uppercase tracking-wider"
-            >
-              Login
-            </Button>
           </div>
         </div>
       </nav>
