@@ -758,7 +758,7 @@ export function WeddingPlanner() {
       <div className="py-24 px-4 text-center max-w-lg mx-auto flex flex-col items-center justify-center select-none">
         <div className="relative mb-6">
           <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-          <div className="absolute inset-0 flex items-center justify-center text-2xl">
+          <div className="absolute inset-0 flex items-center justify-center md:text-2xl">
             💍
           </div>
         </div>
@@ -843,7 +843,7 @@ export function WeddingPlanner() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
         {/* Countdown */}
-        <div className="bg-card border-2 border-foreground rounded-2xl p-5 shadow-tactile flex flex-col justify-between relative overflow-hidden select-none">
+        <div className="bg-card border border-foreground/15 md:border-2 md:border-foreground rounded-xl md:rounded-2xl p-4 md:p-5 shadow-sm md:shadow-tactile flex flex-col justify-between relative overflow-hidden select-none">
           <div className="absolute right-0 top-0 opacity-5 text-7xl translate-x-2 -translate-y-2">🔔</div>
           <div>
             <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase tracking-widest block">Hari H Pernikahan</span>
@@ -851,7 +851,7 @@ export function WeddingPlanner() {
               type="date"
               value={settings.wedding_date}
               onChange={(e) => setSettings(prev => ({ ...prev, wedding_date: e.target.value }))}
-              className="text-xs font-mono font-bold mt-1.5 bg-background border border-foreground/15 rounded p-1 outline-none text-foreground cursor-pointer"
+              className="text-xs font-mono font-bold mt-1.5 bg-background border border-foreground/15 rounded p-1 w-full outline-none text-foreground cursor-pointer"
             />
           </div>
           <div className="mt-4 flex items-baseline gap-1">
@@ -864,7 +864,7 @@ export function WeddingPlanner() {
         </div>
 
         {/* Budget Tracker Bento Card */}
-        <div className="bg-card border-2 border-foreground rounded-2xl p-5 shadow-tactile flex flex-col justify-between select-none">
+        <div className="bg-card border border-foreground/15 md:border-2 md:border-foreground rounded-xl md:rounded-2xl p-4 md:p-5 shadow-sm md:shadow-tactile flex flex-col justify-between select-none">
           <div>
             <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase tracking-widest block">Target Anggaran</span>
             <input
@@ -893,7 +893,7 @@ export function WeddingPlanner() {
         </div>
 
         {/* Guest RSVP Stats Bento Card */}
-        <div className="bg-card border-2 border-foreground rounded-2xl p-5 shadow-tactile flex flex-col justify-between select-none">
+        <div className="bg-card border border-foreground/15 md:border-2 md:border-foreground rounded-xl md:rounded-2xl p-4 md:p-5 shadow-sm md:shadow-tactile flex flex-col justify-between select-none">
           <div>
             <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase tracking-widest block">Manajemen Undangan</span>
             <span className="text-3xl font-display font-bold block mt-1">{totalGuests} <span className="text-xs text-foreground/60 uppercase">Tamu Terdaftar</span></span>
@@ -918,7 +918,7 @@ export function WeddingPlanner() {
         </div>
 
         {/* Tasks Progress Bento Card */}
-        <div className="bg-card border-2 border-foreground rounded-2xl p-5 shadow-tactile flex flex-col justify-between select-none">
+        <div className="bg-card border border-foreground/15 md:border-2 md:border-foreground rounded-xl md:rounded-2xl p-4 md:p-5 shadow-sm md:shadow-tactile flex flex-col justify-between select-none">
           <div>
             <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase tracking-widest block">Tugas & Timeline</span>
             <span className="text-3xl font-display font-bold block mt-1">{completedTodos} / {totalTodos} <span className="text-xs text-foreground/60 uppercase">Tugas Selesai</span></span>
@@ -943,7 +943,7 @@ export function WeddingPlanner() {
       </div>
 
       {/* Main Content Tabs Navigation */}
-      <div className="flex border-2 border-foreground rounded-xl bg-card overflow-hidden select-none shadow-sm overflow-x-auto">
+      <div className="flex border border-foreground/15 md:border-2 md:border-foreground rounded-xl bg-card overflow-hidden select-none shadow-sm overflow-x-auto">
         {(["dashboard", "checklist", "guests", "budget", "logistics"] as const).map((tab) => {
           const tabLabel = {
             dashboard: "📊 Dashboard",
@@ -956,7 +956,7 @@ export function WeddingPlanner() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-3.5 text-xs font-bold uppercase tracking-wider border-r-2 border-foreground last:border-r-0 transition-colors cursor-pointer text-center ${activeTab === tab ? "bg-foreground text-background" : "text-foreground hover:bg-foreground/5"
+              className={`flex-1 py-3 px-2.5 md:py-3.5 text-[10px] md:text-xs font-bold uppercase tracking-wider border-r border-foreground/15 md:border-r-2 md:border-foreground last:border-r-0 transition-colors cursor-pointer text-center whitespace-nowrap ${activeTab === tab ? "bg-foreground text-background" : "text-foreground hover:bg-foreground/5"
                 }`}
             >
               {tabLabel[tab]}
@@ -966,7 +966,7 @@ export function WeddingPlanner() {
       </div>
 
       {/* Tabs Panels Container */}
-      <div id="wedding-planner-print-area" className="bg-card border-2 border-foreground rounded-2xl p-6 shadow-tactile">
+      <div id="wedding-planner-print-area" className="bg-card md:border-2 md:border-foreground border-none rounded-xl md:rounded-2xl p-3 md:p-6 shadow-none md:shadow-tactile">
         {loading ? (
           <div className="py-20 text-center">
             <RefreshCw className="w-10 h-10 animate-spin mx-auto text-primary" />
@@ -979,7 +979,7 @@ export function WeddingPlanner() {
             {activeTab === "dashboard" && (
               <div className="space-y-6">
                 <div className="border-b border-foreground/10 pb-4">
-                  <h3 className="font-display text-2xl uppercase">Dashboard Ringkasan</h3>
+                  <h3 className="font-display md:text-2xl uppercase">Dashboard Ringkasan</h3>
                   <p className="text-xs text-foreground/60 mt-1">Status dan pandangan umum kesiapan pernikahan Anda.</p>
                 </div>
 
@@ -1042,10 +1042,10 @@ export function WeddingPlanner() {
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-foreground/10 pb-4">
                   <div>
-                    <h3 className="font-display text-2xl uppercase">Tugas & Timeline</h3>
+                    <h3 className="font-display md:text-2xl uppercase">Tugas & Timeline</h3>
                     <p className="text-xs text-foreground/60 mt-1">Daftar persiapan pernikahan terperinci berdasarkan deadline.</p>
                   </div>
-                  <div className="flex gap-2 w-full sm:w-auto">
+                  <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                     <select
                       value={todoFilter}
                       onChange={(e) => setTodoFilter(e.target.value as any)}
@@ -1120,7 +1120,7 @@ export function WeddingPlanner() {
                     .map(todo => (
                       <div
                         key={todo.id}
-                        className={`flex items-center justify-between border rounded-xl p-4 transition-all ${todo.is_completed
+                        className={`flex items-center justify-between border rounded-xl p-3 sm:p-4 transition-all ${todo.is_completed
                           ? "bg-foreground/5 border-foreground/10 opacity-70"
                           : "bg-background border-foreground/15 hover:border-foreground/30 shadow-sm"
                           }`}
@@ -1166,7 +1166,7 @@ export function WeddingPlanner() {
               <div className="space-y-6">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-foreground/10 pb-4">
                   <div>
-                    <h3 className="font-display text-2xl uppercase">Daftar Tamu & RSVP</h3>
+                    <h3 className="font-display md:text-2xl uppercase">Daftar Tamu & RSVP</h3>
                     <p className="text-xs text-foreground/60 mt-1">Kelola undangan dan lacak konfirmasi kehadiran tamu.</p>
                   </div>
 
@@ -1295,11 +1295,11 @@ export function WeddingPlanner() {
                   <table className="w-full text-left border-collapse text-xs select-none">
                     <thead>
                       <tr className="bg-foreground/5 border-b border-foreground/15 font-mono text-[10px] uppercase font-bold text-foreground/60">
-                        <th className="p-3">Nama Tamu</th>
-                        <th className="p-3">Kategori</th>
-                        <th className="p-3">Kontak</th>
-                        <th className="p-3">Status RSVP</th>
-                        <th className="p-3 text-right">Aksi</th>
+                        <th className="p-2 sm:p-3">Nama Tamu</th>
+                        <th className="p-2 sm:p-3">Kategori</th>
+                        <th className="p-2 sm:p-3">Kontak</th>
+                        <th className="p-2 sm:p-3">Status RSVP</th>
+                        <th className="p-2 sm:p-3 text-right">Aksi</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-foreground/10">
@@ -1312,14 +1312,14 @@ export function WeddingPlanner() {
                         })
                         .map(guest => (
                           <tr key={guest.id} className="hover:bg-foreground/5 transition-colors">
-                            <td className="p-3 font-bold">{guest.name}</td>
-                            <td className="p-3">
+                            <td className="p-2 sm:p-3 font-bold">{guest.name}</td>
+                            <td className="p-2 sm:p-3">
                               <span className="px-2 py-0.5 border border-foreground/10 bg-background rounded-full font-mono text-[9px]">
                                 {guest.category}
                               </span>
                             </td>
-                            <td className="p-3 font-mono text-foreground/75">{guest.contact_info || "-"}</td>
-                            <td className="p-3">
+                            <td className="p-2 sm:p-3 font-mono text-foreground/75">{guest.contact_info || "-"}</td>
+                            <td className="p-2 sm:p-3">
                               <select
                                 value={guest.rsvp_status}
                                 onChange={(e) => updateGuestRSVP(guest.id, e.target.value as any)}
@@ -1335,7 +1335,7 @@ export function WeddingPlanner() {
                                 <option value="Declined">Menolak</option>
                               </select>
                             </td>
-                            <td className="p-3 text-right flex items-center justify-end gap-1.5">
+                            <td className="p-2 sm:p-3 text-right flex items-center justify-end gap-1.5">
                               {guest.id.startsWith("g_") ? (
                                 <span className="text-[9px] text-foreground/40 font-bold font-mono uppercase select-none cursor-help" title="Simpan ke cloud untuk buat link">
                                   Belum Sync
@@ -1380,10 +1380,10 @@ export function WeddingPlanner() {
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-foreground/10 pb-4">
                   <div>
-                    <h3 className="font-display text-2xl uppercase">Manajemen Anggaran</h3>
+                    <h3 className="font-display md:text-2xl uppercase">Manajemen Anggaran</h3>
                     <p className="text-xs text-foreground/60 mt-1">Lacak pengeluaran estimasi dan realisasi vendor pernikahan.</p>
                   </div>
-                  <div className="flex gap-2 w-full sm:w-auto">
+                  <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                     <select
                       value={budgetFilterCategory}
                       onChange={(e) => setBudgetFilterCategory(e.target.value)}
@@ -1491,12 +1491,12 @@ export function WeddingPlanner() {
                   <table className="w-full text-left border-collapse text-xs select-none">
                     <thead>
                       <tr className="bg-foreground/5 border-b border-foreground/15 font-mono text-[10px] uppercase font-bold text-foreground/60">
-                        <th className="p-3">Vendor / Keperluan</th>
-                        <th className="p-3">Kategori</th>
-                        <th className="p-3">Estimasi Biaya</th>
-                        <th className="p-3">Biaya Riil</th>
-                        <th className="p-3">Status Bayar</th>
-                        <th className="p-3 text-right">Aksi</th>
+                        <th className="p-2 sm:p-3">Vendor / Keperluan</th>
+                        <th className="p-2 sm:p-3">Kategori</th>
+                        <th className="p-2 sm:p-3">Estimasi Biaya</th>
+                        <th className="p-2 sm:p-3">Biaya Riil</th>
+                        <th className="p-2 sm:p-3">Status Bayar</th>
+                        <th className="p-2 sm:p-3 text-right">Aksi</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-foreground/10">
@@ -1504,15 +1504,15 @@ export function WeddingPlanner() {
                         .filter(b => budgetFilterCategory === "all" || b.category === budgetFilterCategory)
                         .map(budget => (
                           <tr key={budget.id} className="hover:bg-foreground/5 transition-colors">
-                            <td className="p-3 font-bold">{budget.name}</td>
-                            <td className="p-3">
+                            <td className="p-2 sm:p-3 font-bold">{budget.name}</td>
+                            <td className="p-2 sm:p-3">
                               <span className="px-2 py-0.5 border border-foreground/10 bg-background rounded-full font-mono text-[9px]">
                                 {budget.category}
                               </span>
                             </td>
-                            <td className="p-3 font-mono">{formatIDR(budget.estimated_cost)}</td>
-                            <td className="p-3 font-mono text-primary font-bold">{formatIDR(budget.actual_cost)}</td>
-                            <td className="p-3">
+                            <td className="p-2 sm:p-3 font-mono">{formatIDR(budget.estimated_cost)}</td>
+                            <td className="p-2 sm:p-3 font-mono text-primary font-bold">{formatIDR(budget.actual_cost)}</td>
+                            <td className="p-2 sm:p-3">
                               <button
                                 onClick={() => toggleBudgetPaid(budget.id)}
                                 className={`px-2 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${budget.is_paid
@@ -1523,7 +1523,7 @@ export function WeddingPlanner() {
                                 {budget.is_paid ? "Lunas" : "Belum Lunas"}
                               </button>
                             </td>
-                            <td className="p-3 text-right">
+                            <td className="p-2 sm:p-3 text-right">
                               <button
                                 onClick={() => handleDeleteBudget(budget.id)}
                                 className="p-1.5 text-foreground/40 hover:text-rose-500 rounded-lg hover:bg-rose-500/10 transition-colors cursor-pointer"
@@ -1547,7 +1547,7 @@ export function WeddingPlanner() {
               <div className="space-y-6">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-foreground/10 pb-4">
                   <div>
-                    <h3 className="font-display text-2xl uppercase">Logistik & Belanja</h3>
+                    <h3 className="font-display md:text-2xl uppercase">Logistik & Belanja</h3>
                     <p className="text-xs text-foreground/60 mt-1">Kelola barang bawaan, mahar, seserahan, suvenir, dan perlengkapan lainnya.</p>
                   </div>
                   <div className="flex flex-wrap gap-2 w-full lg:w-auto items-center">
@@ -1590,19 +1590,19 @@ export function WeddingPlanner() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
                     <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Total Barang</span>
-                    <span className="text-2xl font-bold block mt-1">{totalLogistics}</span>
+                    <span className="md:text-2xl font-bold block mt-1">{totalLogistics}</span>
                   </div>
                   <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
                     <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Barang Siap</span>
-                    <span className="text-2xl font-bold text-emerald-600 block mt-1">{completedLogistics}</span>
+                    <span className="md:text-2xl font-bold text-emerald-600 block mt-1">{completedLogistics}</span>
                   </div>
                   <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
                     <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Estimasi Belanja</span>
-                    <span className="text-2xl font-bold block mt-1">{formatIDR(totalLogisticsEstimatedCost)}</span>
+                    <span className="md:text-2xl font-bold block mt-1">{formatIDR(totalLogisticsEstimatedCost)}</span>
                   </div>
                   <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
                     <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Realisasi</span>
-                    <span className="text-2xl font-bold text-primary block mt-1">{formatIDR(totalLogisticsSpent)}</span>
+                    <span className="md:text-2xl font-bold text-primary block mt-1">{formatIDR(totalLogisticsSpent)}</span>
                   </div>
                 </div>
 
@@ -1709,12 +1709,12 @@ export function WeddingPlanner() {
                     <table className="w-full text-left border-collapse text-xs select-none">
                       <thead>
                         <tr className="bg-foreground/5 border-b border-foreground/15 font-mono text-[10px] uppercase font-bold text-foreground/60">
-                          <th className="p-3">Nama Barang</th>
-                          <th className="p-3">Status</th>
-                          <th className="p-3">Sumber / Toko</th>
-                          <th className="p-3">Harga Estimasi</th>
-                          <th className="p-3">Catatan</th>
-                          <th className="p-3 text-right">Aksi</th>
+                          <th className="p-2 sm:p-3">Nama Barang</th>
+                          <th className="p-2 sm:p-3">Status</th>
+                          <th className="p-2 sm:p-3">Sumber / Toko</th>
+                          <th className="p-2 sm:p-3">Harga Estimasi</th>
+                          <th className="p-2 sm:p-3">Catatan</th>
+                          <th className="p-2 sm:p-3 text-right">Aksi</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-foreground/10">
@@ -1729,7 +1729,7 @@ export function WeddingPlanner() {
                             const cleanTitle = t.title.replace("LOGISTICS:", "");
                             return (
                               <tr key={t.id} className="hover:bg-foreground/5 transition-colors">
-                                <td className="p-3 font-bold">
+                                <td className="p-2 sm:p-3 font-bold">
                                   {editingLogisticsId === t.id && editingLogisticsData ? (
                                     <input
                                       type="text"
@@ -1741,7 +1741,7 @@ export function WeddingPlanner() {
                                     cleanTitle
                                   )}
                                 </td>
-                                <td className="p-3">
+                                <td className="p-2 sm:p-3">
                                   <select
                                     value={meta.status}
                                     onChange={(e) => updateLogisticsStatus(t.id, e.target.value as any)}
@@ -1757,7 +1757,7 @@ export function WeddingPlanner() {
                                     <option value="Siap (Ready)">Siap (Ready)</option>
                                   </select>
                                 </td>
-                                <td className="p-3 text-foreground/75 font-medium">
+                                <td className="p-2 sm:p-3 text-foreground/75 font-medium">
                                   {editingLogisticsId === t.id && editingLogisticsData ? (
                                     <input
                                       type="text"
@@ -1770,7 +1770,7 @@ export function WeddingPlanner() {
                                     meta.source || "-"
                                   )}
                                 </td>
-                                <td className="p-3 font-mono font-bold">
+                                <td className="p-2 sm:p-3 font-mono font-bold">
                                   {editingLogisticsId === t.id && editingLogisticsData ? (
                                     <input
                                       type="number"
@@ -1783,7 +1783,7 @@ export function WeddingPlanner() {
                                     formatIDR(meta.price || 0)
                                   )}
                                 </td>
-                                <td className="p-3 text-foreground/60 italic">
+                                <td className="p-2 sm:p-3 text-foreground/60 italic">
                                   {editingLogisticsId === t.id && editingLogisticsData ? (
                                     <input
                                       type="text"
@@ -1796,7 +1796,7 @@ export function WeddingPlanner() {
                                     meta.notes || "-"
                                   )}
                                 </td>
-                                <td className="p-3 text-right">
+                                <td className="p-2 sm:p-3 text-right">
                                   <div className="flex justify-end gap-1 select-none">
                                     {editingLogisticsId === t.id ? (
                                       <>

@@ -544,7 +544,7 @@ function ToolPage() {
       )}
 
       <main className={`max-w-6xl mx-auto px-4 pb-16 ${isWeddingPlannerAuth ? "pt-8" : ""}`}>
-        <div className="bg-card border-2 border-foreground rounded-2xl p-6 md:p-8 shadow-tactile">
+        <div className="bg-card md:border-2 md:border-foreground border-none rounded-xl md:rounded-2xl p-3 sm:p-6 md:p-8 shadow-none md:shadow-tactile">
           {ToolComponent ? <ToolComponent /> : <p>Tool sedang disiapkan.</p>}
         </div>
 
