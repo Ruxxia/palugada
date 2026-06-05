@@ -51,9 +51,10 @@ async function supabaseRequest(endpoint: string, options: RequestInit = {}) {
   }
 
   // Some operations (like DELETE or single UPSERT with Prefer) might return empty body
-  if (response.status === 204) return null;
+  const text = await response.text();
+  if (!text || text.trim() === "") return null;
   
-  return response.json();
+  return JSON.parse(text);
 }
 
 // ==========================================
@@ -97,6 +98,7 @@ export const saveWeddingData = createServerFn({ method: "POST" })
         settings: z.object({
           wedding_date: z.string(),
           total_budget: z.number(),
+          auto_save: z.boolean().optional(),
         }),
         budgets: z.array(
           z.object({
@@ -114,17 +116,17 @@ export const saveWeddingData = createServerFn({ method: "POST" })
             name: z.string(),
             category: z.string(),
             rsvp_status: z.enum(["Pending", "Attending", "Declined"]),
-            contact_info: z.string().optional(),
-            notes: z.string().optional(),
+            contact_info: z.string().nullish(),
+            notes: z.string().nullish(),
           })
         ),
         todos: z.array(
           z.object({
             id: z.string(),
             title: z.string(),
-            due_date: z.string().optional(),
+            due_date: z.string().nullish(),
             is_completed: z.boolean(),
-            notes: z.string().optional(),
+            notes: z.string().nullish(),
           })
         ),
       }),
@@ -147,6 +149,7 @@ export const saveWeddingData = createServerFn({ method: "POST" })
           user_id: userId,
           wedding_date: payload.settings.wedding_date,
           total_budget: payload.settings.total_budget,
+          auto_save: payload.settings.auto_save ?? true,
           updated_at: new Date().toISOString(),
         }),
       });

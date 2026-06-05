@@ -12,10 +12,17 @@ import {
   Plus,
   Edit3,
   Check,
+  X,
   AlertCircle,
   Search,
   Filter,
-  Info
+  Info,
+  Copy,
+  Printer,
+  FileSpreadsheet,
+  Package,
+  ShoppingBag,
+  CheckCircle2
 } from "lucide-react";
 
 // ==========================================
@@ -24,6 +31,7 @@ import {
 interface WeddingSettings {
   wedding_date: string;
   total_budget: number;
+  auto_save?: boolean;
 }
 
 interface BudgetItem {
@@ -56,6 +64,7 @@ interface TodoItem {
 const DEFAULT_SETTINGS: WeddingSettings = {
   wedding_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], // 6 months from now
   total_budget: 100000000, // 100 Juta IDR
+  auto_save: false,
 };
 
 const DEFAULT_BUDGETS: BudgetItem[] = [];
@@ -66,6 +75,32 @@ const DEFAULT_TODOS: TodoItem[] = [];
 
 const CATEGORIES_BUDGET = ["Gedung", "Katering", "Pakaian", "Dokumentasi", "Undangan", "Souvenir", "Lainnya"];
 const CATEGORIES_GUEST = ["Keluarga Utama", "Keluarga Besar", "Teman Dekat", "Rekan Kerja", "Tetangga", "Lainnya"];
+
+// ==========================================
+// Logistics & Shopping List Types and Helpers
+// ==========================================
+interface LogisticsMeta {
+  status: "Belum Dibeli" | "Sedang Diproses" | "Siap (Ready)";
+  source?: string;
+  price?: number;
+  notes?: string;
+}
+
+const parseLogisticsNotes = (notesStr?: string): LogisticsMeta => {
+  if (!notesStr) return { status: "Belum Dibeli" };
+  try {
+    if (notesStr.trim().startsWith("{")) {
+      return JSON.parse(notesStr);
+    }
+  } catch (e) {
+    // fallback if it was a plain text note
+  }
+  return { status: "Belum Dibeli", notes: notesStr };
+};
+
+const buildLogisticsNotes = (meta: LogisticsMeta): string => {
+  return JSON.stringify(meta);
+};
 
 export function WeddingPlanner() {
   // Authentication & Session State
@@ -83,10 +118,10 @@ export function WeddingPlanner() {
   // Syncing / Loading States
   const [loading, setLoading] = useState(false);
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved" | "error" | "unsaved">("idle");
-  const [autoSave, setAutoSave] = useState(false);
+  const [autoSave, setAutoSave] = useState(true);
 
   // Tabs State
-  const [activeTab, setActiveTab] = useState<"dashboard" | "checklist" | "guests" | "budget">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "checklist" | "guests" | "budget" | "logistics">("dashboard");
 
   // Filter/Search states
   const [todoFilter, setTodoFilter] = useState<"all" | "completed" | "pending">("all");
@@ -94,6 +129,7 @@ export function WeddingPlanner() {
   const [guestFilterCategory, setGuestFilterCategory] = useState("all");
   const [guestFilterRSVP, setGuestFilterRSVP] = useState("all");
   const [budgetFilterCategory, setBudgetFilterCategory] = useState("all");
+  const [logisticsFilterStatus, setLogisticsFilterStatus] = useState("all");
 
   // Form states (modals/drawers)
   const [showTodoForm, setShowTodoForm] = useState(false);
@@ -105,8 +141,51 @@ export function WeddingPlanner() {
   const [showBudgetForm, setShowBudgetForm] = useState(false);
   const [newBudget, setNewBudget] = useState({ name: "", category: "Gedung", estimated_cost: 0, actual_cost: 0, is_paid: false });
 
+  const [showLogisticsForm, setShowLogisticsForm] = useState(false);
+  const [newLogistics, setNewLogistics] = useState({
+    title: "",
+    status: "Belum Dibeli" as LogisticsMeta["status"],
+    source: "",
+    price: 0,
+    notes: ""
+  });
+
   // Countdown timer state
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0 });
+
+  // Editing Logistics State
+  const [editingLogisticsId, setEditingLogisticsId] = useState<string | null>(null);
+  const [editingLogisticsData, setEditingLogisticsData] = useState<{
+    title: string;
+    source: string;
+    price: number;
+    notes: string;
+  } | null>(null);
+
+  // Confirmation state
+  const [confirmState, setConfirmState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: () => { }
+  });
+
+  const requestConfirm = (title: string, message: string, onConfirm: () => void) => {
+    setConfirmState({
+      isOpen: true,
+      title,
+      message,
+      onConfirm: () => {
+        onConfirm();
+        setConfirmState(prev => ({ ...prev, isOpen: false }));
+      }
+    });
+  };
 
   // Refs for tracking changes (prevent infinite loops in auto-save)
   const isInitialMount = useRef(true);
@@ -155,13 +234,29 @@ export function WeddingPlanner() {
         // Execute server function
         const res = await getWeddingData({ data: { token: authToken } });
 
-        if (res.settings) setSettings(res.settings);
+        if (res.settings) {
+          setSettings(res.settings);
+          if (typeof res.settings.auto_save === "boolean") {
+            setAutoSave(res.settings.auto_save);
+          }
+        }
         setBudgets(res.budgets || []);
         setGuests(res.guests || []);
         setTodos(res.todos || []);
         setSavingStatus("idle");
-      } catch (err) {
+      } catch (err: any) {
         console.error("Gagal memuat data dari cloud. Menggunakan data lokal.", err);
+        const errMsg = err?.message || "";
+        if (errMsg.includes("401") || errMsg.includes("Unauthorized") || errMsg.includes("JWT expired") || errMsg.includes("Sesi tidak valid")) {
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("user");
+          setIsLoggedIn(false);
+          setAuthToken(null);
+          setUserId(null);
+          setUserName("");
+          window.dispatchEvent(new Event("storage"));
+          window.dispatchEvent(new Event("bookmark_change"));
+        }
       } finally {
         setLoading(false);
       }
@@ -190,6 +285,50 @@ export function WeddingPlanner() {
     return () => clearInterval(timer);
   }, [settings.wedding_date]);
 
+  const handleToggleAutoSave = async (checked: boolean) => {
+    setAutoSave(checked);
+    const updatedSettings = {
+      ...settings,
+      auto_save: checked
+    };
+    setSettings(updatedSettings);
+
+    if (isLoggedIn && authToken) {
+      setSavingStatus("saving");
+      try {
+        await saveWeddingData({
+          data: {
+            token: authToken,
+            payload: {
+              settings: updatedSettings,
+              budgets,
+              guests,
+              todos
+            }
+          }
+        });
+        setSavingStatus("saved");
+        setTimeout(() => {
+          setSavingStatus((prev) => (prev === "saved" ? "idle" : prev));
+        }, 3000);
+      } catch (err: any) {
+        console.error("Gagal sinkronisasi data.", err);
+        setSavingStatus("error");
+        const errMsg = err?.message || "";
+        if (errMsg.includes("401") || errMsg.includes("Unauthorized") || errMsg.includes("JWT expired") || errMsg.includes("Sesi tidak valid")) {
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("user");
+          setIsLoggedIn(false);
+          setAuthToken(null);
+          setUserId(null);
+          setUserName("");
+          window.dispatchEvent(new Event("storage"));
+          window.dispatchEvent(new Event("bookmark_change"));
+        }
+      }
+    }
+  };
+
   // Handle Save Operation
   const triggerSave = async (silent = false) => {
     if (!isLoggedIn || !authToken) return;
@@ -200,7 +339,10 @@ export function WeddingPlanner() {
         data: {
           token: authToken,
           payload: {
-            settings,
+            settings: {
+              ...settings,
+              auto_save: autoSave
+            },
             budgets,
             guests,
             todos
@@ -211,11 +353,23 @@ export function WeddingPlanner() {
       setTimeout(() => {
         setSavingStatus((prev) => (prev === "saved" ? "idle" : prev));
       }, 3000);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Gagal sinkronisasi data.", err);
       setSavingStatus("error");
+      const errMsg = err?.message || "";
+      if (errMsg.includes("401") || errMsg.includes("Unauthorized") || errMsg.includes("JWT expired") || errMsg.includes("Sesi tidak valid")) {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("user");
+        setIsLoggedIn(false);
+        setAuthToken(null);
+        setUserId(null);
+        setUserName("");
+        window.dispatchEvent(new Event("storage"));
+        window.dispatchEvent(new Event("bookmark_change"));
+      }
     }
   };
+
 
   // Track changes to trigger Save / Auto-Save status
   useEffect(() => {
@@ -250,9 +404,28 @@ export function WeddingPlanner() {
   const guestsPending = guests.filter(g => g.rsvp_status === "Pending").length;
   const totalGuests = guests.length;
 
-  const totalTodos = todos.length;
-  const completedTodos = todos.filter(t => t.is_completed).length;
+  const checklistTodos = todos.filter(t => !t.title.startsWith("LOGISTICS:"));
+  const totalTodos = checklistTodos.length;
+  const completedTodos = checklistTodos.filter(t => t.is_completed).length;
   const todoPercentage = totalTodos > 0 ? Math.round((completedTodos / totalTodos) * 100) : 0;
+
+  const logisticsTodos = todos.filter(t => t.title.startsWith("LOGISTICS:"));
+  const totalLogistics = logisticsTodos.length;
+  const completedLogistics = logisticsTodos.filter(t => {
+    const meta = parseLogisticsNotes(t.notes);
+    return meta.status === "Siap (Ready)";
+  }).length;
+  const logisticsPercentage = totalLogistics > 0 ? Math.round((completedLogistics / totalLogistics) * 100) : 0;
+
+  const totalLogisticsEstimatedCost = logisticsTodos.reduce((acc, curr) => {
+    const meta = parseLogisticsNotes(curr.notes);
+    return acc + (meta.price || 0);
+  }, 0);
+
+  const totalLogisticsSpent = logisticsTodos.reduce((acc, curr) => {
+    const meta = parseLogisticsNotes(curr.notes);
+    return acc + (meta.status === "Siap (Ready)" ? (meta.price || 0) : 0);
+  }, 0);
 
   // Formatting utility
   const formatIDR = (val: number) => {
@@ -280,9 +453,203 @@ export function WeddingPlanner() {
   };
 
   const handleDeleteTodo = (id: string) => {
-    if (confirm("Hapus tugas ini?")) {
-      setTodos(prev => prev.filter(t => t.id !== id));
-    }
+    requestConfirm(
+      "Hapus Tugas",
+      "Apakah Anda yakin ingin menghapus tugas persiapan pernikahan ini dari daftar?",
+      () => {
+        setTodos(prev => prev.filter(t => t.id !== id));
+      }
+    );
+  };
+
+  // Invite link clipboard utility
+  const [copiedGuestId, setCopiedGuestId] = useState<string | null>(null);
+
+  const handleCopyInviteLink = (guestId: string) => {
+    const inviteUrl = `${window.location.origin}/invite/${guestId}`;
+    navigator.clipboard.writeText(inviteUrl);
+    setCopiedGuestId(guestId);
+    setTimeout(() => setCopiedGuestId(null), 2000);
+  };
+
+  // Handlers for Logistics
+  const handleAddLogistics = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newLogistics.title.trim()) return;
+
+    const meta: LogisticsMeta = {
+      status: newLogistics.status,
+      source: newLogistics.source || undefined,
+      price: newLogistics.price || undefined,
+      notes: newLogistics.notes || undefined
+    };
+
+    const newItem: TodoItem = {
+      id: "t_" + Date.now(),
+      title: "LOGISTICS:" + newLogistics.title.trim(),
+      is_completed: newLogistics.status === "Siap (Ready)",
+      notes: buildLogisticsNotes(meta)
+    };
+
+    setTodos(prev => [newItem, ...prev]);
+    setNewLogistics({ title: "", status: "Belum Dibeli", source: "", price: 0, notes: "" });
+    setShowLogisticsForm(false);
+  };
+
+  const handleInitLogisticsTemplate = () => {
+    const defaultItems = [
+      { name: "Cincin Pernikahan", price: 5000000 },
+      { name: "Seserahan: Perlengkapan Make-up & Skincare", price: 1500000 },
+      { name: "Seserahan: Pakaian & Tas/Sepatu Hantaran", price: 2500000 },
+      { name: "Mahar & Mas Kawin", price: 10000000 },
+      { name: "Kotak Cincin & Hiasan Mahar", price: 500000 },
+      { name: "Souvenir Pernikahan", price: 3000000 },
+      { name: "Cetak Undangan Fisik", price: 1200000 },
+      { name: "Seragam Keluarga & Panitia", price: 4000000 }
+    ];
+
+    const newTodos: TodoItem[] = defaultItems.map((item, index) => {
+      const meta: LogisticsMeta = {
+        status: "Belum Dibeli",
+        price: item.price
+      };
+      return {
+        id: `t_log_init_${Date.now()}_${index}`,
+        title: "LOGISTICS:" + item.name,
+        is_completed: false,
+        notes: buildLogisticsNotes(meta)
+      };
+    });
+
+    setTodos(prev => [...prev, ...newTodos]);
+  };
+
+  const updateLogisticsStatus = (id: string, status: LogisticsMeta["status"]) => {
+    setTodos(prev => prev.map(t => {
+      if (t.id !== id) return t;
+      const meta = parseLogisticsNotes(t.notes);
+      meta.status = status;
+      return {
+        ...t,
+        is_completed: status === "Siap (Ready)",
+        notes: buildLogisticsNotes(meta)
+      };
+    }));
+  };
+
+  const handleDeleteLogistics = (id: string) => {
+    requestConfirm(
+      "Hapus Barang Logistik",
+      "Apakah Anda yakin ingin menghapus barang logistik ini dari daftar belanja?",
+      () => {
+        setTodos(prev => prev.filter(t => t.id !== id));
+      }
+    );
+  };
+
+  const handleStartEditLogistics = (id: string, title: string, meta: LogisticsMeta) => {
+    setEditingLogisticsId(id);
+    setEditingLogisticsData({
+      title: title.replace("LOGISTICS:", ""),
+      source: meta.source || "",
+      price: meta.price || 0,
+      notes: meta.notes || ""
+    });
+  };
+
+  const handleCancelEditLogistics = () => {
+    setEditingLogisticsId(null);
+    setEditingLogisticsData(null);
+  };
+
+  const handleSaveEditLogistics = (id: string) => {
+    if (!editingLogisticsData) return;
+
+    setTodos(prev => prev.map(t => {
+      if (t.id === id) {
+        const meta = parseLogisticsNotes(t.notes);
+        const updatedMeta: LogisticsMeta = {
+          ...meta,
+          source: editingLogisticsData.source || undefined,
+          price: editingLogisticsData.price || undefined,
+          notes: editingLogisticsData.notes || undefined
+        };
+        return {
+          ...t,
+          title: "LOGISTICS:" + editingLogisticsData.title.trim(),
+          notes: buildLogisticsNotes(updatedMeta)
+        };
+      }
+      return t;
+    }));
+
+    setEditingLogisticsId(null);
+    setEditingLogisticsData(null);
+  };
+
+  // CSV Export & Print Utilities
+  const downloadCSV = (content: string, filename: string) => {
+    const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportGuestsToCSV = () => {
+    const headers = ["Nama Tamu", "Kategori", "Status RSVP", "Kontak", "Catatan"];
+    const csvRows = [
+      headers.join(","),
+      ...guests.map(g => [
+        `"${g.name.replace(/"/g, '""')}"`,
+        `"${g.category.replace(/"/g, '""')}"`,
+        `"${g.rsvp_status}"`,
+        `"${(g.contact_info || "").replace(/"/g, '""')}"`,
+        `"${(g.notes || "").replace(/"/g, '""')}"`
+      ].join(","))
+    ];
+    const csvString = "\uFEFF" + csvRows.join("\n");
+    downloadCSV(csvString, `daftar_tamu_pernikahan_${Date.now()}.csv`);
+  };
+
+  const exportBudgetToCSV = () => {
+    const headers = ["Nama Kebutuhan", "Kategori", "Estimasi Biaya", "Biaya Riil", "Status Bayar"];
+    const csvRows = [
+      headers.join(","),
+      ...budgets.map(b => [
+        `"${b.name.replace(/"/g, '""')}"`,
+        `"${b.category.replace(/"/g, '""')}"`,
+        `"${b.estimated_cost}"`,
+        `"${b.actual_cost}"`,
+        `"${b.is_paid ? "Lunas" : "Belum Lunas"}"`
+      ].join(","))
+    ];
+    const csvString = "\uFEFF" + csvRows.join("\n");
+    downloadCSV(csvString, `anggaran_pernikahan_${Date.now()}.csv`);
+  };
+
+  const exportLogisticsToCSV = () => {
+    const headers = ["Nama Barang", "Status", "Sumber/Toko", "Harga", "Catatan"];
+    const logisticsItems = todos.filter(t => t.title.startsWith("LOGISTICS:"));
+    const csvRows = [
+      headers.join(","),
+      ...logisticsItems.map(t => {
+        const meta = parseLogisticsNotes(t.notes);
+        return [
+          `"${t.title.replace("LOGISTICS:", "").replace(/"/g, '""')}"`,
+          `"${meta.status}"`,
+          `"${(meta.source || "").replace(/"/g, '""')}"`,
+          `"${meta.price || 0}"`,
+          `"${(meta.notes || "").replace(/"/g, '""')}"`
+        ].join(",");
+      })
+    ];
+    const csvString = "\uFEFF" + csvRows.join("\n");
+    downloadCSV(csvString, `logistik_pernikahan_${Date.now()}.csv`);
   };
 
   // Handlers for Guests
@@ -307,9 +674,13 @@ export function WeddingPlanner() {
   };
 
   const handleDeleteGuest = (id: string) => {
-    if (confirm("Hapus tamu ini dari daftar?")) {
-      setGuests(prev => prev.filter(g => g.id !== id));
-    }
+    requestConfirm(
+      "Hapus Tamu Undangan",
+      "Apakah Anda yakin ingin menghapus tamu ini dari daftar undangan pernikahan Anda?",
+      () => {
+        setGuests(prev => prev.filter(g => g.id !== id));
+      }
+    );
   };
 
   // Handlers for Budget items
@@ -334,9 +705,13 @@ export function WeddingPlanner() {
   };
 
   const handleDeleteBudget = (id: string) => {
-    if (confirm("Hapus entri anggaran ini?")) {
-      setBudgets(prev => prev.filter(b => b.id !== id));
-    }
+    requestConfirm(
+      "Hapus Kebutuhan Anggaran",
+      "Apakah Anda yakin ingin menghapus entri anggaran pengeluaran ini?",
+      () => {
+        setBudgets(prev => prev.filter(b => b.id !== id));
+      }
+    );
   };
 
   // Auth Gate UI
@@ -416,7 +791,7 @@ export function WeddingPlanner() {
             <input
               type="checkbox"
               checked={autoSave}
-              onChange={(e) => setAutoSave(e.target.checked)}
+              onChange={(e) => handleToggleAutoSave(e.target.checked)}
               className="w-4 h-4 rounded border-foreground/15 accent-primary cursor-pointer"
             />
             <span>Auto Save</span>
@@ -568,13 +943,14 @@ export function WeddingPlanner() {
       </div>
 
       {/* Main Content Tabs Navigation */}
-      <div className="flex border-2 border-foreground rounded-xl bg-card overflow-hidden select-none shadow-sm">
-        {(["dashboard", "checklist", "guests", "budget"] as const).map((tab) => {
+      <div className="flex border-2 border-foreground rounded-xl bg-card overflow-hidden select-none shadow-sm overflow-x-auto">
+        {(["dashboard", "checklist", "guests", "budget", "logistics"] as const).map((tab) => {
           const tabLabel = {
             dashboard: "📊 Dashboard",
-            checklist: "📝 Tugas & Timeline",
-            guests: "👥 Daftar Tamu",
-            budget: "💰 Anggaran Biaya"
+            checklist: "📝 Tugas",
+            guests: "👥 Tamu",
+            budget: "💰 Anggaran",
+            logistics: "📦 Logistik & Belanja"
           };
           return (
             <button
@@ -590,7 +966,7 @@ export function WeddingPlanner() {
       </div>
 
       {/* Tabs Panels Container */}
-      <div className="bg-card border-2 border-foreground rounded-2xl p-6 shadow-tactile">
+      <div id="wedding-planner-print-area" className="bg-card border-2 border-foreground rounded-2xl p-6 shadow-tactile">
         {loading ? (
           <div className="py-20 text-center">
             <RefreshCw className="w-10 h-10 animate-spin mx-auto text-primary" />
@@ -636,7 +1012,7 @@ export function WeddingPlanner() {
                   <div className="border border-foreground/15 rounded-xl p-5 space-y-4">
                     <h4 className="font-bold text-sm uppercase text-foreground/75 flex items-center gap-2"><CheckSquare className="w-4 h-4 text-primary" /> Tugas Penting Mendatang</h4>
                     <div className="space-y-3">
-                      {todos.filter(t => !t.is_completed).slice(0, 3).map(todo => (
+                      {todos.filter(t => !t.title.startsWith("LOGISTICS:") && !t.is_completed).slice(0, 3).map(todo => (
                         <div key={todo.id} className="flex justify-between items-center bg-foreground/5 p-3 rounded-xl border border-foreground/5">
                           <div>
                             <p className="text-xs font-bold text-foreground/85">{todo.title}</p>
@@ -651,7 +1027,7 @@ export function WeddingPlanner() {
                           </button>
                         </div>
                       ))}
-                      {todos.filter(t => !t.is_completed).length === 0 && (
+                      {todos.filter(t => !t.title.startsWith("LOGISTICS:") && !t.is_completed).length === 0 && (
                         <p className="text-xs text-foreground/50 text-center py-6">🎉 Semua tugas penting telah diselesaikan!</p>
                       )}
                     </div>
@@ -735,6 +1111,7 @@ export function WeddingPlanner() {
                 {/* Todos List */}
                 <div className="space-y-3">
                   {todos
+                    .filter(t => !t.title.startsWith("LOGISTICS:"))
                     .filter(t => {
                       if (todoFilter === "completed") return t.is_completed;
                       if (todoFilter === "pending") return !t.is_completed;
@@ -744,16 +1121,16 @@ export function WeddingPlanner() {
                       <div
                         key={todo.id}
                         className={`flex items-center justify-between border rounded-xl p-4 transition-all ${todo.is_completed
-                            ? "bg-foreground/5 border-foreground/10 opacity-70"
-                            : "bg-background border-foreground/15 hover:border-foreground/30 shadow-sm"
+                          ? "bg-foreground/5 border-foreground/10 opacity-70"
+                          : "bg-background border-foreground/15 hover:border-foreground/30 shadow-sm"
                           }`}
                       >
                         <div className="flex items-center gap-4">
                           <button
                             onClick={() => toggleTodo(todo.id)}
                             className={`w-6 h-6 border-2 rounded-md flex items-center justify-center transition-all cursor-pointer ${todo.is_completed
-                                ? "bg-foreground border-foreground text-background"
-                                : "border-foreground/30 bg-background hover:border-foreground"
+                              ? "bg-foreground border-foreground text-background"
+                              : "border-foreground/30 bg-background hover:border-foreground"
                               }`}
                           >
                             {todo.is_completed && <Check className="w-4 h-4" />}
@@ -777,7 +1154,7 @@ export function WeddingPlanner() {
                         </button>
                       </div>
                     ))}
-                  {todos.length === 0 && (
+                  {todos.filter(t => !t.title.startsWith("LOGISTICS:")).length === 0 && (
                     <p className="text-center text-xs text-foreground/50 py-12">Belum ada tugas dibuat. Klik "Tambah Tugas" untuk memulai.</p>
                   )}
                 </div>
@@ -833,8 +1210,23 @@ export function WeddingPlanner() {
                     </select>
 
                     <button
+                      onClick={exportGuestsToCSV}
+                      className="px-3 py-2 border border-foreground/15 text-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 hover:bg-foreground/5 transition-colors cursor-pointer"
+                      title="Ekspor ke CSV"
+                    >
+                      <FileSpreadsheet className="w-4 h-4" /> Export CSV
+                    </button>
+                    <button
+                      onClick={() => window.print()}
+                      className="px-3 py-2 border border-foreground/15 text-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 hover:bg-foreground/5 transition-colors cursor-pointer"
+                      title="Cetak Laporan / PDF"
+                    >
+                      <Printer className="w-4 h-4" /> Cetak / PDF
+                    </button>
+
+                    <button
                       onClick={() => setShowGuestForm(true)}
-                      className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-opacity cursor-pointer ml-auto"
+                      className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
                     >
                       <Plus className="w-4 h-4" /> Undang Tamu
                     </button>
@@ -932,10 +1324,10 @@ export function WeddingPlanner() {
                                 value={guest.rsvp_status}
                                 onChange={(e) => updateGuestRSVP(guest.id, e.target.value as any)}
                                 className={`px-2 py-1 rounded-lg text-[10px] font-bold border cursor-pointer ${guest.rsvp_status === "Attending"
-                                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600"
-                                    : guest.rsvp_status === "Declined"
-                                      ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
-                                      : "bg-amber-500/10 border-amber-500/30 text-amber-600"
+                                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600"
+                                  : guest.rsvp_status === "Declined"
+                                    ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
+                                    : "bg-amber-500/10 border-amber-500/30 text-amber-600"
                                   }`}
                               >
                                 <option value="Pending">Pending</option>
@@ -943,10 +1335,31 @@ export function WeddingPlanner() {
                                 <option value="Declined">Menolak</option>
                               </select>
                             </td>
-                            <td className="p-3 text-right">
+                            <td className="p-3 text-right flex items-center justify-end gap-1.5">
+                              {guest.id.startsWith("g_") ? (
+                                <span className="text-[9px] text-foreground/40 font-bold font-mono uppercase select-none cursor-help" title="Simpan ke cloud untuk buat link">
+                                  Belum Sync
+                                </span>
+                              ) : (
+                                <button
+                                  onClick={() => handleCopyInviteLink(guest.id)}
+                                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${copiedGuestId === guest.id
+                                    ? "text-emerald-500 bg-emerald-500/10"
+                                    : "text-foreground/40 hover:text-primary hover:bg-primary/10"
+                                    }`}
+                                  title="Salin Link Undangan"
+                                >
+                                  {copiedGuestId === guest.id ? (
+                                    <Check className="w-4 h-4" />
+                                  ) : (
+                                    <Copy className="w-4 h-4" />
+                                  )}
+                                </button>
+                              )}
                               <button
                                 onClick={() => handleDeleteGuest(guest.id)}
                                 className="p-1.5 text-foreground/40 hover:text-rose-500 rounded-lg hover:bg-rose-500/10 transition-colors cursor-pointer"
+                                title="Hapus Tamu"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -982,8 +1395,23 @@ export function WeddingPlanner() {
                       ))}
                     </select>
                     <button
+                      onClick={exportBudgetToCSV}
+                      className="px-3 py-2 border border-foreground/15 text-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 hover:bg-foreground/5 transition-colors cursor-pointer"
+                      title="Ekspor ke CSV"
+                    >
+                      <FileSpreadsheet className="w-4 h-4" /> Export CSV
+                    </button>
+                    <button
+                      onClick={() => window.print()}
+                      className="px-3 py-2 border border-foreground/15 text-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 hover:bg-foreground/5 transition-colors cursor-pointer"
+                      title="Cetak Laporan / PDF"
+                    >
+                      <Printer className="w-4 h-4" /> Cetak / PDF
+                    </button>
+
+                    <button
                       onClick={() => setShowBudgetForm(true)}
-                      className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-opacity cursor-pointer ml-auto"
+                      className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
                     >
                       <Plus className="w-4 h-4" /> Tambah Alokasi
                     </button>
@@ -1088,8 +1516,8 @@ export function WeddingPlanner() {
                               <button
                                 onClick={() => toggleBudgetPaid(budget.id)}
                                 className={`px-2 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${budget.is_paid
-                                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 font-bold"
-                                    : "bg-amber-500/10 border-amber-500/30 text-amber-600 font-bold"
+                                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 font-bold"
+                                  : "bg-amber-500/10 border-amber-500/30 text-amber-600 font-bold"
                                   }`}
                               >
                                 {budget.is_paid ? "Lunas" : "Belum Lunas"}
@@ -1114,6 +1542,344 @@ export function WeddingPlanner() {
               </div>
             )}
 
+            {/* Tab: Logistics Tracker */}
+            {activeTab === "logistics" && (
+              <div className="space-y-6">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-foreground/10 pb-4">
+                  <div>
+                    <h3 className="font-display text-2xl uppercase">Logistik & Belanja</h3>
+                    <p className="text-xs text-foreground/60 mt-1">Kelola barang bawaan, mahar, seserahan, suvenir, dan perlengkapan lainnya.</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 w-full lg:w-auto items-center">
+                    <select
+                      value={logisticsFilterStatus}
+                      onChange={(e) => setLogisticsFilterStatus(e.target.value)}
+                      className="p-2 border border-foreground/15 rounded-lg bg-background text-xs font-bold outline-none cursor-pointer text-foreground"
+                    >
+                      <option value="all">Semua Status</option>
+                      <option value="Belum Dibeli">Belum Dibeli</option>
+                      <option value="Sedang Diproses">Sedang Diproses</option>
+                      <option value="Siap (Ready)">Siap (Ready)</option>
+                    </select>
+
+                    <button
+                      onClick={exportLogisticsToCSV}
+                      className="px-3 py-2 border border-foreground/15 text-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 hover:bg-foreground/5 transition-colors cursor-pointer"
+                      title="Ekspor ke CSV"
+                    >
+                      <FileSpreadsheet className="w-4 h-4" /> Export CSV
+                    </button>
+                    <button
+                      onClick={() => window.print()}
+                      className="px-3 py-2 border border-foreground/15 text-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 hover:bg-foreground/5 transition-colors cursor-pointer"
+                      title="Cetak Laporan / PDF"
+                    >
+                      <Printer className="w-4 h-4" /> Cetak / PDF
+                    </button>
+
+                    <button
+                      onClick={() => setShowLogisticsForm(true)}
+                      className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4" /> Tambah Barang
+                    </button>
+                  </div>
+                </div>
+
+                {/* Logistics Stats Bento Overview */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
+                    <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Total Barang</span>
+                    <span className="text-2xl font-bold block mt-1">{totalLogistics}</span>
+                  </div>
+                  <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
+                    <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Barang Siap</span>
+                    <span className="text-2xl font-bold text-emerald-600 block mt-1">{completedLogistics}</span>
+                  </div>
+                  <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
+                    <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Estimasi Belanja</span>
+                    <span className="text-2xl font-bold block mt-1">{formatIDR(totalLogisticsEstimatedCost)}</span>
+                  </div>
+                  <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
+                    <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Realisasi</span>
+                    <span className="text-2xl font-bold text-primary block mt-1">{formatIDR(totalLogisticsSpent)}</span>
+                  </div>
+                </div>
+
+                {/* Add Logistics Form */}
+                {showLogisticsForm && (
+                  <form onSubmit={handleAddLogistics} className="bg-foreground/5 border border-foreground/10 rounded-2xl p-4 space-y-3">
+                    <h4 className="font-bold text-xs uppercase text-foreground/50 tracking-wider">Tambah Barang Logistik & Belanja</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                      <div className="sm:col-span-2">
+                        <label className="text-[10px] font-bold uppercase text-foreground/60 block mb-1">Nama Barang / Keperluan</label>
+                        <input
+                          type="text"
+                          required
+                          value={newLogistics.title}
+                          onChange={(e) => setNewLogistics(prev => ({ ...prev, title: e.target.value }))}
+                          placeholder="Contoh: Cincin Kawin Emas 10gr"
+                          className="w-full p-2 border border-foreground/15 rounded-lg bg-background text-xs text-foreground outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold uppercase text-foreground/60 block mb-1">Status Awal</label>
+                        <select
+                          value={newLogistics.status}
+                          onChange={(e) => setNewLogistics(prev => ({ ...prev, status: e.target.value as any }))}
+                          className="w-full p-2 border border-foreground/15 rounded-lg bg-background text-xs text-foreground outline-none focus:border-primary font-bold cursor-pointer"
+                        >
+                          <option value="Belum Dibeli">Belum Dibeli</option>
+                          <option value="Sedang Diproses">Sedang Diproses</option>
+                          <option value="Siap (Ready)">Siap (Ready)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold uppercase text-foreground/60 block mb-1">Harga Estimasi (IDR)</label>
+                        <input
+                          type="number"
+                          value={newLogistics.price}
+                          onChange={(e) => setNewLogistics(prev => ({ ...prev, price: Number(e.target.value) }))}
+                          className="w-full p-2 border border-foreground/15 rounded-lg bg-background text-xs text-foreground outline-none focus:border-primary"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[10px] font-bold uppercase text-foreground/60 block mb-1">Sumber / Toko / Vendor</label>
+                        <input
+                          type="text"
+                          value={newLogistics.source}
+                          onChange={(e) => setNewLogistics(prev => ({ ...prev, source: e.target.value }))}
+                          placeholder="Contoh: Toko Emas Melati"
+                          className="w-full p-2 border border-foreground/15 rounded-lg bg-background text-xs text-foreground outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold uppercase text-foreground/60 block mb-1">Catatan Tambahan</label>
+                        <input
+                          type="text"
+                          value={newLogistics.notes}
+                          onChange={(e) => setNewLogistics(prev => ({ ...prev, notes: e.target.value }))}
+                          placeholder="Contoh: Perlu diukur ulang sebelum tanggal 10"
+                          className="w-full p-2 border border-foreground/15 rounded-lg bg-background text-xs text-foreground outline-none focus:border-primary"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowLogisticsForm(false)}
+                        className="px-3.5 py-1.5 border border-foreground/20 text-xs uppercase font-bold rounded-lg text-foreground/60 hover:bg-foreground/5 cursor-pointer"
+                      >
+                        Batal
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-3.5 py-1.5 bg-foreground text-background text-xs uppercase font-bold rounded-lg hover:opacity-90 cursor-pointer"
+                      >
+                        Simpan Barang
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Default Template Initialization Banner */}
+                {totalLogistics === 0 && (
+                  <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center space-y-4">
+                    <Package className="w-12 h-12 text-primary mx-auto opacity-75 animate-bounce" />
+                    <div>
+                      <h4 className="font-bold text-sm uppercase">Mulai dengan Templat Bawaan</h4>
+                      <p className="text-xs text-foreground/60 max-w-md mx-auto mt-1">
+                        Belum ada barang di daftar logistik Anda. Gunakan templat bawaan untuk memuat item standar seperti Cincin, Mahar, Seserahan, Souvenir, dan lainnya.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleInitLogisticsTemplate}
+                      className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-lg tracking-wider hover:opacity-90 transition-opacity cursor-pointer inline-flex items-center gap-1.5"
+                    >
+                      <Plus className="w-4 h-4" /> Inisialisasi Templat Bawaan
+                    </button>
+                  </div>
+                )}
+
+                {/* Logistics List Table */}
+                {totalLogistics > 0 && (
+                  <div className="overflow-x-auto border border-foreground/15 rounded-xl">
+                    <table className="w-full text-left border-collapse text-xs select-none">
+                      <thead>
+                        <tr className="bg-foreground/5 border-b border-foreground/15 font-mono text-[10px] uppercase font-bold text-foreground/60">
+                          <th className="p-3">Nama Barang</th>
+                          <th className="p-3">Status</th>
+                          <th className="p-3">Sumber / Toko</th>
+                          <th className="p-3">Harga Estimasi</th>
+                          <th className="p-3">Catatan</th>
+                          <th className="p-3 text-right">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-foreground/10">
+                        {logisticsTodos
+                          .filter(t => {
+                            if (logisticsFilterStatus === "all") return true;
+                            const meta = parseLogisticsNotes(t.notes);
+                            return meta.status === logisticsFilterStatus;
+                          })
+                          .map(t => {
+                            const meta = parseLogisticsNotes(t.notes);
+                            const cleanTitle = t.title.replace("LOGISTICS:", "");
+                            return (
+                              <tr key={t.id} className="hover:bg-foreground/5 transition-colors">
+                                <td className="p-3 font-bold">
+                                  {editingLogisticsId === t.id && editingLogisticsData ? (
+                                    <input
+                                      type="text"
+                                      value={editingLogisticsData.title}
+                                      onChange={(e) => setEditingLogisticsData(prev => prev ? { ...prev, title: e.target.value } : null)}
+                                      className="p-1 border border-foreground/15 rounded bg-background text-xs text-foreground font-bold outline-none w-full"
+                                    />
+                                  ) : (
+                                    cleanTitle
+                                  )}
+                                </td>
+                                <td className="p-3">
+                                  <select
+                                    value={meta.status}
+                                    onChange={(e) => updateLogisticsStatus(t.id, e.target.value as any)}
+                                    className={`px-2 py-1 rounded-lg text-[10px] font-bold border cursor-pointer ${meta.status === "Siap (Ready)"
+                                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 font-bold"
+                                      : meta.status === "Sedang Diproses"
+                                        ? "bg-amber-500/10 border-amber-500/30 text-amber-600 font-bold"
+                                        : "bg-foreground/5 border-foreground/10 text-foreground/60 font-bold"
+                                      }`}
+                                  >
+                                    <option value="Belum Dibeli">Belum Dibeli</option>
+                                    <option value="Sedang Diproses">Sedang Diproses</option>
+                                    <option value="Siap (Ready)">Siap (Ready)</option>
+                                  </select>
+                                </td>
+                                <td className="p-3 text-foreground/75 font-medium">
+                                  {editingLogisticsId === t.id && editingLogisticsData ? (
+                                    <input
+                                      type="text"
+                                      value={editingLogisticsData.source}
+                                      onChange={(e) => setEditingLogisticsData(prev => prev ? { ...prev, source: e.target.value } : null)}
+                                      className="p-1 border border-foreground/15 rounded bg-background text-xs text-foreground outline-none w-full"
+                                      placeholder="Vendor / Sumber"
+                                    />
+                                  ) : (
+                                    meta.source || "-"
+                                  )}
+                                </td>
+                                <td className="p-3 font-mono font-bold">
+                                  {editingLogisticsId === t.id && editingLogisticsData ? (
+                                    <input
+                                      type="number"
+                                      value={editingLogisticsData.price || ""}
+                                      onChange={(e) => setEditingLogisticsData(prev => prev ? { ...prev, price: Number(e.target.value) } : null)}
+                                      className="p-1 border border-foreground/15 rounded bg-background text-xs text-foreground font-mono outline-none w-28"
+                                      placeholder="Harga"
+                                    />
+                                  ) : (
+                                    formatIDR(meta.price || 0)
+                                  )}
+                                </td>
+                                <td className="p-3 text-foreground/60 italic">
+                                  {editingLogisticsId === t.id && editingLogisticsData ? (
+                                    <input
+                                      type="text"
+                                      value={editingLogisticsData.notes}
+                                      onChange={(e) => setEditingLogisticsData(prev => prev ? { ...prev, notes: e.target.value } : null)}
+                                      className="p-1 border border-foreground/15 rounded bg-background text-xs text-foreground outline-none w-full"
+                                      placeholder="Catatan"
+                                    />
+                                  ) : (
+                                    meta.notes || "-"
+                                  )}
+                                </td>
+                                <td className="p-3 text-right">
+                                  <div className="flex justify-end gap-1 select-none">
+                                    {editingLogisticsId === t.id ? (
+                                      <>
+                                        <button
+                                          onClick={() => handleSaveEditLogistics(t.id)}
+                                          className="p-1.5 text-emerald-500 hover:text-emerald-600 rounded-lg hover:bg-emerald-500/10 transition-colors cursor-pointer"
+                                          title="Simpan Perubahan"
+                                        >
+                                          <Check className="w-4.5 h-4.5" />
+                                        </button>
+                                        <button
+                                          onClick={handleCancelEditLogistics}
+                                          className="p-1.5 text-foreground/40 hover:text-rose-500 rounded-lg hover:bg-rose-500/10 transition-colors cursor-pointer"
+                                          title="Batal"
+                                        >
+                                          <X className="w-4.5 h-4.5" />
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <button
+                                          onClick={() => handleStartEditLogistics(t.id, t.title, meta)}
+                                          className="p-1.5 text-foreground/40 hover:text-amber-500 rounded-lg hover:bg-amber-500/10 transition-colors cursor-pointer"
+                                          title="Edit Barang"
+                                        >
+                                          <Edit3 className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                          onClick={() => handleDeleteLogistics(t.id)}
+                                          className="p-1.5 text-foreground/40 hover:text-rose-500 rounded-lg hover:bg-rose-500/10 transition-colors cursor-pointer"
+                                          title="Hapus Barang"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Printable Report Styles */}
+            <style dangerouslySetInnerHTML={{
+              __html: `
+              @media print {
+                body {
+                  background: #ffffff !important;
+                  color: #000000 !important;
+                }
+                body > div {
+                  display: none !important;
+                }
+                #wedding-planner-print-area {
+                  display: block !important;
+                  border: none !important;
+                  box-shadow: none !important;
+                  padding: 0 !important;
+                  background: transparent !important;
+                }
+                button, select, input, form, .no-print, [title="Ekspor ke CSV"], [title="Cetak Laporan / PDF"], [title="Undang Tamu"], [title="Tambah Barang"] {
+                  display: none !important;
+                }
+                .text-foreground\/60, .text-foreground\/50, .text-foreground\/75 {
+                  color: #333333 !important;
+                }
+              }
+            `}} />
+
+            {/* Reusable confirmation modal overlay */}
+            <ConfirmationDialog
+              isOpen={confirmState.isOpen}
+              title={confirmState.title}
+              message={confirmState.message}
+              onConfirm={confirmState.onConfirm}
+              onCancel={() => setConfirmState(prev => ({ ...prev, isOpen: false }))}
+            />
           </>
         )}
       </div>
@@ -1121,4 +1887,60 @@ export function WeddingPlanner() {
     </div>
   );
 }
+
+interface ConfirmationDialogProps {
+  isOpen: boolean;
+  title: string;
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+export function ConfirmationDialog({
+  isOpen,
+  title,
+  message,
+  onConfirm,
+  onCancel
+}: ConfirmationDialogProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-background/85 transition-opacity"
+        onClick={onCancel}
+      />
+
+      {/* Modal Content */}
+      <div className="relative bg-card border border-foreground/15 rounded-2xl w-full max-w-sm p-6 shadow-xl animate-in fade-in zoom-in-95 duration-200 select-none">
+        <h3 className="font-display text-sm font-bold uppercase tracking-wider mb-2 text-foreground">
+          {title}
+        </h3>
+        <p className="text-[11px] text-foreground/60 leading-relaxed mb-6">
+          {message}
+        </p>
+
+        <div className="flex justify-end gap-3 font-medium">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 border border-foreground/10 hover:bg-foreground/5 rounded-lg text-[10px] uppercase font-bold tracking-wider transition-colors cursor-pointer text-foreground"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="px-4 py-2 bg-rose-600 text-white font-bold uppercase tracking-wider hover:bg-rose-700 rounded-lg text-[10px] transition-colors cursor-pointer"
+          >
+            Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default WeddingPlanner;

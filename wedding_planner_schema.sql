@@ -5,10 +5,12 @@
 
 -- 1. Table: wedding_settings
 -- Menyimpan pengaturan umum seperti tanggal pernikahan dan total anggaran target.
+-- JIKA TABEL SUDAH ADA, JALANKAN: ALTER TABLE wedding_settings ADD COLUMN IF NOT EXISTS auto_save BOOLEAN DEFAULT TRUE;
 CREATE TABLE IF NOT EXISTS wedding_settings (
     user_id UUID PRIMARY KEY,
     wedding_date DATE NOT NULL,
     total_budget NUMERIC(15, 2) DEFAULT 0.00,
+    auto_save BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
