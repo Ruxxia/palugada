@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { categories, tools } from "@/lib/tools";
+import { categories, tools, type Tool } from "@/lib/tools";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ToolCard } from "@/components/ToolCard";
@@ -116,7 +116,7 @@ function CategoryPage() {
 
   const filteredTools = useMemo(() => {
     if (selectedSubcategory === "all") return categoryTools;
-    return categoryTools.filter((t) => t.subcategory === selectedSubcategory);
+    return categoryTools.filter((t: Tool) => t.subcategory === selectedSubcategory);
   }, [categoryTools, selectedSubcategory]);
 
   return (
@@ -157,7 +157,7 @@ function CategoryPage() {
             >
               Semua Subkategori
             </button>
-            {category.subcategories.map((sub) => {
+            {category.subcategories.map((sub: string) => {
               const isSubActive = selectedSubcategory === sub;
               return (
                 <button
@@ -184,7 +184,7 @@ function CategoryPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTools.map((t) => (
+            {filteredTools.map((t: Tool) => (
               <ToolCard key={t.slug} tool={t} />
             ))}
           </div>

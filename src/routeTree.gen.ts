@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as InviteGuestIdRouteImport } from './routes/invite.$guestId'
 import { Route as CategoriesCategoryRouteImport } from './routes/categories.$category'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -35,6 +36,11 @@ const ToolsSlugRoute = ToolsSlugRouteImport.update({
   path: '/tools/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InviteGuestIdRoute = InviteGuestIdRouteImport.update({
+  id: '/invite/$guestId',
+  path: '/invite/$guestId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoriesCategoryRoute = CategoriesCategoryRouteImport.update({
   id: '/categories/$category',
   path: '/categories/$category',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/categories/$category': typeof CategoriesCategoryRoute
+  '/invite/$guestId': typeof InviteGuestIdRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/categories/$category': typeof CategoriesCategoryRoute
+  '/invite/$guestId': typeof InviteGuestIdRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
 export interface FileRoutesById {
@@ -61,6 +69,7 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/categories/$category': typeof CategoriesCategoryRoute
+  '/invite/$guestId': typeof InviteGuestIdRoute
   '/tools/$slug': typeof ToolsSlugRoute
 }
 export interface FileRouteTypes {
@@ -70,6 +79,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/sitemap.xml'
     | '/categories/$category'
+    | '/invite/$guestId'
     | '/tools/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -77,6 +87,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/sitemap.xml'
     | '/categories/$category'
+    | '/invite/$guestId'
     | '/tools/$slug'
   id:
     | '__root__'
@@ -84,6 +95,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/sitemap.xml'
     | '/categories/$category'
+    | '/invite/$guestId'
     | '/tools/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -92,6 +104,7 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CategoriesCategoryRoute: typeof CategoriesCategoryRoute
+  InviteGuestIdRoute: typeof InviteGuestIdRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
 }
 
@@ -125,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/invite/$guestId': {
+      id: '/invite/$guestId'
+      path: '/invite/$guestId'
+      fullPath: '/invite/$guestId'
+      preLoaderRoute: typeof InviteGuestIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/categories/$category': {
       id: '/categories/$category'
       path: '/categories/$category'
@@ -140,18 +160,9 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CategoriesCategoryRoute: CategoriesCategoryRoute,
+  InviteGuestIdRoute: InviteGuestIdRoute,
   ToolsSlugRoute: ToolsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -278,3 +278,61 @@ export const saveWeddingData = createServerFn({ method: "POST" })
       throw new Error(err.message || "Gagal menyimpan perubahan ke database");
     }
   });
+
+// ==========================================
+// 3. Public Get Guest & Wedding Settings (for RSVP page)
+// ==========================================
+export const getPublicGuest = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ guestId: z.string().uuid() }))
+  .handler(async ({ data }) => {
+    try {
+      // Fetch the guest by ID
+      const guestRes = await supabaseRequest(`wedding_guests?id=eq.${data.guestId}`);
+      if (!guestRes || guestRes.length === 0) {
+        throw new Error("Tamu tidak ditemukan");
+      }
+      const guest = guestRes[0];
+
+      // Fetch the wedding settings for the host user (wedding_date)
+      const settingsRes = await supabaseRequest(`wedding_settings?user_id=eq.${guest.user_id}`);
+      const settings = settingsRes && settingsRes.length > 0 ? settingsRes[0] : null;
+
+      return {
+        guest,
+        settings,
+      };
+    } catch (err: any) {
+      console.error("Error fetching public guest:", err);
+      throw new Error(err.message || "Gagal mengambil data undangan");
+    }
+  });
+
+// ==========================================
+// 4. Public Submit RSVP
+// ==========================================
+export const submitPublicRSVP = createServerFn({ method: "POST" })
+  .inputValidator(
+    z.object({
+      guestId: z.string().uuid(),
+      rsvpStatus: z.enum(["Attending", "Declined"]),
+      notes: z.string().optional(),
+    })
+  )
+  .handler(async ({ data }) => {
+    try {
+      // Update only rsvp_status and notes columns for security
+      await supabaseRequest(`wedding_guests?id=eq.${data.guestId}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          rsvp_status: data.rsvpStatus,
+          notes: data.notes || null,
+        }),
+      });
+
+      return { success: true };
+    } catch (err: any) {
+      console.error("Error submitting public RSVP:", err);
+      throw new Error(err.message || "Gagal mengirim konfirmasi RSVP");
+    }
+  });
+

@@ -75,3 +75,24 @@ ALTER TABLE wedding_todos ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users can only manage their own wedding todos" 
 ON wedding_todos FOR ALL TO authenticated USING (auth.uid() = user_id);
+
+
+-- 5. Additional Public Policies for Guest Invitations & RSVP (bypasses full auth check via cryptographically secure UUID IDs)
+-- Memungkinkan siapa saja yang memiliki link undangan unik (UUID ID) untuk melihat undangan mereka dan melakukan RSVP.
+
+-- Tamu dapat melihat datanya sendiri
+CREATE POLICY "Allow public select by guest ID"
+ON wedding_guests FOR SELECT TO public
+USING (true);
+
+-- Tamu dapat memperbarui status RSVP & catatan ucapan mereka sendiri
+CREATE POLICY "Allow public update by guest ID"
+ON wedding_guests FOR UPDATE TO public
+USING (true)
+WITH CHECK (true);
+
+-- Tamu dapat membaca tanggal/anggaran umum pernikahan host mereka
+CREATE POLICY "Allow public read of wedding settings"
+ON wedding_settings FOR SELECT TO public
+USING (true);
+

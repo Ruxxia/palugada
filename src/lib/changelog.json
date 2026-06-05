@@ -1,13 +1,13 @@
 [
   {
     "date": "5 Juni 2026",
-    "title": "Tools Baru: Cloud Wedding Planner & Sistem Autentikasi Pengguna",
-    "description": "Kami meluncurkan Tools bantu perencanaan pernikahan berbasis cloud (Wedding Planner) yang dilengkapi dashboard anggaran detail, daftar tamu RSVP, manajemen tugas, hitung mundur digital, serta integrasi autentikasi akun terproteksi.",
+    "title": "Update: Cloud Wedding Planner v1.1 - Undangan Digital Publik & Tab Logistik",
+    "description": "Kami merilis pembaruan besar untuk alat Wedding Planner dengan menambahkan halaman undangan digital publik yang dinamis bagi para tamu, mendukung konfirmasi RSVP, pesan ucapan terintegrasi ke dashboard, pembuatan QR Code check-in, ekspor CSV, format cetak/PDF kustom, serta tab Manajemen Logistik & Belanja baru.",
     "tools": [
       {
         "slug": "wedding-planner",
-        "badge": "New Tool",
-        "details": "Atur seluruh kebutuhan hari bahagia Anda dengan modul Anggaran, Tamu (RSVP), dan Tugas (Todo) yang tersimpan aman di cloud secara otomatis."
+        "badge": "Update v1.1",
+        "details": "Menambahkan sistem undangan tamu digital mandiri, konfirmasi RSVP real-time, cetak PDF/ekspor CSV, & tab manajemen logistik/belanja templat bawaan."
       }
     ]
   },
