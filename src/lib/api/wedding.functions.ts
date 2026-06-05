@@ -20,8 +20,8 @@ function getUserIdFromToken(token: string): string {
 
 // Get Supabase configuration from environment variables
 function getSupabaseConfig() {
-  const url = process.env.VITE_SUPABASE_URL;
-  const anonKey = process.env.VITE_SUPABASE_ANON_KEY;
+  const url = process.env.SUPABASE_URL;
+  const anonKey = process.env.SUPABASE_ANON_KEY;
   if (!url || !anonKey) {
     throw new Error("Supabase credentials not configured in environment variables");
   }
