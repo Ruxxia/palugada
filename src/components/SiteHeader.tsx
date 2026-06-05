@@ -9,9 +9,22 @@ import { Button } from "@/components/ui/button";
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [canInstall, setCanInstall] = useState(false);
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+  const [loginMode, setLoginMode] = useState<"login" | "register">("login");
+
+  useEffect(() => {
+    const handleOpenLogin = (e: Event) => {
+      const customEvent = e as CustomEvent<{ mode?: "login" | "register" }>;
+      const mode = customEvent.detail?.mode || "login";
+      setLoginMode(mode);
+      setLoginDialogOpen(true);
+    };
+    window.addEventListener("open-login-dialog", handleOpenLogin as EventListener);
+    return () => window.removeEventListener("open-login-dialog", handleOpenLogin as EventListener);
+  }, []);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -81,11 +94,23 @@ export function SiteHeader() {
       `}</style>
       <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-foreground/5 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between relative">
-          <Link to="/" className="flex items-center gap-2 group cursor-pointer">
+          {/* Mobile view: Hamburger Menu Button */}
+          <div className="sm:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 border-2 border-foreground rounded-xl shadow-[3px_3px_0px_rgba(0,0,0,0.15)] bg-card text-foreground hover:bg-foreground/5 cursor-pointer flex items-center justify-center shrink-0 transition-transform active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(0,0,0,0.15)]"
+              aria-label="Toggle Menu"
+            >
+              <span className="text-xl leading-none">{isMobileMenuOpen ? "✕" : "☰"}</span>
+            </button>
+          </div>
+
+          {/* Desktop view: Palugada Logo */}
+          <Link to="/" className="hidden sm:flex items-center gap-2 group cursor-pointer">
             <div className="bg-primary p-1.5 rounded-sm">
               <div className="w-5 h-5 bg-background" />
             </div>
-            <span className="hidden sm:inline font-display text-2xl tracking-tight uppercase">Palugada</span>
+            <span className="font-display text-2xl tracking-tight uppercase">Palugada</span>
           </Link>
 
           <div className="flex items-center gap-6">
@@ -101,14 +126,15 @@ export function SiteHeader() {
               </kbd>
             </button>
 
-            {/* Bookmarks Dropdown */}
+            {/* Bookmarks Dropdown (Kept, only icon on mobile) */}
             <div className="relative">
               <button
                 onClick={() => setIsBookmarkOpen(!isBookmarkOpen)}
                 onBlur={() => setTimeout(() => setIsBookmarkOpen(false), 200)}
                 className="text-xs font-bold uppercase tracking-wider text-foreground/75 hover:text-foreground transition-colors flex items-center gap-1.5"
               >
-                <span className="hidden sm:inline">⭐</span> Bookmarks
+                <span>⭐</span>
+                <span className="hidden sm:inline">Bookmarks</span>
                 {bookmarks.length > 0 && (
                   <span className="bg-primary text-primary-foreground text-[9px] font-bold px-1.5 py-0.5 rounded-full min-w-4 text-center leading-none">
                     {bookmarks.length}
@@ -142,8 +168,8 @@ export function SiteHeader() {
               )}
             </div>
 
-            {/* Categories Dropdown */}
-            <div className="relative">
+            {/* Categories Dropdown (Desktop only) */}
+            <div className="relative hidden sm:block">
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 onBlur={() => setTimeout(() => setIsOpen(false), 200)}
@@ -170,7 +196,8 @@ export function SiteHeader() {
                 </div>
               )}
             </div>
-            {/* Changelog Link */}
+
+            {/* Changelog Link (Desktop only) */}
             <Link
               to="/changelog"
               className="hidden sm:block text-xs font-bold uppercase tracking-wider text-foreground/75 hover:text-foreground transition-colors"
@@ -178,13 +205,98 @@ export function SiteHeader() {
               Changelog
             </Link>
             <div className="hidden sm:block bg-foreground/5 h-8 w-px" />
-            <span className="text-[10px] font-mono font-medium uppercase tracking-widest text-primary">
+            <span className="hidden sm:inline text-[10px] font-mono font-medium uppercase tracking-widest text-primary">
               v{version}
             </span>
           </div>
         </div>
       </nav>
-      <SupabaseLoginDialog open={loginDialogOpen} onOpenChange={setLoginDialogOpen} />
+
+      {/* Hamburger Drawer/Overlay for Mobile View */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-lg flex flex-col p-6 animate-in fade-in duration-200 sm:hidden">
+          <div className="flex items-center justify-between pb-6 border-b border-foreground/10">
+            <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 group cursor-pointer">
+              <div className="bg-primary p-1.5 rounded-sm">
+                <div className="w-5 h-5 bg-background" />
+              </div>
+              <span className="font-display text-2xl tracking-tight uppercase">Palugada</span>
+            </Link>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-2 border-2 border-foreground rounded-xl shadow-[3px_3px_0px_rgba(0,0,0,0.15)] bg-card text-foreground hover:bg-foreground/5 cursor-pointer flex items-center justify-center shrink-0"
+            >
+              <span className="text-xl leading-none">✕</span>
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto py-6 flex flex-col gap-6">
+            {/* Wedding Organizer Link */}
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-foreground/30 px-1">
+                Featured Tool
+              </span>
+              <Link
+                to="/tools/$slug"
+                params={{ slug: "wedding-planner" }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-4 py-4 bg-primary/5 border-2 border-primary/30 hover:bg-primary/10 rounded-2xl text-sm font-bold uppercase tracking-wider text-left transition-colors flex items-center justify-between shadow-tactile-sm"
+              >
+                <span className="flex items-center gap-3">
+                  <span className="text-xl">💍</span>
+                  <span>Wedding Organizer</span>
+                </span>
+                <span className="text-primary font-bold">➔</span>
+              </Link>
+            </div>
+
+            {/* Categories */}
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-foreground/30 px-1">
+                Kategori Tools
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {categories
+                  .filter((c) => c.key !== "all")
+                  .map((c) => (
+                    <Link
+                      key={c.key}
+                      to="/categories/$category"
+                      params={{ category: c.key.toLowerCase() }}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="px-3 py-3 bg-card border-2 border-foreground hover:bg-foreground/5 rounded-xl text-xs font-bold uppercase tracking-wider text-left transition-colors truncate shadow-[2px_2px_0px_rgba(0,0,0,0.15)]"
+                    >
+                      {c.name}
+                    </Link>
+                  ))}
+              </div>
+            </div>
+
+            {/* Changelog */}
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-foreground/30 px-1">
+                Info & Update
+              </span>
+              <Link
+                to="/changelog"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-4 py-4 bg-card border-2 border-foreground hover:bg-foreground/5 rounded-2xl text-xs font-bold uppercase tracking-wider text-left transition-colors flex items-center justify-between shadow-[2px_2px_0px_rgba(0,0,0,0.15)]"
+              >
+                <span>Changelog</span>
+                <span>✨</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Version Footer */}
+          <div className="pt-6 border-t border-foreground/10 text-center">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/70">
+              v{version}
+            </span>
+          </div>
+        </div>
+      )}
+      <SupabaseLoginDialog open={loginDialogOpen} onOpenChange={setLoginDialogOpen} initialMode={loginMode} />
       {canInstall && (
         <button
           onClick={handleInstallClick}

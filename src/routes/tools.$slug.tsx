@@ -139,6 +139,7 @@ import { SvgWaveGenerator } from "@/components/tools/SvgWaveGenerator";
 import { FaviconGenerator } from "@/components/tools/FaviconGenerator";
 import { ChartMaker } from "@/components/tools/ChartMaker";
 import { CronBuilder } from "@/components/tools/CronBuilder";
+import { WeddingPlanner } from "@/components/tools/WeddingPlanner";
 
 import { RandomNamePicker } from "@/components/tools/RandomNamePicker";
 import { TeamGenerator } from "@/components/tools/TeamGenerator";
@@ -286,6 +287,7 @@ const toolComponents: Record<string, ComponentType> = {
   "spin-wheel": SpinWheel,
   "2048": Game2048,
   "cron-builder": CronBuilder,
+  "wedding-planner": WeddingPlanner,
 };
 
 export const Route = createFileRoute("/tools/$slug")({
@@ -405,6 +407,20 @@ function ToolPage() {
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [copiedEmbed, setCopiedEmbed] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsAuthenticated(!!localStorage.getItem("auth_token"));
+    };
+    checkAuth();
+    window.addEventListener("storage", checkAuth);
+    window.addEventListener("bookmark_change", checkAuth);
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("bookmark_change", checkAuth);
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -461,6 +477,8 @@ function ToolPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const isWeddingPlannerAuth = tool.slug === "wedding-planner" && isAuthenticated;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
@@ -477,59 +495,62 @@ function ToolPage() {
         }
       `}</style>
 
-      <div className="max-w-6xl mx-auto px-4 pt-10 pb-6">
-        <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-6 flex flex-wrap items-center">
-          <Link to="/" className="hover:text-primary">
-            Home
-          </Link>
-          <span className="mx-2">/</span>
-          <Link
-            to="/categories/$category"
-            params={{ category: tool.category.toLowerCase() }}
-            className="hover:text-primary"
-          >
-            {categoryName}
-          </Link>
-          <span className="mx-2">/</span>
-          <span className="text-foreground/60">{tool.subcategory}</span>
-          <span className="mx-2">/</span>
-          <span className="text-foreground">{tool.name}</span>
-        </nav>
+      {!isWeddingPlannerAuth && (
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-6">
+          <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-6 flex flex-wrap items-center">
+            <Link to="/" className="hover:text-primary">
+              Home
+            </Link>
+            <span className="mx-2">/</span>
+            <Link
+              to="/categories/$category"
+              params={{ category: tool.category.toLowerCase() }}
+              className="hover:text-primary"
+            >
+              {categoryName}
+            </Link>
+            <span className="mx-2">/</span>
+            <span className="text-foreground/60">{tool.subcategory}</span>
+            <span className="mx-2">/</span>
+            <span className="text-foreground">{tool.name}</span>
+          </nav>
 
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="flex items-start gap-4">
-            <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center text-primary font-mono font-bold text-2xl shrink-0">
-              {tool.icon}
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center text-primary font-mono font-bold text-2xl shrink-0">
+                {tool.icon}
+              </div>
+              <div>
+                <h1 className="font-display text-4xl md:text-5xl uppercase tracking-tight leading-none">
+                  {tool.name}
+                </h1>
+                <p className="text-foreground/60 mt-2 text-pretty">{tool.longDescription}</p>
+              </div>
             </div>
-            <div>
-              <h1 className="font-display text-4xl md:text-5xl uppercase tracking-tight leading-none">
-                {tool.name}
-              </h1>
-              <p className="text-foreground/60 mt-2 text-pretty">{tool.longDescription}</p>
-            </div>
+
+            <button
+              onClick={toggleBookmark}
+              title={isBookmarked ? "Hapus dari Bookmark" : "Simpan ke Bookmark"}
+              className={`p-3.5 border-2 border-foreground rounded-xl shadow-[3px_3px_0px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all cursor-pointer select-none shrink-0 ${
+                isBookmarked
+                  ? "bg-primary text-primary-foreground hover:bg-primary/95"
+                  : "bg-card text-foreground hover:bg-foreground/5 animate-wiggle-notice"
+              }`}
+            >
+              <span className="text-2xl leading-none">{isBookmarked ? "★" : "☆"}</span>
+            </button>
           </div>
-
-          <button
-            onClick={toggleBookmark}
-            title={isBookmarked ? "Hapus dari Bookmark" : "Simpan ke Bookmark"}
-            className={`p-3.5 border-2 border-foreground rounded-xl shadow-[3px_3px_0px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all cursor-pointer select-none shrink-0 ${
-              isBookmarked
-                ? "bg-primary text-primary-foreground hover:bg-primary/95"
-                : "bg-card text-foreground hover:bg-foreground/5 animate-wiggle-notice"
-            }`}
-          >
-            <span className="text-2xl leading-none">{isBookmarked ? "★" : "☆"}</span>
-          </button>
         </div>
-      </div>
+      )}
 
-      <main className="max-w-6xl mx-auto px-4 pb-16">
+      <main className={`max-w-6xl mx-auto px-4 pb-16 ${isWeddingPlannerAuth ? "pt-8" : ""}`}>
         <div className="bg-card border-2 border-foreground rounded-2xl p-6 md:p-8 shadow-tactile">
           {ToolComponent ? <ToolComponent /> : <p>Tool sedang disiapkan.</p>}
         </div>
 
         {/* Share & Embed (Backlink Generator Hack) */}
-        <section className="mt-16 bg-foreground/5 border border-foreground/10 rounded-2xl p-6 md:p-8">
+        {!isWeddingPlannerAuth && (
+          <section className="mt-16 bg-foreground/5 border border-foreground/10 rounded-2xl p-6 md:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-4">
               <h3 className="font-display text-2xl uppercase tracking-tight">Bagikan Tool Ini</h3>
@@ -602,30 +623,33 @@ function ToolPage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* FAQ */}
-        <section className="mt-16">
-          <h2 className="font-display text-3xl uppercase tracking-tight mb-6">FAQ</h2>
-          <div className="space-y-3">
-            {tool.faqs.map((f: { q: string; a: string }, i: number) => (
-              <details
-                key={i}
-                className="group bg-card border border-foreground/10 rounded-xl p-5 open:border-primary/40"
-              >
-                <summary className="cursor-pointer font-semibold flex items-center justify-between list-none">
-                  {f.q}
-                  <span className="text-primary text-xl group-open:rotate-45 transition-transform">
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 text-foreground/70 text-sm leading-relaxed">{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
+        {!isWeddingPlannerAuth && (
+          <section className="mt-16">
+            <h2 className="font-display text-3xl uppercase tracking-tight mb-6">FAQ</h2>
+            <div className="space-y-3">
+              {tool.faqs.map((f: { q: string; a: string }, i: number) => (
+                <details
+                  key={i}
+                  className="group bg-card border border-foreground/10 rounded-xl p-5 open:border-primary/40"
+                >
+                  <summary className="cursor-pointer font-semibold flex items-center justify-between list-none">
+                    {f.q}
+                    <span className="text-primary text-xl group-open:rotate-45 transition-transform">
+                      +
+                    </span>
+                  </summary>
+                  <p className="mt-3 text-foreground/70 text-sm leading-relaxed">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Related */}
-        {related.length > 0 && (
+        {!isWeddingPlannerAuth && related.length > 0 && (
           <section className="mt-16">
             <h2 className="font-display text-3xl uppercase tracking-tight mb-6">
               Related <span className="text-primary">Tools</span>

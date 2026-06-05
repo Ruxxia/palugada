@@ -1,13 +1,25 @@
 [
   {
+    "date": "5 Juni 2026",
+    "title": "Tools Baru: Cloud Wedding Planner & Sistem Autentikasi Pengguna",
+    "description": "Kami meluncurkan Tools bantu perencanaan pernikahan berbasis cloud (Wedding Planner) yang dilengkapi dashboard anggaran detail, daftar tamu RSVP, manajemen tugas, hitung mundur digital, serta integrasi autentikasi akun terproteksi.",
+    "tools": [
+      {
+        "slug": "wedding-planner",
+        "badge": "New Tool",
+        "details": "Atur seluruh kebutuhan hari bahagia Anda dengan modul Anggaran, Tamu (RSVP), dan Tugas (Todo) yang tersimpan aman di cloud secara otomatis."
+      }
+    ]
+  },
+  {
     "date": "3 Juni 2026",
-    "title": "Alat Baru: Cron Builder & Visualisasi Data + Fitur Command Palette (Cmd+K)",
+    "title": "Tools Baru: Cron Builder & Visualisasi Data + Fitur Command Palette (Cmd+K)",
     "description": "Hari ini kami merilis fitur navigasi Command Palette (Cmd+K) untuk pencarian cepat, meluncurkan Interactive Chart Maker untuk visualisasi data lokal, serta menambahkan Cron Expression Builder & Tester untuk merancang ekspresi cron secara visual.",
     "tools": [
       {
         "slug": "command-palette",
         "badge": "Fitur Baru",
-        "details": "Akses menu pencarian cepat menggunakan shortcut Ctrl+K / Cmd+K atau tombol Cari di header untuk mencari nama alat, kategori, dan deskripsi."
+        "details": "Akses menu pencarian cepat menggunakan shortcut Ctrl+K / Cmd+K atau tombol Cari di header untuk mencari nama Tools, kategori, dan deskripsi."
       },
       {
         "slug": "chart-maker",
@@ -23,8 +35,8 @@
   },
   {
     "date": "1 Juni 2026",
-    "title": "Rilis Paket Alat Audit SEO Lengkap (SEO Audit Suite)",
-    "description": "Kami meluncurkan tiga alat audit optimasi mesin pencari (SEO Audit) baru untuk mendeteksi masalah on-page SEO secara mendalam, mengevaluasi kesehatan tautan/link, dan memeriksa performa pemuatan rendering awal berkas secara instan.",
+    "title": "Rilis Paket Tools Audit SEO Lengkap (SEO Audit Suite)",
+    "description": "Kami meluncurkan tiga Tools audit optimasi mesin pencari (SEO Audit) baru untuk mendeteksi masalah on-page SEO secara mendalam, mengevaluasi kesehatan tautan/link, dan memeriksa performa pemuatan rendering awal berkas secara instan.",
     "tools": [
       {
         "slug": "seo-audit",
@@ -116,8 +128,8 @@
   },
   {
     "date": "1 Juni 2026",
-    "title": "Produktivitas Maksimal: Rilis 4 Alat Utilitas Baru",
-    "description": "Menambahkan 4 alat produktivitas baru di kategori Utilities untuk mempermudah undian nama, pembagian tim, perencanaan waktu rapat global, dan manajemen fokus.",
+    "title": "Produktivitas Maksimal: Rilis 4 Tools Utilitas Baru",
+    "description": "Menambahkan 4 Tools produktivitas baru di kategori Utilities untuk mempermudah undian nama, pembagian tim, perencanaan waktu rapat global, dan manajemen fokus.",
     "tools": [
       {
         "slug": "random-name-picker",
@@ -144,7 +156,7 @@
   {
     "date": "1 Juni 2026",
     "title": "Ekspansi Kreatif: Kategori Design Tools Baru",
-    "description": "Meluncurkan kategori baru 'Design Tools' dengan 5 alat bantu visual untuk mempercepat alur kerja pembuatan aset desain UI/UX dan web dev.",
+    "description": "Meluncurkan kategori baru 'Design Tools' dengan 5 Tools bantu visual untuk mempercepat alur kerja pembuatan aset desain UI/UX dan web dev.",
     "tools": [
       {
         "slug": "color-palette-generator",
@@ -176,7 +188,7 @@
   {
     "date": "1 Juni 2026",
     "title": "Pembaruan: Modul PDF & Ejaan Keuangan Rupiah",
-    "description": "Menambahkan konverter nominal rupiah ke ejaan formal dan 4 alat baru untuk manipulasi berkas PDF secara lokal di browser.",
+    "description": "Menambahkan konverter nominal rupiah ke ejaan formal dan 4 Tools baru untuk manipulasi berkas PDF secara lokal di browser.",
     "tools": [
       {
         "slug": "angka-terbilang",
@@ -208,7 +220,7 @@
   {
     "date": "31 Mei 2026",
     "title": "Rilis Besar: Paket SEO Tools & Optimasi Halaman",
-    "description": "Meluncurkan kategori baru 'SEO Tools' dengan 5 alat analisis performa pencarian untuk membantu pemilik website mengaudit dan merancang metadata yang ramah mesin pencari.",
+    "description": "Meluncurkan kategori baru 'SEO Tools' dengan 5 Tools analisis performa pencarian untuk membantu pemilik website mengaudit dan merancang metadata yang ramah mesin pencari.",
     "tools": [
       {
         "slug": "keyword-density-checker",

@@ -1694,6 +1694,20 @@ export const tools: Tool[] = [
       { q: "Bagaimana format cron yang didukung?", a: "Format cron standar dengan 5 kolom (menit, jam, tanggal, bulan, hari kerja)." },
       { q: "Apakah data yang dimasukkan dikirim ke server?", a: "Tidak, semua kalkulasi dan visualisasi jadwal cron berjalan 100% lokal di browser Anda." }
     ]
+  },
+  {
+    slug: "wedding-planner",
+    name: "Wedding Planner",
+    description: "Rencanakan pernikahan impian Anda dengan Checklist, Guest List, dan Budget Tracker terintegrasi.",
+    longDescription: "Alat bantu lengkap untuk merencanakan pernikahan. Dilengkapi checklist tugas persiapan, manajemen daftar tamu dengan RSVP, pelacakan anggaran (estimasi vs riil), serta penghitung mundur ke hari H secara real-time. Data Anda disinkronkan secara aman ke dalam database.",
+    category: "Utilities",
+    subcategory: "Events",
+    icon: "💍",
+    featured: true,
+    faqs: [
+      { q: "Apakah saya perlu login untuk menggunakan Wedding Planner?", a: "Ya. Data pernikahan Anda disimpan dengan aman secara relasional ke dalam database sehingga memerlukan akun login agar data tetap tersinkronisasi di semua perangkat Anda." },
+      { q: "Bagaimana cara kerja fitur Auto-Save?", a: "Jika diaktifkan, setiap perubahan yang Anda lakukan pada anggaran, tamu, atau tugas akan disimpan otomatis secara berkala ke dalam database tanpa perlu menekan tombol Simpan manual." }
+    ]
   }
 ];
 
