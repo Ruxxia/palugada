@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "palugada",
+  "compatibility_date": "2026-06-06",
+  "main": "@tanstack/react-start/server-entry",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "SUPABASE_URL": "https://ommpxxjdwsximqdyqpsz.supabase.co",
+    "SUPABASE_ANON_KEY": "sb_publishable_RYpEINkPXY9UXKuJ44GI8A_qzXu-wpR"
+  }
+}
