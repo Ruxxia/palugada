@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "palugada",
   "compatibility_date": "2026-06-06",
-  "main": "@tanstack/react-start/server-entry",
+  "main": "node_modules/@tanstack/react-start/dist/default-entry/esm/server.js",
   "compatibility_flags": [
     "nodejs_compat"
   ],
