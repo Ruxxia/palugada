@@ -99,6 +99,11 @@ export const saveWeddingData = createServerFn({ method: "POST" })
           wedding_date: z.string(),
           total_budget: z.number(),
           auto_save: z.boolean().optional(),
+          wedding_title: z.string().nullish(),
+          groom_name: z.string().nullish(),
+          bride_name: z.string().nullish(),
+          wedding_location: z.string().nullish(),
+          location_maps_url: z.string().nullish(),
         }),
         budgets: z.array(
           z.object({
@@ -150,6 +155,11 @@ export const saveWeddingData = createServerFn({ method: "POST" })
           wedding_date: payload.settings.wedding_date,
           total_budget: payload.settings.total_budget,
           auto_save: payload.settings.auto_save ?? true,
+          wedding_title: payload.settings.wedding_title || null,
+          groom_name: payload.settings.groom_name || null,
+          bride_name: payload.settings.bride_name || null,
+          wedding_location: payload.settings.wedding_location || null,
+          location_maps_url: payload.settings.location_maps_url || null,
           updated_at: new Date().toISOString(),
         }),
       });

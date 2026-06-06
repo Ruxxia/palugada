@@ -52,13 +52,13 @@ function GuestInvitationPage() {
   // Countdown timer logic
   useEffect(() => {
     if (!settings?.wedding_date) return;
-    
+
     const target = new Date(settings.wedding_date).getTime();
-    
+
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const difference = target - now;
-      
+
       if (difference <= 0) {
         setCountdown((prev) => ({ ...prev, finished: true }));
         clearInterval(interval);
@@ -67,7 +67,7 @@ function GuestInvitationPage() {
         const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-        
+
         setCountdown({ days, hours, minutes, seconds, finished: false });
       }
     }, 1000);
@@ -135,11 +135,17 @@ function GuestInvitationPage() {
         <div className="max-w-md w-full text-center z-10 bg-card/60 backdrop-blur-md border-2 border-foreground p-8 rounded-3xl shadow-tactile relative animate-fade-in">
           <span className="text-3xl">💍</span>
           <h2 className="mt-3 font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
-            Undangan Pernikahan
+            {settings?.wedding_title || "Undangan Pernikahan"}
           </h2>
-          <h1 className="mt-2 font-display text-4xl uppercase tracking-tight leading-none text-foreground">
-            The Wedding
-          </h1>
+          {(settings?.groom_name || settings?.bride_name) ? (
+            <h1 className="mt-2 font-display text-3xl uppercase tracking-tight leading-none text-foreground">
+              {settings.groom_name || "Pengantin Pria"} <span className="font-serif italic text-2xl lowercase block my-1">dan</span> {settings.bride_name || "Pengantin Wanita"}
+            </h1>
+          ) : (
+            <h1 className="mt-2 font-display text-4xl uppercase tracking-tight leading-none text-foreground">
+              The Wedding
+            </h1>
+          )}
           <div className="my-6 border-y border-foreground/10 py-4 flex flex-col items-center">
             <p className="font-mono text-[9px] uppercase tracking-wider text-foreground/40 mb-1">
               Kepada Yth. Bapak/Ibu/Saudara/i
@@ -171,17 +177,23 @@ function GuestInvitationPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background flex flex-col items-center py-12 px-4 relative">
       <div className="max-w-lg w-full space-y-8 z-10">
-        
+
         {/* Core Header Card */}
         <div className="bg-card border-2 border-foreground p-8 rounded-3xl shadow-tactile text-center relative overflow-hidden">
           <span className="text-3xl">✨</span>
           <h2 className="mt-3 font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
-            Walimatul 'Ursy
+            {settings?.wedding_title || "Walimatul 'Ursy"}
           </h2>
-          <h1 className="mt-1 font-display text-3xl md:text-4xl uppercase tracking-tight text-foreground">
-            Save The Date
-          </h1>
-          
+          {(settings?.groom_name || settings?.bride_name) ? (
+            <h1 className="mt-2 font-display text-2xl md:text-3xl uppercase tracking-tight text-foreground leading-tight">
+              {settings.groom_name || "Pengantin Pria"} & {settings.bride_name || "Pengantin Wanita"}
+            </h1>
+          ) : (
+            <h1 className="mt-1 font-display text-3xl md:text-4xl uppercase tracking-tight text-foreground">
+              Save The Date
+            </h1>
+          )}
+
           {settings?.wedding_date && (
             <div className="mt-4 font-mono text-sm font-bold bg-foreground/5 inline-block px-4 py-2 border border-foreground/10 rounded-xl">
               {new Date(settings.wedding_date).toLocaleDateString("id-ID", {
@@ -219,26 +231,32 @@ function GuestInvitationPage() {
             </div>
           )}
         </div>
-
         {/* Venue/Location Card */}
         <div className="bg-card border-2 border-foreground p-8 rounded-3xl shadow-tactile">
           <h3 className="font-display text-lg uppercase tracking-wide border-b border-foreground/10 pb-2 mb-4 flex items-center gap-2">
             <span>📍</span> Lokasi Acara
           </h3>
-          <p className="font-body text-sm text-foreground/80 leading-relaxed">
-            <strong>Gedung Pertemuan Utama</strong><br />
-            Jl. Raya Kebahagiaan No. 77, Jakarta Selatan
-          </p>
-          <a
-            href="https://maps.google.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 border border-foreground text-xs font-bold uppercase bg-foreground/5 hover:bg-foreground/10 rounded-xl transition-colors"
-          >
-            <span>🗺️</span> Buka Google Maps
-          </a>
+          {settings?.wedding_location ? (
+            <p className="font-body text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">
+              {settings.wedding_location}
+            </p>
+          ) : (
+            <p className="font-body text-sm text-foreground/80 leading-relaxed">
+              <strong>Gedung Pertemuan Utama</strong><br />
+              Jl. Raya Kebahagiaan No. 77, Jakarta Selatan
+            </p>
+          )}
+          {(settings?.location_maps_url || settings?.wedding_location) && (
+            <a
+              href={settings.location_maps_url || `https://maps.google.com/?q=${encodeURIComponent(settings.wedding_location || "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 border border-foreground text-xs font-bold uppercase bg-foreground/5 hover:bg-foreground/10 rounded-xl transition-colors"
+            >
+              <span>🗺️</span> Buka Google Maps
+            </a>
+          )}
         </div>
-
         {/* RSVP Confirmation & Wishes Form */}
         <div className="bg-card border-2 border-foreground p-8 rounded-3xl shadow-tactile relative">
           <h3 className="font-display text-lg uppercase tracking-wide border-b border-foreground/10 pb-2 mb-6 flex items-center gap-2">
@@ -252,7 +270,7 @@ function GuestInvitationPage() {
               <p className="text-xs text-foreground/60 max-w-xs mx-auto">
                 Konfirmasi RSVP Anda telah berhasil disimpan dan disinkronkan langsung ke dashboard pengantin.
               </p>
-              
+
               {/* QR Code Check-in section */}
               {rsvpStatus === "Attending" && (
                 <div className="mt-6 border-2 border-foreground p-4 bg-white inline-block rounded-2xl shadow-tactile-sm">
@@ -289,22 +307,20 @@ function GuestInvitationPage() {
                   <button
                     type="button"
                     onClick={() => setRsvpStatus("Attending")}
-                    className={`py-3.5 border-2 rounded-2xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                      rsvpStatus === "Attending"
+                    className={`py-3.5 border-2 rounded-2xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${rsvpStatus === "Attending"
                         ? "bg-accent text-accent-foreground border-foreground shadow-tactile-sm -translate-y-0.5"
                         : "bg-card border-foreground/20 hover:border-foreground/45"
-                    }`}
+                      }`}
                   >
                     👍 Hadir
                   </button>
                   <button
                     type="button"
                     onClick={() => setRsvpStatus("Declined")}
-                    className={`py-3.5 border-2 rounded-2xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                      rsvpStatus === "Declined"
+                    className={`py-3.5 border-2 rounded-2xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${rsvpStatus === "Declined"
                         ? "bg-destructive text-destructive-foreground border-foreground shadow-tactile-sm -translate-y-0.5"
                         : "bg-card border-foreground/20 hover:border-foreground/45"
-                    }`}
+                      }`}
                   >
                     👎 Berhalangan
                   </button>

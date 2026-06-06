@@ -663,7 +663,7 @@ function ToolPage() {
         )}
       </main>
 
-      <SiteFooter />
+      {!isWeddingPlannerAuth && <SiteFooter />}
     </div>
   );
 }
