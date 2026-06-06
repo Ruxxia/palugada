@@ -663,7 +663,7 @@ function ToolPage() {
         )}
       </main>
 
-      {!isWeddingPlannerAuth && <SiteFooter />}
+      {tool.slug !== "wedding-planner" && <SiteFooter />}
     </div>
   );
 }

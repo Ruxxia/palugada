@@ -557,10 +557,9 @@ export function WeddingPlanner() {
         savingStatus={savingStatus}
         onTriggerSave={() => triggerSave()}
       />
-
-      <div className="space-y-6 pb-24 md:pb-6">
+      <div id="wedding-planner-print-area" className="space-y-6 pb-24 md:pb-6">
         {/* Print Area Header */}
-        <div id="wedding-planner-print-area" className="hidden print:block font-serif text-center pb-8 border-b-4 border-double border-foreground select-none">
+        <div className="hidden print:block font-serif text-center pb-8 border-b-4 border-double border-foreground select-none">
           <h1 className="text-4xl uppercase tracking-wider font-extrabold">Wedding Planner & Tracker</h1>
           <p className="text-sm italic mt-2">Laporan Persiapan Pernikahan Resmi</p>
           <p className="text-[10px] font-mono mt-1 text-foreground/75">Dibuat otomatis via Palugada SuperApp</p>
@@ -579,23 +578,25 @@ export function WeddingPlanner() {
         />
 
         {/* Bento Stats & Countdown */}
-        <BentoStats
-          settings={settings}
-          onSettingsChange={setSettings}
-          countdown={countdown}
-          totalEstimatedBudget={totalEstimatedBudget}
-          totalActualBudget={totalActualBudget}
-          totalGuests={totalGuests}
-          guestsAttending={guestsAttending}
-          guestsDeclined={guestsDeclined}
-          guestsPending={guestsPending}
-          completedTodos={completedTodos}
-          totalTodos={totalTodos}
-          todoPercentage={todoPercentage}
-        />
+        <div className="print:hidden">
+          <BentoStats
+            settings={settings}
+            onSettingsChange={setSettings}
+            countdown={countdown}
+            totalEstimatedBudget={totalEstimatedBudget}
+            totalActualBudget={totalActualBudget}
+            totalGuests={totalGuests}
+            guestsAttending={guestsAttending}
+            guestsDeclined={guestsDeclined}
+            guestsPending={guestsPending}
+            completedTodos={completedTodos}
+            totalTodos={totalTodos}
+            todoPercentage={todoPercentage}
+          />
+        </div>
 
         {/* Main Content Tabs Navigation (Desktop View) */}
-        <div className="hidden md:flex border border-foreground/15 md:border-2 md:border-foreground rounded-xl bg-card overflow-hidden select-none shadow-sm overflow-x-auto">
+        <div className="hidden md:flex border border-foreground/15 md:border-2 md:border-foreground rounded-xl bg-card overflow-hidden select-none shadow-sm overflow-x-auto print:hidden">
           {(["dashboard", "checklist", "guests", "budget", "logistics"] as const).map((tab) => {
             const tabLabel = {
               dashboard: "📊 Dashboard",
@@ -619,7 +620,7 @@ export function WeddingPlanner() {
         </div>
 
         {/* Tabs Panels Container */}
-        <div id="wedding-planner-print-area" className="bg-card md:border-2 md:border-foreground border-none rounded-xl md:rounded-2xl p-3 md:p-6 shadow-none md:shadow-tactile">
+        <div className="bg-card md:border-2 md:border-foreground border-none rounded-xl md:rounded-2xl p-3 md:p-6 shadow-none md:shadow-tactile print:border-none print:shadow-none print:p-0 print:bg-transparent">
           {activeTab === "dashboard" && (
             <DashboardTab
               settings={settings}
@@ -668,7 +669,6 @@ export function WeddingPlanner() {
               onInitLogisticsTemplate={handleInitLogisticsTemplate}
             />
           )}
-
           {/* Printable Report Styles */}
           <style dangerouslySetInnerHTML={{
             __html: `
@@ -677,17 +677,27 @@ export function WeddingPlanner() {
                 background: #ffffff !important;
                 color: #000000 !important;
               }
-              body > div {
+              header, footer, nav, aside, .no-print, [title="Ekspor ke CSV"], [title="Cetak Laporan / PDF"], [title="Undang Tamu"], [title="Tambah Barang"] {
                 display: none !important;
               }
+              body * {
+                visibility: hidden;
+              }
+              #wedding-planner-print-area, #wedding-planner-print-area * {
+                visibility: visible;
+              }
               #wedding-planner-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
                 display: block !important;
                 border: none !important;
                 box-shadow: none !important;
                 padding: 0 !important;
                 background: transparent !important;
               }
-              button, select, input, form, .no-print, [title="Ekspor ke CSV"], [title="Cetak Laporan / PDF"], [title="Undang Tamu"], [title="Tambah Barang"] {
+              button, select, input, form {
                 display: none !important;
               }
               .text-foreground\/60, .text-foreground\/50, .text-foreground\/75 {
@@ -695,7 +705,6 @@ export function WeddingPlanner() {
               }
             }
           `}} />
-
           {/* Reusable confirmation modal overlay */}
           <ConfirmationDialog
             isOpen={confirmState.isOpen}

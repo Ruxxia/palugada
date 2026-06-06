@@ -190,7 +190,7 @@ export function GuestsTab({
       )}
 
       {/* Guest Table (Desktop View) */}
-      <div className="hidden md:block overflow-x-auto border border-foreground/15 rounded-xl">
+      <div className="hidden md:block print:block overflow-x-auto border border-foreground/15 rounded-xl print:border-none">
         <table className="w-full text-left border-collapse text-xs select-none">
           <thead>
             <tr className="bg-foreground/5 border-b border-foreground/15 font-mono text-[10px] uppercase font-bold text-foreground/60">
@@ -198,7 +198,7 @@ export function GuestsTab({
               <th className="p-2 sm:p-3">Kategori</th>
               <th className="p-2 sm:p-3">Kontak</th>
               <th className="p-2 sm:p-3">Status RSVP</th>
-              <th className="p-2 sm:p-3 text-right">Aksi</th>
+              <th className="p-2 sm:p-3 text-right print:hidden">Aksi</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-foreground/10">
@@ -215,7 +215,7 @@ export function GuestsTab({
                   <select
                     value={guest.rsvp_status}
                     onChange={(e) => onUpdateGuestRSVP(guest.id, e.target.value as any)}
-                    className={`px-2 py-1 rounded-lg text-[10px] font-bold border cursor-pointer ${guest.rsvp_status === "Attending"
+                    className={`px-2 py-1 rounded-lg text-[10px] font-bold border cursor-pointer print:hidden ${guest.rsvp_status === "Attending"
                         ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600"
                         : guest.rsvp_status === "Declined"
                           ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
@@ -226,8 +226,16 @@ export function GuestsTab({
                     <option value="Attending">Hadir</option>
                     <option value="Declined">Menolak</option>
                   </select>
+                  <span className={`hidden print:inline-block px-2 py-0.5 rounded text-[9px] font-bold font-mono border ${guest.rsvp_status === "Attending"
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600"
+                      : guest.rsvp_status === "Declined"
+                        ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
+                        : "bg-amber-500/10 border-amber-500/30 text-amber-600"
+                    }`}>
+                    {guest.rsvp_status === "Attending" ? "Hadir" : guest.rsvp_status === "Declined" ? "Menolak" : "Pending"}
+                  </span>
                 </td>
-                <td className="p-2 sm:p-3 text-right flex items-center justify-end gap-1.5">
+                <td className="p-2 sm:p-3 text-right flex items-center justify-end gap-1.5 print:hidden">
                   {guest.id.startsWith("g_") ? (
                     <span className="text-[9px] text-foreground/40 font-bold font-mono uppercase select-none cursor-help" title="Simpan ke cloud untuk buat link">
                       Belum Sync
@@ -262,7 +270,7 @@ export function GuestsTab({
       </div>
 
       {/* Guest List (Mobile View Card Grid) */}
-      <div className="grid grid-cols-1 gap-3 md:hidden">
+      <div className="grid grid-cols-1 gap-3 md:hidden print:hidden">
         {filteredGuests.map(guest => (
           <div key={guest.id} className="bg-card border border-foreground/15 rounded-xl p-3.5 shadow-sm space-y-2.5 select-none">
             <div className="flex justify-between items-start">

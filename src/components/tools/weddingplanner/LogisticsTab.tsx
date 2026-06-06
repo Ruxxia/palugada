@@ -167,7 +167,7 @@ export function LogisticsTab({
       </div>
 
       {/* Logistics Stats Bento Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 print:hidden">
         <div className="bg-foreground/[0.02] border border-foreground/15 rounded-xl p-4">
           <span className="text-[10px] font-mono font-bold text-foreground/50 uppercase block">Total Barang</span>
           <span className="md:text-2xl font-bold block mt-1">{totalLogistics}</span>
@@ -285,7 +285,7 @@ export function LogisticsTab({
 
       {/* Logistics List Table (Desktop View) */}
       {totalLogistics > 0 && (
-        <div className="hidden md:block overflow-x-auto border border-foreground/15 rounded-xl">
+        <div className="hidden md:block print:block overflow-x-auto border border-foreground/15 rounded-xl print:border-none">
           <table className="w-full text-left border-collapse text-xs select-none">
             <thead>
               <tr className="bg-foreground/5 border-b border-foreground/15 font-mono text-[10px] uppercase font-bold text-foreground/60">
@@ -294,7 +294,7 @@ export function LogisticsTab({
                 <th className="p-2 sm:p-3">Sumber / Toko</th>
                 <th className="p-2 sm:p-3">Harga Estimasi</th>
                 <th className="p-2 sm:p-3">Catatan</th>
-                <th className="p-2 sm:p-3 text-right">Aksi</th>
+                <th className="p-2 sm:p-3 text-right print:hidden">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-foreground/10">
@@ -321,7 +321,7 @@ export function LogisticsTab({
                       <select
                         value={meta.status}
                         onChange={(e) => onUpdateLogisticsStatus(t.id, e.target.value as any)}
-                        className={`px-2 py-1 rounded-lg text-[10px] font-bold border cursor-pointer ${
+                        className={`px-2 py-1 rounded-lg text-[10px] font-bold border cursor-pointer print:hidden ${
                           meta.status === "Siap (Ready)"
                             ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 font-bold"
                             : meta.status === "Sedang Diproses"
@@ -333,6 +333,15 @@ export function LogisticsTab({
                         <option value="Sedang Diproses">Sedang Diproses</option>
                         <option value="Siap (Ready)">Siap (Ready)</option>
                       </select>
+                      <span className={`hidden print:inline-block px-2 py-0.5 rounded text-[9px] font-bold font-mono border ${
+                        meta.status === "Siap (Ready)"
+                          ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600"
+                          : meta.status === "Sedang Diproses"
+                          ? "bg-amber-500/10 border-amber-500/30 text-amber-600"
+                          : "bg-foreground/5 border-foreground/10 text-foreground/60"
+                      }`}>
+                        {meta.status}
+                      </span>
                     </td>
                     <td className="p-2 sm:p-3 text-foreground/75 font-medium">
                       {isEditing ? (
@@ -373,8 +382,8 @@ export function LogisticsTab({
                         meta.notes || "-"
                       )}
                     </td>
-                    <td className="p-2 sm:p-3 text-right">
-                      <div className="flex justify-end gap-1 select-none">
+                    <td className="p-2 sm:p-3 text-right print:hidden">
+                      <div className="flex justify-end gap-1 select-none print:hidden">
                         {isEditing ? (
                           <>
                             <button
@@ -422,7 +431,7 @@ export function LogisticsTab({
 
       {/* Logistics List (Mobile View Card Grid) */}
       {totalLogistics > 0 && (
-        <div className="grid grid-cols-1 gap-3 md:hidden">
+        <div className="grid grid-cols-1 gap-3 md:hidden print:hidden">
           {filteredLogistics.map(t => {
             const meta = parseLogisticsNotes(t.notes);
             const cleanTitle = t.title.replace("LOGISTICS:", "");

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, Calendar, Check } from "lucide-react";
+import { Plus, Trash2, Calendar, Check, Printer } from "lucide-react";
 import { TodoItem } from "./types";
 
 interface ChecklistTabProps {
@@ -52,6 +52,13 @@ export function ChecklistTab({
             <option value="pending">Belum Selesai</option>
             <option value="completed">Sudah Selesai</option>
           </select>
+          <button
+            onClick={() => window.print()}
+            className="px-3 py-2 border border-foreground/15 text-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 hover:bg-foreground/5 transition-colors cursor-pointer min-h-[40px] flex-1 sm:flex-initial justify-center"
+            title="Cetak Laporan / PDF"
+          >
+            <Printer className="w-4 h-4" /> Cetak / PDF
+          </button>
           <button
             onClick={() => setShowTodoForm(true)}
             className="px-4 py-2.5 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-lg tracking-wider flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-opacity cursor-pointer ml-auto flex-1 sm:flex-initial justify-center min-h-[44px]"
@@ -116,7 +123,7 @@ export function ChecklistTab({
       )}
 
       {/* Todos List */}
-      <div className="space-y-3">
+      <div className="space-y-3 print:hidden">
         {filteredTodos.map(todo => (
           <div
             key={todo.id}
@@ -166,6 +173,37 @@ export function ChecklistTab({
         ))}
         {checklistTodos.length === 0 && (
           <p className="text-center text-xs text-foreground/50 py-12">Belum ada tugas dibuat. Klik "Tambah Tugas" untuk memulai.</p>
+        )}
+      </div>
+
+      {/* Printable Checklist Table (Hidden on screen, Visible on print) */}
+      <div className="hidden print:block overflow-x-auto border border-foreground/15 rounded-xl print:border-none">
+        <table className="w-full text-left border-collapse text-xs select-none">
+          <thead>
+            <tr className="bg-foreground/5 border-b border-foreground/15 font-mono text-[10px] uppercase font-bold text-foreground/60">
+              <th className="p-2 w-12 text-center">Status</th>
+              <th className="p-2">Nama Tugas</th>
+              <th className="p-2 w-32">Batas Tanggal</th>
+              <th className="p-2">Catatan</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-foreground/10">
+            {filteredTodos.map(todo => (
+              <tr key={todo.id} className="hover:bg-foreground/5 transition-colors">
+                <td className="p-2 text-center font-bold">
+                  {todo.is_completed ? "✓" : "☐"}
+                </td>
+                <td className={`p-2 font-bold ${todo.is_completed ? "line-through text-foreground/40" : ""}`}>
+                  {todo.title}
+                </td>
+                <td className="p-2 font-mono text-foreground/75">{todo.due_date || "-"}</td>
+                <td className="p-2 text-foreground/60 italic">{todo.notes || "-"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {checklistTodos.length === 0 && (
+          <p className="text-center text-xs text-foreground/50 py-12">Belum ada tugas dibuat.</p>
         )}
       </div>
     </div>

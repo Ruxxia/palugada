@@ -167,7 +167,7 @@ export function BudgetTab({
       )}
 
       {/* Budget Table (Desktop View) */}
-      <div className="hidden md:block overflow-x-auto border border-foreground/15 rounded-xl">
+      <div className="hidden md:block print:block overflow-x-auto border border-foreground/15 rounded-xl print:border-none">
         <table className="w-full text-left border-collapse text-xs select-none">
           <thead>
             <tr className="bg-foreground/5 border-b border-foreground/15 font-mono text-[10px] uppercase font-bold text-foreground/60">
@@ -176,7 +176,7 @@ export function BudgetTab({
               <th className="p-2 sm:p-3">Estimasi Biaya</th>
               <th className="p-2 sm:p-3">Biaya Riil</th>
               <th className="p-2 sm:p-3">Status Bayar</th>
-              <th className="p-2 sm:p-3 text-right">Aksi</th>
+              <th className="p-2 sm:p-3 text-right print:hidden">Aksi</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-foreground/10">
@@ -193,7 +193,7 @@ export function BudgetTab({
                 <td className="p-2 sm:p-3">
                   <button
                     onClick={() => onToggleBudgetPaid(budget.id)}
-                    className={`px-2 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                    className={`px-2 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer print:hidden ${
                       budget.is_paid
                         ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 font-bold"
                         : "bg-amber-500/10 border-amber-500/30 text-amber-600 font-bold"
@@ -201,8 +201,15 @@ export function BudgetTab({
                   >
                     {budget.is_paid ? "Lunas" : "Belum Lunas"}
                   </button>
+                  <span className={`hidden print:inline-block px-2 py-0.5 rounded text-[9px] font-bold font-mono border ${
+                    budget.is_paid
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600"
+                      : "bg-amber-500/10 border-amber-500/30 text-amber-600"
+                  }`}>
+                    {budget.is_paid ? "Lunas" : "Belum Lunas"}
+                  </span>
                 </td>
-                <td className="p-2 sm:p-3 text-right">
+                <td className="p-2 sm:p-3 text-right print:hidden">
                   <button
                     onClick={() => onDeleteBudget(budget.id)}
                     className="p-1.5 text-foreground/40 hover:text-rose-500 rounded-lg hover:bg-rose-500/10 transition-colors cursor-pointer"
@@ -220,7 +227,7 @@ export function BudgetTab({
       </div>
 
       {/* Budget List (Mobile View Card Grid) */}
-      <div className="grid grid-cols-1 gap-3 md:hidden">
+      <div className="grid grid-cols-1 gap-3 md:hidden print:hidden">
         {filteredBudgets.map(budget => (
           <div key={budget.id} className="bg-card border border-foreground/15 rounded-xl p-3.5 shadow-sm space-y-2.5 select-none">
             <div className="flex justify-between items-start">
