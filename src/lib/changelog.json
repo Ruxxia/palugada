@@ -1,5 +1,17 @@
 [
   {
+    "date": "6 Juni 2026",
+    "title": "Update: Kelola Uang (Personal Finance Tracker) v1.0 - Sinkronisasi Cloud & Polish UI",
+    "description": "Kami meluncurkan pembaruan besar untuk modul Kelola Uang dengan menambahkan sinkronisasi database cloud relasional secara real-time, format input mata uang Rupiah otomatis dengan separator titik, optimalisasi tampilan cetak PDF laporan keuangan di perangkat seluler, serta penambahan akses cepat Kelola Uang pada menu navigasi utama.",
+    "tools": [
+      {
+        "slug": "finance-tracker",
+        "badge": "Update Besar",
+        "details": "Penyimpanan cloud terproteksi dengan sinkronisasi UUID real-time, input Rupiah terformat otomatis (IDR dot separators), serta optimalisasi tampilan responsif mobile untuk Laporan Keuangan."
+      }
+    ]
+  },
+  {
     "date": "5 Juni 2026",
     "title": "Update: Cloud Wedding Planner v1.1 - Undangan Digital Publik & Tab Logistik",
     "description": "Kami merilis pembaruan besar untuk alat Wedding Planner dengan menambahkan halaman undangan digital publik yang dinamis bagi para tamu, mendukung konfirmasi RSVP, pesan ucapan terintegrasi ke dashboard, pembuatan QR Code check-in, ekspor CSV, format cetak/PDF kustom, serta tab Manajemen Logistik & Belanja baru.",

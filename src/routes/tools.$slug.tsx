@@ -140,6 +140,7 @@ import { FaviconGenerator } from "@/components/tools/FaviconGenerator";
 import { ChartMaker } from "@/components/tools/ChartMaker";
 import { CronBuilder } from "@/components/tools/CronBuilder";
 import { WeddingPlanner } from "@/components/tools/WeddingPlanner";
+import { FinanceTracker } from "@/components/tools/FinanceTracker";
 
 import { RandomNamePicker } from "@/components/tools/RandomNamePicker";
 import { TeamGenerator } from "@/components/tools/TeamGenerator";
@@ -288,6 +289,7 @@ const toolComponents: Record<string, ComponentType> = {
   "2048": Game2048,
   "cron-builder": CronBuilder,
   "wedding-planner": WeddingPlanner,
+  "finance-tracker": FinanceTracker,
 };
 
 export const Route = createFileRoute("/tools/$slug")({
@@ -477,7 +479,8 @@ function ToolPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const isWeddingPlannerAuth = tool.slug === "wedding-planner" && isAuthenticated;
+  const isSpecialAuthTool =
+    (tool.slug === "wedding-planner" || tool.slug === "finance-tracker") && isAuthenticated;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -495,7 +498,7 @@ function ToolPage() {
         }
       `}</style>
 
-      {!isWeddingPlannerAuth && (
+      {!isSpecialAuthTool && (
         <div className="max-w-6xl mx-auto px-4 pt-10 pb-6">
           <nav className="text-xs font-mono uppercase tracking-wider text-foreground/40 mb-6 flex flex-wrap items-center">
             <Link to="/" className="hover:text-primary">
@@ -543,13 +546,13 @@ function ToolPage() {
         </div>
       )}
 
-      <main className={`max-w-6xl mx-auto px-4 pb-16 ${isWeddingPlannerAuth ? "pt-8" : ""}`}>
+      <main className={`max-w-6xl mx-auto px-4 pb-16 ${isSpecialAuthTool ? "pt-8" : ""}`}>
         <div className="bg-card md:border-2 md:border-foreground border-none rounded-xl md:rounded-2xl p-3 sm:p-6 md:p-8 shadow-none md:shadow-tactile">
           {ToolComponent ? <ToolComponent /> : <p>Tool sedang disiapkan.</p>}
         </div>
 
         {/* Share & Embed (Backlink Generator Hack) */}
-        {!isWeddingPlannerAuth && (
+        {!isSpecialAuthTool && (
           <section className="mt-16 bg-foreground/5 border border-foreground/10 rounded-2xl p-6 md:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-4">
@@ -567,103 +570,103 @@ function ToolPage() {
                 </button>
                 <a
                   onClick={() =>
-                    trackEvent("tool_shared", {
-                      tool_slug: tool.slug,
-                      tool_name: tool.name,
-                      share_type: "whatsapp",
-                    })
-                  }
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Coba tool ${tool.name} gratis di Palugada: ${shareUrl}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 h-11 bg-[#25D366] text-white text-xs font-bold uppercase rounded-lg tracking-wider flex items-center justify-center hover:opacity-90 transition-opacity"
-                >
-                  WhatsApp
-                </a>
-                <a
-                  onClick={() =>
-                    trackEvent("tool_shared", {
-                      tool_slug: tool.slug,
-                      tool_name: tool.name,
-                      share_type: "twitter",
-                    })
-                  }
-                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Rekomendasi tool gratis ${tool.name} dari Palugada!`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 h-11 bg-[#1DA1F2] text-white text-xs font-bold uppercase rounded-lg tracking-wider flex items-center justify-center hover:opacity-90 transition-opacity"
-                >
-                  Twitter / X
-                </a>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="font-display text-2xl uppercase tracking-tight">
-                Sematkan di Website Anda
-              </h3>
-              <p className="text-sm text-foreground/60 leading-relaxed">
-                Pasang backlink HTML di blog atau web resource Anda agar pengunjung Anda bisa
-                langsung mengakses alat ini.
-              </p>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  readOnly
-                  value={embedCode}
-                  className="flex-1 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono text-foreground/60 focus:outline-none"
-                />
-                <button
-                  onClick={() => copyToClipboard(embedCode, setCopiedEmbed, "embed")}
-                  className="px-4 bg-foreground text-background text-xs font-bold uppercase rounded-lg tracking-wider hover:opacity-90 transition-opacity shrink-0"
-                >
-                  {copiedEmbed ? "Copied!" : "Salin"}
-                </button>
-              </div>
+                  trackEvent("tool_shared", {
+                    tool_slug: tool.slug,
+                    tool_name: tool.name,
+                    share_type: "whatsapp",
+                  })
+                }
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Coba tool ${tool.name} gratis di Palugada: ${shareUrl}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 h-11 bg-[#25D366] text-white text-xs font-bold uppercase rounded-lg tracking-wider flex items-center justify-center hover:opacity-90 transition-opacity"
+              >
+                WhatsApp
+              </a>
+              <a
+                onClick={() =>
+                  trackEvent("tool_shared", {
+                    tool_slug: tool.slug,
+                    tool_name: tool.name,
+                    share_type: "twitter",
+                  })
+                }
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Rekomendasi tool gratis ${tool.name} dari Palugada!`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 h-11 bg-[#1DA1F2] text-white text-xs font-bold uppercase rounded-lg tracking-wider flex items-center justify-center hover:opacity-90 transition-opacity"
+              >
+                Twitter / X
+              </a>
             </div>
           </div>
+
+          <div className="space-y-4">
+            <h3 className="font-display text-2xl uppercase tracking-tight">
+              Sematkan di Website Anda
+            </h3>
+            <p className="text-sm text-foreground/60 leading-relaxed">
+              Pasang backlink HTML di blog atau web resource Anda agar pengunjung Anda bisa
+              langsung mengakses alat ini.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                readOnly
+                value={embedCode}
+                className="flex-1 px-3 bg-background border border-foreground/15 rounded-lg text-xs font-mono text-foreground/60 focus:outline-none"
+              />
+              <button
+                onClick={() => copyToClipboard(embedCode, setCopiedEmbed, "embed")}
+                className="px-4 bg-foreground text-background text-xs font-bold uppercase rounded-lg tracking-wider hover:opacity-90 transition-opacity shrink-0"
+              >
+                {copiedEmbed ? "Copied!" : "Salin"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      )}
+
+      {/* FAQ */}
+      {!isSpecialAuthTool && (
+        <section className="mt-16">
+          <h2 className="font-display text-3xl uppercase tracking-tight mb-6">FAQ</h2>
+          <div className="space-y-3">
+            {tool.faqs.map((f: { q: string; a: string }, i: number) => (
+              <details
+                key={i}
+                className="group bg-card border border-foreground/10 rounded-xl p-5 open:border-primary/40"
+              >
+                <summary className="cursor-pointer font-semibold flex items-center justify-between list-none">
+                  {f.q}
+                  <span className="text-primary text-xl group-open:rotate-45 transition-transform">
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 text-foreground/70 text-sm leading-relaxed">{f.a}</p>
+              </details>
+            ))}
+          </div>
         </section>
-        )}
+      )}
 
-        {/* FAQ */}
-        {!isWeddingPlannerAuth && (
-          <section className="mt-16">
-            <h2 className="font-display text-3xl uppercase tracking-tight mb-6">FAQ</h2>
-            <div className="space-y-3">
-              {tool.faqs.map((f: { q: string; a: string }, i: number) => (
-                <details
-                  key={i}
-                  className="group bg-card border border-foreground/10 rounded-xl p-5 open:border-primary/40"
-                >
-                  <summary className="cursor-pointer font-semibold flex items-center justify-between list-none">
-                    {f.q}
-                    <span className="text-primary text-xl group-open:rotate-45 transition-transform">
-                      +
-                    </span>
-                  </summary>
-                  <p className="mt-3 text-foreground/70 text-sm leading-relaxed">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        )}
+      {/* Related */}
+      {!isSpecialAuthTool && related.length > 0 && (
+        <section className="mt-16">
+          <h2 className="font-display text-3xl uppercase tracking-tight mb-6">
+            Related <span className="text-primary">Tools</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {related.map((t) => (
+              <ToolCard key={t.slug} tool={t} />
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
 
-        {/* Related */}
-        {!isWeddingPlannerAuth && related.length > 0 && (
-          <section className="mt-16">
-            <h2 className="font-display text-3xl uppercase tracking-tight mb-6">
-              Related <span className="text-primary">Tools</span>
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {related.map((t) => (
-                <ToolCard key={t.slug} tool={t} />
-              ))}
-            </div>
-          </section>
-        )}
-      </main>
-
-      {tool.slug !== "wedding-planner" && <SiteFooter />}
-    </div>
-  );
+    {tool.slug !== "wedding-planner" && !isSpecialAuthTool && <SiteFooter />}
+  </div>
+);
 }

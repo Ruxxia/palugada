@@ -1708,6 +1708,23 @@ export const tools: Tool[] = [
       { q: "Apakah saya perlu login untuk menggunakan Wedding Planner?", a: "Ya. Data pernikahan Anda disimpan dengan aman secara relasional ke dalam database sehingga memerlukan akun login agar data tetap tersinkronisasi di semua perangkat Anda." },
       { q: "Bagaimana cara kerja fitur Auto-Save?", a: "Jika diaktifkan, setiap perubahan yang Anda lakukan pada anggaran, tamu, atau tugas akan disimpan otomatis secara berkala ke dalam database tanpa perlu menekan tombol Simpan manual." }
     ]
+  },
+  {
+    slug: "finance-tracker",
+    name: "Kelola Uang — Financial Tracker",
+    shortName: "Kelola Uang",
+    description: "Lacak pemasukan, pengeluaran, anggaran, dan tabungan kamu secara menyeluruh dalam satu dashboard.",
+    longDescription: "Kelola Uang adalah aplikasi pencatat keuangan pribadi lengkap untuk pengguna Indonesia. Dilengkapi multi-dompet (BCA, GoPay, Cash, dll), pelacak transaksi, anggaran bulanan per kategori, goals tabungan dengan progress ring, pelacak tagihan rutin, dan ekspor laporan PDF & CSV. Data disimpan aman ke cloud dan tersinkronisasi di semua perangkat.",
+    category: "Utilities",
+    subcategory: "Finance",
+    icon: "💰",
+    featured: true,
+    faqs: [
+      { q: "Apakah saya perlu login?", a: "Ya. Data keuangan Anda disimpan secara aman ke database, sehingga diperlukan login agar data tersedia di semua perangkat." },
+      { q: "Dompet apa saja yang bisa saya tambahkan?", a: "Anda bisa menambahkan dompet bertipe Bank (BCA, Mandiri, BRI, dll), E-Wallet (GoPay, OVO, Dana, ShopeePay), Tunai, maupun Investasi dalam jumlah tidak terbatas." },
+      { q: "Apakah saldo dompet diperbarui otomatis?", a: "Ya. Setiap kali Anda menambahkan transaksi pemasukan atau pengeluaran, saldo dompet terkait diperbarui secara otomatis melalui database trigger." },
+      { q: "Bisa ekspor laporan?", a: "Bisa. Tersedia ekspor CSV untuk data spreadsheet dan cetak/PDF untuk laporan keuangan bulanan yang rapi." }
+    ]
   }
 ];
 
@@ -1752,7 +1769,7 @@ export const categories: CategoryInfo[] = [
   {
     name: "⚙️ Utilities",
     key: "Utilities",
-    subcategories: ["Time", "Random", "Productivity", "Events"]
+    subcategories: ["Time", "Random", "Productivity", "Events", "Finance"]
   },
   {
     name: "💬 WhatsApp Tools",

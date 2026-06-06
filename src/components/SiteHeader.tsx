@@ -231,23 +231,37 @@ export function SiteHeader() {
           </div>
 
           <div className="flex-1 overflow-y-auto py-6 flex flex-col gap-6">
-            {/* Wedding Organizer Link */}
+            {/* Featured Tools Links */}
             <div className="flex flex-col gap-2">
               <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-foreground/30 px-1">
-                Featured Tool
+                Featured Tools
               </span>
-              <Link
-                to="/tools/$slug"
-                params={{ slug: "wedding-planner" }}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-4 bg-primary/5 border-2 border-primary/30 hover:bg-primary/10 rounded-2xl text-sm font-bold uppercase tracking-wider text-left transition-colors flex items-center justify-between shadow-tactile-sm"
-              >
-                <span className="flex items-center gap-3">
-                  <span className="text-xl">💍</span>
-                  <span>Wedding Organizer</span>
-                </span>
-                <span className="text-primary font-bold">➔</span>
-              </Link>
+              <div className="flex flex-col gap-2">
+                <Link
+                  to="/tools/$slug"
+                  params={{ slug: "wedding-planner" }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-3.5 bg-primary/5 border-2 border-primary/30 hover:bg-primary/10 rounded-2xl text-sm font-bold uppercase tracking-wider text-left transition-colors flex items-center justify-between shadow-tactile-sm"
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="text-xl">💍</span>
+                    <span>Wedding Organizer</span>
+                  </span>
+                  <span className="text-primary font-bold">➔</span>
+                </Link>
+                <Link
+                  to="/tools/$slug"
+                  params={{ slug: "finance-tracker" }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="px-4 py-3.5 bg-primary/5 border-2 border-primary/30 hover:bg-primary/10 rounded-2xl text-sm font-bold uppercase tracking-wider text-left transition-colors flex items-center justify-between shadow-tactile-sm"
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="text-xl">💰</span>
+                    <span>Kelola Uang</span>
+                  </span>
+                  <span className="text-primary font-bold">➔</span>
+                </Link>
+              </div>
             </div>
 
             {/* Categories */}
