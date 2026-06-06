@@ -177,7 +177,7 @@ export default function GoalsTab({ goals, transactions, onSaveGoal, onDeleteGoal
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-1">
                       <p className="text-xs font-extrabold text-foreground leading-snug truncate pr-4">{goal.name}</p>
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 absolute right-3 top-3">
+                      <div className="flex gap-1 flex-shrink-0 absolute right-3 top-3">
                         <button onClick={() => openEdit(goal)} className="text-foreground/40 hover:text-primary p-0.5 cursor-pointer"><Pencil size={12} /></button>
                         <button onClick={() => onDeleteGoal(goal.id)} className="text-foreground/40 hover:text-rose-500 p-0.5 cursor-pointer"><Trash2 size={12} /></button>
                       </div>

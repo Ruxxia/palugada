@@ -164,7 +164,7 @@ export default function TransactionTab({
               <span className={`text-xs font-extrabold ml-1 ${w.balance >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                 {formatIDR(w.balance)}
               </span>
-              <button onClick={() => onDeleteWallet(w.id)} className="opacity-0 group-hover:opacity-100 ml-1 text-foreground/30 hover:text-rose-500 transition-all cursor-pointer">
+              <button onClick={() => onDeleteWallet(w.id)} className="ml-1 text-foreground/30 hover:text-rose-500 transition-all cursor-pointer">
                 <Trash2 size={11} />
               </button>
             </div>
@@ -264,7 +264,7 @@ export default function TransactionTab({
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-1">
                           <button onClick={() => openEditTx(tx)} className="text-foreground/40 hover:text-primary transition-colors p-1 cursor-pointer">
                             <Pencil size={13} />
                           </button>

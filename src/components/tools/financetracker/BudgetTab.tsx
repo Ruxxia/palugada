@@ -143,7 +143,7 @@ export default function BudgetTab({ budgets, transactions, onSaveBudget, onDelet
                     <span className={`text-xs font-extrabold ${isOver ? "text-rose-600 dark:text-rose-400" : isWarning ? "text-amber-500" : "text-foreground"}`}>
                       {formatIDR(spent)}
                     </span>
-                    <button onClick={() => onDeleteBudget(budget.id)} className="opacity-0 group-hover:opacity-100 text-foreground/30 hover:text-rose-500 transition-all ml-1 cursor-pointer">
+                    <button onClick={() => onDeleteBudget(budget.id)} className="text-foreground/30 hover:text-rose-500 transition-all ml-1 cursor-pointer">
                       <Trash2 size={13} />
                     </button>
                   </div>
